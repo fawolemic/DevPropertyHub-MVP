@@ -6,6 +6,7 @@ import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
+import '../../examples/api_service_example.dart';
 import '../providers/auth_provider.dart';
 
 /// Handles application routing with role-based access controls
@@ -67,6 +68,12 @@ class AppRouter {
           builder: (context, state) => const SettingsScreen(),
           // No redirect needed - all users can access basic settings
           // Each setting item will handle its own permission checks
+        ),
+        
+        // API Service example route
+        GoRoute(
+          path: '/api-example',
+          builder: (context, state) => const ApiServiceExampleScreen(),
         ),
         
         // Development details route

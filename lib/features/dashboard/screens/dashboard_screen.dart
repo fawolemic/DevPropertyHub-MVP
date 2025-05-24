@@ -60,6 +60,16 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _buildRecentLeads(context, isLowBandwidth, authProvider),
             
+            // Auth Testing Section (visible to all during development)
+            const SizedBox(height: 24),
+            _buildSectionHeader(
+              context, 
+              'Authentication Testing', 
+              onViewAll: () => context.push('/api-example'),
+            ),
+            const SizedBox(height: 12),
+            _buildAuthTestingSection(context, isLowBandwidth),
+            
             // Admin-only section
             if (authProvider.isAdmin) ...[
               const SizedBox(height: 24),
@@ -98,8 +108,7 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
+            Row(              children: [
                 CircleAvatar(
                   backgroundColor: theme.colorScheme.primary,
                   radius: 24,
@@ -397,6 +406,39 @@ class DashboardScreen extends StatelessWidget {
               ),
           ],
         ],
+      ),
+    );
+  }
+  
+  Widget _buildAuthTestingSection(BuildContext context, bool isLowBandwidth) {
+    return Card(
+      elevation: isLowBandwidth ? 0 : 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: isLowBandwidth ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Test the enhanced JWT authentication flow with token refresh',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'This example demonstrates how the API service handles authentication tokens, ' +
+              'including automatic token refresh when they expire.',
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/api-example'),
+              icon: const Icon(Icons.security),
+              label: const Text('Open Auth Testing'),
+            ),
+          ],
+        ),
       ),
     );
   }

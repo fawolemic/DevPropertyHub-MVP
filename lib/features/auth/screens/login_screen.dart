@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   bool _obscurePassword = true;
   String? _errorMessage;
+  String _userType = 'developer'; // Default user type
 
   @override
   void dispose() {
@@ -42,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final success = await authProvider.signIn(
         _emailController.text.trim(),
         _passwordController.text,
+        userType: _userType,
       );
 
       if (success) {
@@ -66,20 +68,28 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _setDemoCredentials(String role) {
+  void _setDemoCredentials(String roleOrType) {
     setState(() {
-      switch (role) {
+      switch (roleOrType) {
         case 'admin':
           _emailController.text = 'admin@example.com';
           _passwordController.text = 'password';
+          _userType = 'developer';
           break;
         case 'standard':
           _emailController.text = 'user@example.com';
           _passwordController.text = 'password';
+          _userType = 'developer';
           break;
         case 'viewer':
           _emailController.text = 'viewer@example.com';
           _passwordController.text = 'password';
+          _userType = 'developer';
+          break;
+        case 'buyer':
+          _emailController.text = 'buyer@example.com';
+          _passwordController.text = 'password';
+          _userType = 'buyer';
           break;
       }
     });
@@ -202,10 +212,42 @@ class _LoginScreenState extends State<LoginScreen> {
                               return null;
                             },
                           ),
+                          // User type selection
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: const Text('Developer'),
+                                  value: 'developer',
+                                  groupValue: _userType,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _userType = value!;
+                                    });
+                                  },
+                                  dense: true,
+                                ),
+                              ),
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: const Text('Buyer'),
+                                  value: 'buyer',
+                                  groupValue: _userType,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _userType = value!;
+                                    });
+                                  },
+                                  dense: true,
+                                ),
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: 24),
 
                           // Error message
-                          if (_errorMessage != null) ...[
+                          if (_errorMessage != null) ...[                          
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -277,18 +319,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Admin',
                               Colors.purple,
                               () => _setDemoCredentials('admin'),
+                              Icons.admin_panel_settings,
                             ),
                             _buildRoleButton(
                               context,
                               'Standard',
                               Colors.blue,
                               () => _setDemoCredentials('standard'),
+                              Icons.person,
                             ),
                             _buildRoleButton(
                               context,
                               'Viewer',
                               Colors.teal,
                               () => _setDemoCredentials('viewer'),
+                              Icons.visibility,
+                            ),
+                            _buildRoleButton(
+                              context,
+                              'Buyer',
+                              Colors.orange,
+                              () => _setDemoCredentials('buyer'),
+                              Icons.shopping_bag,
                             ),
                           ],
                         ),
@@ -329,14 +381,11 @@ class _LoginScreenState extends State<LoginScreen> {
     String label,
     Color color,
     VoidCallback onPressed,
+    IconData icon,
   ) {
     return ElevatedButton.icon(
       icon: Icon(
-        label == 'Admin'
-            ? Icons.admin_panel_settings
-            : label == 'Standard'
-                ? Icons.person
-                : Icons.visibility,
+        icon,
         size: 16,
       ),
       label: Text(label),
