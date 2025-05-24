@@ -306,7 +306,7 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      tabBarTheme: const TabBarTheme(
+      tabBarTheme: const TabBarThemeData(
         indicatorColor: accentTeal,
         labelColor: primaryNavy,
         unselectedLabelColor: textSecondary,
@@ -332,7 +332,7 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: backgroundWhite,
         elevation: 3,
         shape: RoundedRectangleBorder(
@@ -366,8 +366,222 @@ class AppTheme {
         tertiaryContainer: accentTeal,
         onTertiary: Colors.white,
       ),
-      // Dark theme configuration mirrors light theme but with dark mode colors
-      // For the MVP, we'll focus on the light theme since that's the primary use case
+      textTheme: GoogleFonts.interTextTheme(
+        ThemeData.dark().textTheme.copyWith(
+          displayLarge: const TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+          ),
+          displayMedium: const TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.w600,
+            height: 1.3,
+          ),
+          displaySmall: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            height: 1.3,
+          ),
+          headlineMedium: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            height: 1.4,
+          ),
+          headlineSmall: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            height: 1.4,
+          ),
+          titleLarge: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            height: 1.4,
+          ),
+          bodyLarge: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+          ),
+          bodyMedium: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+          ),
+          bodySmall: const TextStyle(
+            color: Color(0xFFADB5BD),
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            height: 1.4,
+          ),
+        ),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: primaryNavy,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: primaryNavy,
+          backgroundColor: secondaryGoldLight,
+          elevation: 2,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          minimumSize: const Size(0, 44),
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: secondaryGoldLight,
+          side: const BorderSide(color: secondaryGoldLight, width: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          minimumSize: const Size(0, 44),
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: secondaryGoldLight,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          minimumSize: const Size(0, 44),
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: const Color(0xFF2A2A2A),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: Color(0xFF444444), width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: Color(0xFF444444), width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: accentTealLight, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: Color(0xFFEF9A9A), width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        hintStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          color: Color(0xFF8E8E8E),
+        ),
+        helperStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          color: Color(0xFF8E8E8E),
+        ),
+        errorStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          color: Color(0xFFEF9A9A),
+        ),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color(0xFF333333),
+        contentTextStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          color: Colors.white,
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: const Color(0xFF333333),
+        selectedColor: accentTealLight,
+        labelStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        secondaryLabelStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          color: Colors.black,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusSmall),
+        ),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: Color(0xFF444444),
+        thickness: 1,
+        space: 1,
+      ),
+      tabBarTheme: const TabBarThemeData(
+        indicatorColor: accentTealLight,
+        labelColor: Colors.white,
+        unselectedLabelColor: Color(0xFF8E8E8E),
+        labelStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(
+          color: const Color(0xFF333333),
+          borderRadius: BorderRadius.circular(radiusSmall),
+        ),
+        textStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          color: Colors.white,
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: const Color(0xFF1E1E1E),
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radiusLarge),
+        ),
+      ),
     );
     
     // Return theme without using cardTheme to avoid conflicts between Flutter SDK versions
