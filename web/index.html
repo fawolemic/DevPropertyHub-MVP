@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A property developer portal with Material Design principles">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="DevPropertyHub">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>DevPropertyHub</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = null;
+  </script>
+  
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  
+  <style>
+    body {
+      background-color: #F5F7FA;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
+      background-color: #1976D2;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .app-icon svg {
+      width: 48px;
+      height: 48px;
+      fill: white;
+    }
+    
+    .app-name {
+      font-size: 24px;
+      font-weight: 500;
+      color: #1976D2;
+      margin-bottom: 16px;
+    }
+    
+    .loading-text {
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 24px;
+    }
+    
+    .bandwidth-text {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    
+    .progress-bar {
+      width: 200px;
+      height: 4px;
+      background-color: rgba(25, 118, 210, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .progress-value {
+      position: absolute;
+      height: 100%;
+      background-color: #1976D2;
+      border-radius: 2px;
+      animation: indeterminate 1.5s infinite ease-in-out;
+      width: 50%;
+    }
+    
+    @keyframes indeterminate {
+      0% {
+        left: -50%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">
+    <div class="app-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48">
+        <path fill="white" d="M120-120v-560h160v-160h400v320h160v400H120Zm80-80h480v-240H200v240Zm280-280h200v-280H360v280Zm-240 0h160v-200H200v200Zm160 200h80v-120h-80v120Zm160 0h80v-120h-80v120Z"/>
+      </svg>
+    </div>
+    <div class="app-name">DevPropertyHub</div>
+    <div class="loading-text">Loading your experience...</div>
+    <div class="progress-bar">
+      <div class="progress-value"></div>
+    </div>
+    <div class="bandwidth-text" id="bandwidth-text">Checking connection...</div>
+  </div>
+  
+  <script>
+    // Check for network speed/quality
+    function checkNetworkQuality() {
+      // For the demo, just detect if on mobile network
+      if (navigator.connection) {
+        const networkType = navigator.connection.effectiveType;
+        const isLowBandwidth = 
+          networkType === '2g' || 
+          networkType === '3g' || 
+          (navigator.connection.downlink && navigator.connection.downlink < 1.0);
+          
+        if (isLowBandwidth) {
+          document.getElementById('bandwidth-text').textContent = 'Optimizing for your network conditions';
+          localStorage.setItem('isLowBandwidth', 'true');
+        } else {
+          document.getElementById('bandwidth-text').textContent = 'Loading high quality experience';
+          localStorage.setItem('isLowBandwidth', 'false');
+        }
+      }
+    }
+    
+    window.addEventListener('load', function(ev) {
+      checkNetworkQuality();
+      
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
