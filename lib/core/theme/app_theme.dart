@@ -26,7 +26,8 @@ class AppTheme {
 
   // Light theme
   static ThemeData get lightTheme {
-    return ThemeData(
+    // Create the base theme without CardTheme
+    final theme = ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.light(
         primary: _primaryColor,
@@ -109,12 +110,8 @@ class AppTheme {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
-      cardTheme: CardTheme(
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ),
+      // Card theme configuration is applied separately below
+      // to avoid type conflicts between Flutter versions
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
@@ -156,11 +153,22 @@ class AppTheme {
         space: 1,
       ),
     );
+    
+    // Apply CardTheme separately to avoid conflicts between Flutter SDK versions
+    return theme.copyWith(
+      cardTheme: CardTheme(
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+    );
   }
 
   // Dark theme
   static ThemeData get darkTheme {
-    return ThemeData(
+    // Create the base theme without CardTheme
+    final theme = ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.dark(
         primary: _primaryLightColor,
@@ -177,6 +185,17 @@ class AppTheme {
       ),
       // Dark theme configuration would be expanded here
       // For the MVP, we'll focus on the light theme since that's the primary use case
+    );
+    
+    // Apply CardTheme separately to avoid conflicts between Flutter SDK versions
+    return theme.copyWith(
+      cardTheme: CardTheme(
+        elevation: 1,
+        color: const Color(0xFF2A2A2A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
     );
   }
 
