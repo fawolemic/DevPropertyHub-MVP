@@ -552,13 +552,12 @@ class AppTheme {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
-  }
   
   // Dark mode card styling
   static BoxDecoration get darkCardDecoration {
     return BoxDecoration(
       color: const Color(0xFF2A2A2A),
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(radiusMedium),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.3),
@@ -573,13 +572,13 @@ class AppTheme {
   static Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'active':
-        return _secondaryColor;
+        return secondaryGold;
       case 'scheduled':
-        return _primaryColor;
+        return primaryNavy;
       case 'completed':
         return Colors.grey;
       case 'on hold':
-        return Colors.orange;
+        return warning;
       default:
         return Colors.grey;
     }
@@ -589,13 +588,13 @@ class AppTheme {
   static Color getLeadStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'new':
-        return Colors.orange;
+        return warning;
       case 'contacted':
-        return _primaryColor;
+        return primaryNavy;
       case 'interested':
-        return _secondaryColor;
+        return secondaryGold;
       case 'converted':
-        return Colors.purple;
+        return accentTeal;
       case 'closed':
         return Colors.grey;
       default:
