@@ -154,15 +154,8 @@ class AppTheme {
       ),
     );
     
-    // Apply CardTheme separately to avoid conflicts between Flutter SDK versions
-    return theme.copyWith(
-      cardTheme: CardTheme(
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ),
-    );
+    // Return theme without using cardTheme to avoid conflicts between Flutter SDK versions
+    return theme;
   }
 
   // Dark theme
@@ -187,19 +180,41 @@ class AppTheme {
       // For the MVP, we'll focus on the light theme since that's the primary use case
     );
     
-    // Apply CardTheme separately to avoid conflicts between Flutter SDK versions
-    return theme.copyWith(
-      cardTheme: CardTheme(
-        elevation: 1,
-        color: const Color(0xFF2A2A2A),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ),
-    );
+    // Return theme without using cardTheme to avoid conflicts between Flutter SDK versions
+    return theme;
   }
 
   // Helper methods for use in the app
+  
+  // Card styling to use directly in Card widgets instead of through theme
+  static BoxDecoration get cardDecoration {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(4),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    );
+  }
+  
+  // Dark mode card styling
+  static BoxDecoration get darkCardDecoration {
+    return BoxDecoration(
+      color: const Color(0xFF2A2A2A),
+      borderRadius: BorderRadius.circular(4),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    );
+  }
   
   // Get a color based on the development status
   static Color getStatusColor(String status) {
