@@ -1,9 +1,15 @@
 [build]
   # Directory to publish (relative to root of your repo)
-  publish = "public"
+  publish = "build/web"
   
-  # No build command needed for the static HTML
-  command = "echo 'Deploying static landing page'"
+  # Install Flutter and build the web application
+  command = '''
+    git clone https://github.com/flutter/flutter.git --branch stable --depth 1
+    export PATH="$PATH:`pwd`/flutter/bin"
+    flutter config --enable-web
+    flutter pub get
+    flutter build web --release
+  '''
 
 # Redirects for web routing
 [[redirects]]
