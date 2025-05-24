@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevPropertyHub - Property Developer Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1976d2;
+      --primary-light: #63a4ff;
+      --primary-dark: #004ba0;
+      --secondary-color: #388e3c;
+      --secondary-light: #6abf69;
+      --secondary-dark: #00600f;
+      --surface-color: #ffffff;
+      --background-color: #f5f7fa;
+      --text-primary: rgba(0, 0, 0, 0.87);
+      --text-secondary: rgba(0, 0, 0, 0.6);
+      
+      /* Material Design Elevation */
+      --elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      --elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      --elevation-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    
+    .header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 24px 0;
+      text-align: center;
+      box-shadow: var(--elevation-2);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    .app-title {
+      font-size: 32px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    
+    .app-subtitle {
+      font-size: 18px;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    
+    .main {
+      padding: 48px 0;
+    }
+    
+    .section {
+      margin-bottom: 48px;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      color: var(--primary-color);
+    }
+    
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    
+    .card {
+      background-color: var(--surface-color);
+      border-radius: 8px;
+      box-shadow: var(--elevation-1);
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      box-shadow: var(--elevation-2);
+    }
+    
+    .card-header {
+      padding: 16px;
+      background-color: var(--primary-light);
+      color: white;
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    
+    .card-content {
+      padding: 16px;
+    }
+    
+    .feature-item {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .feature-item .material-icons {
+      color: var(--primary-color);
+      margin-right: 8px;
+      font-size: 20px;
+    }
+    
+    .user-roles {
+      margin-top: 32px;
+    }
+    
+    .role-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    
+    .role-card {
+      background-color: var(--surface-color);
+      border-radius: 8px;
+      box-shadow: var(--elevation-1);
+      overflow: hidden;
+    }
+    
+    .role-card.admin {
+      border-top: 4px solid #7B1FA2;
+    }
+    
+    .role-card.standard {
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .role-card.viewer {
+      border-top: 4px solid var(--secondary-color);
+    }
+    
+    .role-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .role-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+    }
+    
+    .role-icon.admin {
+      background-color: #7B1FA2;
+      color: white;
+    }
+    
+    .role-icon.standard {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .role-icon.viewer {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .role-title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .role-content {
+      padding: 16px;
+    }
+    
+    .role-feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .role-feature .material-icons {
+      font-size: 16px;
+      margin-right: 8px;
+    }
+    
+    .cta-section {
+      text-align: center;
+      padding: 48px 0;
+      background-color: var(--primary-color);
+      color: white;
+      margin-top: 48px;
+    }
+    
+    .cta-title {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    
+    .cta-subtitle {
+      font-size: 18px;
+      margin-bottom: 32px;
+      opacity: 0.9;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: white;
+      color: var(--primary-color);
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .button:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .footer {
+      padding: 24px 0;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cards, .role-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .header, .main, .cta-section {
+        padding: 32px 0;
+      }
+      
+      .app-title {
+        font-size: 24px;
+      }
+      
+      .app-subtitle {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1 class="app-title">DevPropertyHub</h1>
+      <p class="app-subtitle">Property Developer Portal with Material Design</p>
+    </div>
+  </header>
+  
+  <main class="main">
+    <div class="container">
+      <section class="section">
+        <h2 class="section-title">Welcome to DevPropertyHub</h2>
+        <p>A comprehensive platform for property developers in Africa, designed with Material Design principles and optimized for varying bandwidth conditions.</p>
+        
+        <div class="cards" style="margin-top: 24px;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Key Features</h3>
+            </div>
+            <div class="card-content">
+              <div class="feature-item">
+                <span class="material-icons">dashboard</span>
+                <span>Comprehensive dashboard with real-time analytics</span>
+              </div>
+              <div class="feature-item">
+                <span class="material-icons">business</span>
+                <span>Manage multiple property developments</span>
+              </div>
+              <div class="feature-item">
+                <span class="material-icons">people</span>
+                <span>Track leads and conversions</span>
+              </div>
+              <div class="feature-item">
+                <span class="material-icons">signal_cellular_alt</span>
+                <span>Bandwidth-adaptive interface for all network conditions</span>
+              </div>
+              <div class="feature-item">
+                <span class="material-icons">security</span>
+                <span>Role-based access controls</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Bandwidth Optimization</h3>
+            </div>
+            <div class="card-content">
+              <p>DevPropertyHub automatically adapts to your network conditions, ensuring a smooth experience even in low-bandwidth areas.</p>
+              <div style="margin-top: 16px;">
+                <div class="feature-item">
+                  <span class="material-icons">image</span>
+                  <span>Optimized images for faster loading</span>
+                </div>
+                <div class="feature-item">
+                  <span class="material-icons">speed</span>
+                  <span>Reduced animations in low-bandwidth mode</span>
+                </div>
+                <div class="feature-item">
+                  <span class="material-icons">battery_charging_full</span>
+                  <span>Lower battery consumption</span>
+                </div>
+                <div class="feature-item">
+                  <span class="material-icons">data_usage</span>
+                  <span>Reduced data usage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="user-roles">
+        <h2 class="section-title">User Roles</h2>
+        <p>DevPropertyHub supports different user roles with varying levels of access and permissions:</p>
+        
+        <div class="role-cards" style="margin-top: 24px;">
+          <div class="role-card admin">
+            <div class="role-header">
+              <div class="role-icon admin">
+                <span class="material-icons">admin_panel_settings</span>
+              </div>
+              <h3 class="role-title">Admin Developer</h3>
+            </div>
+            <div class="role-content">
+              <p>Full access to all features, including user management and company settings.</p>
+              <div style="margin-top: 16px;">
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Manage all developments</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Manage all leads</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>User management</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Company settings</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Analytics and reporting</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="role-card standard">
+            <div class="role-header">
+              <div class="role-icon standard">
+                <span class="material-icons">person</span>
+              </div>
+              <h3 class="role-title">Standard Developer</h3>
+            </div>
+            <div class="role-content">
+              <p>Manages assigned developments and leads with limited administrative access.</p>
+              <div style="margin-top: 16px;">
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Manage own developments</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Manage assigned leads</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Create and edit content</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Basic reporting</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">not_interested</span>
+                  <span>No administrative access</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="role-card viewer">
+            <div class="role-header">
+              <div class="role-icon viewer">
+                <span class="material-icons">visibility</span>
+              </div>
+              <h3 class="role-title">Viewer Developer</h3>
+            </div>
+            <div class="role-content">
+              <p>Read-only access to data without the ability to edit or delete content.</p>
+              <div style="margin-top: 16px;">
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>View all developments</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>View all leads</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">check_circle</span>
+                  <span>Access to reports</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">not_interested</span>
+                  <span>No edit capabilities</span>
+                </div>
+                <div class="role-feature">
+                  <span class="material-icons">not_interested</span>
+                  <span>No administrative access</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <div class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Try DevPropertyHub?</h2>
+        <p class="cta-subtitle">The Flutter app is coming soon. Check back for updates!</p>
+        <a href="#" class="button">Learn More</a>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 DevPropertyHub. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

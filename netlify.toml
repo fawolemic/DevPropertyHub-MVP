@@ -1,0 +1,12 @@
+[build]
+  # Directory to publish (relative to root of your repo)
+  publish = "public"
+  
+  # No build command needed for the static HTML
+  command = "echo 'Deploying static landing page'"
+
+# Redirects for web routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
