@@ -15,7 +15,7 @@ dependencies:
   # State Management
   provider: ^6.0.5
   
-  # Routing
+  # Routingflutter pub getflutter pub getflutter pub get
   go_router: ^7.0.0
   
   # UI Components
@@ -48,17 +48,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  
+
+  # Assets
   assets:
     - assets/images/
     - assets/icons/
     - assets/data/
 
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Roboto-Bold.ttf
-          weight: 700
+  # Fonts
+  # Using Google Fonts package so we don't need to declare fonts here

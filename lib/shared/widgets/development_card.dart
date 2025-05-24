@@ -5,22 +5,28 @@ class DevelopmentCard extends StatelessWidget {
   final String id;
   final String name;
   final String location;
-  final String status;
+  final String? status;
   final int units;
-  final double progress;
+  final int unitsSold;
+  final double? progress;
   final String imageUrl;
+  final String description;
   final bool isLowBandwidth;
+  final VoidCallback onTap;
 
   const DevelopmentCard({
     Key? key,
     required this.id,
     required this.name,
     required this.location,
-    required this.status,
+    this.status,
     required this.units,
-    required this.progress,
+    required this.unitsSold,
+    this.progress,
     required this.imageUrl,
+    required this.description,
     required this.isLowBandwidth,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -35,7 +41,7 @@ class DevelopmentCard extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => context.push('/developments/$id'),
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -74,11 +80,11 @@ class DevelopmentCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _getStatusColor(status, theme),
+                      color: status != null ? _getStatusColor(status!, theme) : Colors.grey,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      status,
+                      status ?? 'No Status',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -140,7 +146,7 @@ class DevelopmentCard extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        '${(progress * 100).toInt()}%',
+                        progress != null ? '${(progress! * 100).toInt()}%' : 'N/A',
                         style: theme.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.primary,
@@ -153,11 +159,12 @@ class DevelopmentCard extends StatelessWidget {
                   // Progress bar
                   ClipRRect(
                     borderRadius: BorderRadius.circular(2),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                    child: progress != null ? LinearProgressIndicator(
+                      value: progress!,
+                      backgroundColor: Colors.grey[200],
+                      valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
                       minHeight: 4,
-                    ),
+                    ) : const SizedBox(height: 4),
                   ),
                 ],
               ),
@@ -168,7 +175,7 @@ class DevelopmentCard extends StatelessWidget {
     );
   }
   
-  // Helper to get status color
+  // Get color based on development status
   Color _getStatusColor(String status, ThemeData theme) {
     switch (status.toLowerCase()) {
       case 'active':

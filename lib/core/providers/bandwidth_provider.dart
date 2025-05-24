@@ -119,14 +119,21 @@ class BandwidthProvider with ChangeNotifier {
   }
   
   // Manually toggle low bandwidth mode (for testing or user preference)
-  Future<void> toggleLowBandwidthMode() async {
+  void toggleLowBandwidthMode() async {
     _isLowBandwidth = !_isLowBandwidth;
-    
-    // Save preference
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLowBandwidth', _isLowBandwidth);
-    
     notifyListeners();
+  }
+  
+  // Set low bandwidth mode to a specific value
+  void setLowBandwidth(bool value) async {
+    if (_isLowBandwidth != value) {
+      _isLowBandwidth = value;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLowBandwidth', _isLowBandwidth);
+      notifyListeners();
+    }
   }
   
   // Force set low bandwidth mode

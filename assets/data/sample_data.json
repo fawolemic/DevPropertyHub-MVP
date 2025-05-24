@@ -1,0 +1,87 @@
+{
+  "developments": [
+    {
+      "id": "dev-001",
+      "name": "The Palms Estate",
+      "location": "Lagos, Nigeria",
+      "units": 120,
+      "unitsSold": 45,
+      "price": {
+        "min": 150000,
+        "max": 350000,
+        "currency": "USD"
+      },
+      "completionDate": "2026-03-01",
+      "imageUrl": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+      "description": "Luxury apartments with modern amenities in the heart of Lagos."
+    },
+    {
+      "id": "dev-002",
+      "name": "Green Haven",
+      "location": "Accra, Ghana",
+      "units": 80,
+      "unitsSold": 30,
+      "price": {
+        "min": 120000,
+        "max": 280000,
+        "currency": "USD"
+      },
+      "completionDate": "2025-11-15",
+      "imageUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "description": "Eco-friendly residential complex with solar power and rainwater harvesting."
+    },
+    {
+      "id": "dev-003",
+      "name": "Sunrise Towers",
+      "location": "Nairobi, Kenya",
+      "units": 150,
+      "unitsSold": 70,
+      "price": {
+        "min": 100000,
+        "max": 250000,
+        "currency": "USD"
+      },
+      "completionDate": "2025-09-30",
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+      "description": "High-rise apartments with panoramic views of the city skyline."
+    }
+  ],
+  "leads": [
+    {
+      "id": "lead-001",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+234 123 456 7890",
+      "interest": "The Palms Estate",
+      "status": "New",
+      "createdAt": "2025-05-20T10:30:00Z"
+    },
+    {
+      "id": "lead-002",
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "phone": "+233 987 654 3210",
+      "interest": "Green Haven",
+      "status": "Contacted",
+      "createdAt": "2025-05-18T14:45:00Z"
+    },
+    {
+      "id": "lead-003",
+      "name": "David Johnson",
+      "email": "david.johnson@example.com",
+      "phone": "+254 456 789 0123",
+      "interest": "Sunrise Towers",
+      "status": "Qualified",
+      "createdAt": "2025-05-15T09:15:00Z"
+    },
+    {
+      "id": "lead-004",
+      "name": "Sarah Williams",
+      "email": "sarah.williams@example.com",
+      "phone": "+234 567 890 1234",
+      "interest": "The Palms Estate",
+      "status": "Negotiation",
+      "createdAt": "2025-05-10T16:20:00Z"
+    }
+  ]
+}

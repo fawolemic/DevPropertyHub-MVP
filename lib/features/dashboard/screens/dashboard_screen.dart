@@ -299,11 +299,21 @@ class DashboardScreen extends StatelessWidget {
                 id: development['id'] as String,
                 name: development['name'] as String,
                 location: development['location'] as String,
-                status: development['status'] as String,
+                status: development['status'] as String?,
                 units: development['units'] as int,
-                progress: development['progress'] as double,
+                unitsSold: development['unitsSold'] as int? ?? 0,
+                progress: development['progress'] as double?,
                 imageUrl: development['imageUrl'] as String,
+                description: development['description'] as String? ?? '',
                 isLowBandwidth: isLowBandwidth,
+                onTap: () {
+                  // Navigation to development details would go here
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Details for ${development['name']} coming soon!'),
+                    ),
+                  );
+                },
               ),
             ),
           );
@@ -320,30 +330,33 @@ class DashboardScreen extends StatelessWidget {
     final theme = Theme.of(context);
     
     // Sample lead data
-    final leads = [
+    final leads = const [
       {
         'id': '1',
         'name': 'John Smith',
         'email': 'john.smith@example.com',
-        'development': 'Sunset Heights',
+        'phone': '+234 123 456 7890',
+        'interest': 'Green Acres',
         'status': 'Contacted',
-        'date': 'May 20, 2025',
+        'createdAt': '2025-05-25T10:30:00Z',
       },
       {
         'id': '2',
         'name': 'Sarah Johnson',
         'email': 'sarah.j@example.com',
-        'development': 'Palm Residences',
-        'status': 'Interested',
-        'date': 'May 18, 2025',
+        'phone': '+234 987 654 3210',
+        'interest': 'Sunrise Heights',
+        'status': 'Qualified',
+        'createdAt': '2025-05-24T14:45:00Z',
       },
       {
         'id': '3',
         'name': 'Mike Thompson',
         'email': 'mike.t@example.com',
-        'development': 'Business Park',
+        'phone': '+234 555 123 4567',
+        'interest': 'Business Park',
         'status': 'New Lead',
-        'date': 'May 23, 2025',
+        'createdAt': '2025-05-23T09:15:00Z',
       },
     ];
     
@@ -360,11 +373,21 @@ class DashboardScreen extends StatelessWidget {
               id: leads[i]['id'] as String,
               name: leads[i]['name'] as String,
               email: leads[i]['email'] as String,
-              development: leads[i]['development'] as String,
+              phone: leads[i]['phone'] as String,
+              interest: leads[i]['interest'] as String,
               status: leads[i]['status'] as String,
-              date: leads[i]['date'] as String,
-              isLowBandwidth: isLowBandwidth,
+              createdAt: DateTime.parse(leads[i]['createdAt'] as String),
               canEdit: authProvider.canEdit,
+              onEdit: authProvider.canEdit ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Edit ${leads[i]['name']} coming soon')),
+                );
+              } : null,
+              onDelete: authProvider.isAdmin ? () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Delete ${leads[i]['name']} coming soon')),
+                );
+              } : null,
             ),
             if (i < leads.length - 1)
               Divider(
