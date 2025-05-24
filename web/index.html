@@ -21,7 +21,8 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
+    // Using template variable {{flutter_service_worker_version}} as per updated Flutter web standards
+    var serviceWorkerVersion = '{{flutter_service_worker_version}}';
   </script>
   
   <!-- This script adds the flutter initialization JS code -->
@@ -149,15 +150,16 @@
       checkNetworkQuality();
       
       // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
+      // Updated to use Flutter.load instead of loadEntrypoint as per Flutter docs
+      _flutter.loader.load({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
         }
+      }).then(function(engineInitializer) {
+        return engineInitializer.initializeEngine();
+      }).then(function(appRunner) {
+        return appRunner.runApp();
+      });
       });
     });
   </script>
