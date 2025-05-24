@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/screens/login_screen.dart';
+import '../../features/auth/screens/registration/registration_screen.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
@@ -38,10 +39,14 @@ class AppRouter {
       },
       refreshListenable: authProvider,
       routes: [
-        // Login route
+        // Auth routes
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/register',
+          builder: (context, state) => const RegistrationScreen(),
         ),
         
         // Dashboard route

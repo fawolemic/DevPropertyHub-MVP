@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bandwidth_provider.dart';
+import 'core/providers/registration_provider.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 
@@ -15,6 +16,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => BandwidthProvider()),
+        ChangeNotifierProvider(create: (_) => RegistrationProvider()),
       ],
       child: const DevPropertyHub(),
     ),

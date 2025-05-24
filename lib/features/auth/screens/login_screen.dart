@@ -212,6 +212,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               return null;
                             },
                           ),
+                          // Registration link
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                context.go('/register');
+                              },
+                              child: const Text('New Developer? Register here'),
+                            ),
+                          ),
                           // User type selection
                           const SizedBox(height: 16),
                           Row(
@@ -276,6 +285,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   )
                                 : const Text('Sign In'),
+                          ),
+                          
+                          // Registration link
+                          const SizedBox(height: 16),
+                          Center(
+                            child: TextButton(
+                              onPressed: () {
+                                context.go('/register');
+                              },
+                              child: const Text('New Developer? Register here'),
+                            ),
                           ),
                         ],
                       ),
