@@ -65,13 +65,8 @@ class AppRouter {
         GoRoute(
           path: '/settings',
           builder: (context, state) => const SettingsScreen(),
-          redirect: (context, state) {
-            // Role-based access control - only allow admins to access settings
-            if (!authProvider.hasAdminPermissions) {
-              return '/dashboard';
-            }
-            return null;
-          },
+          // No redirect needed - all users can access basic settings
+          // Each setting item will handle its own permission checks
         ),
         
         // Development details route

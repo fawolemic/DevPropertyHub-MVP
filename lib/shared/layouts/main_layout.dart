@@ -202,15 +202,14 @@ class MainLayout extends StatelessWidget {
             onTap: () => context.go('/leads'),
           ),
           
-          // Admin-only settings
-          if (authProvider.isAdmin)
-            _buildDrawerItem(
-              context,
-              icon: Icons.settings,
-              title: 'Settings',
-              isSelected: currentIndex == 3,
-              onTap: () => context.go('/settings'),
-            ),
+          // Settings available to all users
+          _buildDrawerItem(
+            context,
+            icon: Icons.settings,
+            title: 'Settings',
+            isSelected: currentIndex == 3,
+            onTap: () => context.go('/settings'),
+          ),
           
           const Spacer(),
           
