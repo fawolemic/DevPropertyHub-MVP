@@ -25,10 +25,11 @@ class ApiService {
     Map<String, String>? headers,
     Map<String, dynamic>? queryParams,
   }) async {
+    final finalHeaders = await _getHeaders(headers);
     return _authenticatedRequest(
       () => http.get(
         _buildUri(endpoint, queryParams),
-        headers: await _getHeaders(headers),
+        headers: finalHeaders,
       ),
     );
   }
@@ -41,10 +42,11 @@ class ApiService {
     Map<String, String>? headers,
     Map<String, dynamic>? queryParams,
   }) async {
+    final finalHeaders = await _getHeaders(headers);
     return _authenticatedRequest(
       () => http.post(
         _buildUri(endpoint, queryParams),
-        headers: await _getHeaders(headers),
+        headers: finalHeaders,
         body: jsonEncode(body),
       ),
     );
@@ -58,10 +60,11 @@ class ApiService {
     Map<String, String>? headers,
     Map<String, dynamic>? queryParams,
   }) async {
+    final finalHeaders = await _getHeaders(headers);
     return _authenticatedRequest(
       () => http.put(
         _buildUri(endpoint, queryParams),
-        headers: await _getHeaders(headers),
+        headers: finalHeaders,
         body: jsonEncode(body),
       ),
     );
@@ -75,10 +78,11 @@ class ApiService {
     Map<String, dynamic>? queryParams,
     Map<String, dynamic>? body,
   }) async {
+    final finalHeaders = await _getHeaders(headers);
     return _authenticatedRequest(
       () => http.delete(
         _buildUri(endpoint, queryParams),
-        headers: await _getHeaders(headers),
+        headers: finalHeaders,
         body: body != null ? jsonEncode(body) : null,
       ),
     );
