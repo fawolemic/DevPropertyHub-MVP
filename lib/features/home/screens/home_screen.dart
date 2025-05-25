@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             
             // Featured properties section
             FeaturedPropertiesSection(
-              properties: FeaturedProperty.getFeaturedProperties(),
+              properties: FeaturedProperty.getSampleData(),
               isLowBandwidth: isLowBandwidth,
             ),
             

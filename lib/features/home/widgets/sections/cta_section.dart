@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// CTASection
@@ -49,7 +50,23 @@ class CTASection extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: () => launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html')),
+            onPressed: () async {
+              // Try using url_launcher with web-specific options
+              final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html');
+              if (!await launchUrl(
+                url,
+                mode: LaunchMode.externalApplication,
+                webOnlyWindowName: '_self',
+              )) {
+                // If url_launcher fails, fallback to Go Router
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Navigating to registration page...')),
+                  );
+                  GoRouter.of(context).go('/unified-register');
+                }
+              }
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: theme.colorScheme.primary,

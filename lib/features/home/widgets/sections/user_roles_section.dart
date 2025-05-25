@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/user_role.dart';
 
 /// UserRolesSection
@@ -61,8 +63,25 @@ class UserRolesSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     // Handle role selection - direct to unified registration with role parameter
+                    final roleParam = role.type.toLowerCase();
+                    
+                    // Try using url_launcher with web-specific options
+                    final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html?role=$roleParam');
+                    if (!await launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                      webOnlyWindowName: '_self',
+                    )) {
+                      // If url_launcher fails, fallback to Go Router
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Navigating to registration page...')),
+                        );
+                        GoRouter.of(context).go('/unified-register?role=$roleParam');
+                      }
+                    }
                   },
                   borderRadius: BorderRadius.circular(12),
                   child: Padding(
@@ -77,7 +96,7 @@ class UserRolesSection extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          role.title,
+                          role.type,
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),

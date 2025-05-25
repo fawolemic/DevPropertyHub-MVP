@@ -47,7 +47,23 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         
         // Auth buttons
         TextButton(
-          onPressed: () => GoRouter.of(context).go('/login'),
+          onPressed: () async {
+            // Try using url_launcher for direct HTML page
+            final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/login.html');
+            if (!await launchUrl(
+              url,
+              mode: LaunchMode.externalApplication,
+              webOnlyWindowName: '_self',
+            )) {
+              // If url_launcher fails, fallback to Go Router
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Navigating to login page...')),
+                );
+                GoRouter.of(context).go('/login');
+              }
+            }
+          },
           child: Text(
             'Sign In',
             style: TextStyle(
@@ -60,7 +76,23 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: ElevatedButton(
-            onPressed: () => launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html')),
+            onPressed: () async {
+              // Try using url_launcher with web-specific options
+              final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html');
+              if (!await launchUrl(
+                url,
+                mode: LaunchMode.externalApplication,
+                webOnlyWindowName: '_self',
+              )) {
+                // If url_launcher fails, fallback to Go Router
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Navigating to registration page...')),
+                  );
+                  GoRouter.of(context).go('/unified-register');
+                }
+              }
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: Colors.white,

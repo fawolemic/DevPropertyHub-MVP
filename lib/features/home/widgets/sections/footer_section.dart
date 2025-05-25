@@ -88,9 +88,9 @@ class FooterSection extends StatelessWidget {
         Row(
           children: [
             _buildSocialIcon(Icons.facebook, theme),
-            _buildSocialIcon(Icons.twitter, theme),
-            _buildSocialIcon(Icons.linkedin, theme),
-            _buildSocialIcon(Icons.instagram, theme),
+            _buildSocialIcon(Icons.message, theme),  // Using message icon instead of twitter
+            _buildSocialIcon(Icons.business_center, theme),  // Using business_center icon instead of linkedin
+            _buildSocialIcon(Icons.photo_camera, theme),  // Using photo_camera icon instead of instagram
           ],
         ),
       ],

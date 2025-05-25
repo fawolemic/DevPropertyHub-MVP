@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Mobile navigation drawer that provides access to all app sections
 /// and handles back navigation for improved mobile experience
@@ -40,9 +41,24 @@ class MobileNavigationDrawer extends StatelessWidget {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.pop(context); // Close drawer
-                        GoRouter.of(context).go('/login');
+                        
+                        // Try using url_launcher for direct HTML page
+                        final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/login.html');
+                        if (!await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                          webOnlyWindowName: '_self',
+                        )) {
+                          // If url_launcher fails, fallback to Go Router
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Navigating to login page...')),
+                            );
+                            GoRouter.of(context).go('/login');
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -53,9 +69,24 @@ class MobileNavigationDrawer extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         Navigator.pop(context); // Close drawer
-                        GoRouter.of(context).go('/register');
+                        
+                        // Try using url_launcher for direct HTML page
+                        final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html');
+                        if (!await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                          webOnlyWindowName: '_self',
+                        )) {
+                          // If url_launcher fails, fallback to Go Router
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Navigating to registration page...')),
+                            );
+                            GoRouter.of(context).go('/unified-register');
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.2),

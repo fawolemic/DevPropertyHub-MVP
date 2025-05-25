@@ -92,7 +92,7 @@ class FeaturedPropertiesSection extends StatelessWidget {
                                   ),
                                 )
                               : Image.network(
-                                  property.imageUrl,
+                                  property.image,
                                   fit: BoxFit.cover,
                                   loadingBuilder: (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
@@ -162,7 +162,7 @@ class FeaturedPropertiesSection extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        property.returns,
+                                        '${property.rating}/5',
                                         style: theme.textTheme.titleMedium?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
