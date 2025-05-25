@@ -117,25 +117,37 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context);
     
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Property Preferences',
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Tell us what you\'re looking for to help us find the perfect property for you',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-              ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Card(
+            elevation: isLowBandwidth ? 0 : 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: isLowBandwidth 
+                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                  : BorderSide.none,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Property Preferences',
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Tell us what you\'re looking for to help us find the perfect property for you',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
               const SizedBox(height: 24),
               
               // Property Types Section
@@ -311,30 +323,45 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                 controlAffinity: ListTileControlAffinity.leading,
                 dense: true,
               ),
+              const SizedBox(height: 32),
+              
+              const Divider(),
               const SizedBox(height: 24),
               
-              // Submit button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: registrationProvider.isLoading ? null : _submitStep,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // Navigation buttons
+              Row(
+                children: [
+                  // Back button
+                  OutlinedButton(
+                    onPressed: registrationProvider.isLoading
+                        ? null
+                        : () {
+                            registrationProvider.previousStep();
+                          },
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    ),
+                    child: const Text('Back'),
+                  ),
+                  const SizedBox(width: 16),
+                  
+                  // Submit button
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: registrationProvider.isLoading ? null : _submitStep,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: registrationProvider.isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(),
+                            )
+                          : const Text('Complete Registration'),
                     ),
                   ),
-                  child: registrationProvider.isLoading
-                      ? SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: theme.colorScheme.onPrimary,
-                          ),
-                        )
-                      : const Text('Complete Registration'),
-                ),
+                ],
               ),
             ],
           ),

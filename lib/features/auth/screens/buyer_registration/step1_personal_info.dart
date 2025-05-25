@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider_package;
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/providers/buyer_registration_provider.dart';
 import '../../../../core/providers/bandwidth_provider.dart';
@@ -81,24 +82,36 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context);
     
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Personal Information',
-                style: theme.textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Create your buyer account to find your dream property',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Card(
+            elevation: isLowBandwidth ? 0 : 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: isLowBandwidth 
+                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                  : BorderSide.none,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Personal Information',
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Create your buyer account to find your dream property',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
               ),
               const SizedBox(height: 24),
               
@@ -246,6 +259,9 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
               ),
               const SizedBox(height: 24),
               
+              const Divider(),
+              const SizedBox(height: 24),
+                
               // Privacy policy acceptance
               Row(
                 children: [
@@ -259,35 +275,41 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                     child: Text(
                       'By continuing, you agree to our Terms of Service and Privacy Policy',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onBackground.withOpacity(0.7),
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               
               // Continue button
               SizedBox(
                 width: double.infinity,
-                height: 50,
                 child: ElevatedButton(
                   onPressed: registrationProvider.isLoading ? null : _submitStep,
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: registrationProvider.isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                           height: 24,
                           width: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: theme.colorScheme.onPrimary,
-                          ),
+                          child: CircularProgressIndicator(),
                         )
-                      : const Text('Continue'),
+                      : const Text('Next: Preferences'),
+                ),
+              ),
+              const SizedBox(height: 16),
+              
+              // Login link
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    registrationProvider.resetRegistration();
+                    GoRouter.of(context).go('/login');
+                  },
+                  child: const Text('Already have an account? Sign In'),
                 ),
               ),
             ],

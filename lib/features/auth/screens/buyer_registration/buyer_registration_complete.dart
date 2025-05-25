@@ -15,12 +15,25 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
     
     return Scaffold(
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 600),
+              child: Card(
+                elevation: isLowBandwidth ? 0 : 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: isLowBandwidth 
+                      ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                      : BorderSide.none,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
               // Success icon
               Container(
                 width: isLowBandwidth ? 80 : 100,
@@ -108,21 +121,21 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 32),
+              
+              const Divider(),
+              const SizedBox(height: 24),
               
               // Continue to dashboard button
               SizedBox(
                 width: double.infinity,
-                height: 50,
                 child: ElevatedButton(
                   onPressed: () {
                     // Navigate to login screen
                     GoRouter.of(context).go('/login');
                   },
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: const Text('Continue to Login'),
                 ),
@@ -130,18 +143,19 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
               const SizedBox(height: 16),
               
               // Go home button
-              TextButton(
-                onPressed: () {
-                  GoRouter.of(context).go('/');
-                },
-                child: Text(
-                  'Return to Home',
-                  style: TextStyle(
-                    color: theme.colorScheme.primary,
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    GoRouter.of(context).go('/');
+                  },
+                  child: const Text('Return to Home'),
+                ),
+              ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
