@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../core/providers/bandwidth_provider.dart';
 import '../../../../core/providers/registration_provider.dart';
@@ -11,9 +11,9 @@ class RegistrationCompleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     
     // Get some basic information from the registration
     final userData = registrationProvider.step1Data;

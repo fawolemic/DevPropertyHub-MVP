@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/bandwidth_provider.dart';
@@ -13,8 +13,8 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final authProvider = provider_package.Provider.of<AuthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     
     // Get user role information

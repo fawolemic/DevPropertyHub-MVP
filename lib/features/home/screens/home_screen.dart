@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 import 'package:go_router/go_router.dart';
 import '../../../core/providers/bandwidth_provider.dart';
 import '../models/featured_property.dart';
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     
     // Data

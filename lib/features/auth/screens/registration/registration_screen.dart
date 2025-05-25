@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../core/providers/bandwidth_provider.dart';
 import '../../../../core/providers/registration_provider.dart';
@@ -26,7 +26,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     // Initialize the registration provider to step 1
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+      final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
       if (registrationProvider.currentStep != 1) {
         registrationProvider.resetRegistration();
       }
@@ -42,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void _goToStep(int step) {
     if (step <= 0 || step > 3) return;
     
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     if (registrationProvider.goToStep(step)) {
       _pageController.animateToPage(
         step - 1,
@@ -55,9 +55,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = Provider.of<RegistrationProvider>(context);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
     
     // Listen for changes to registration step
     WidgetsBinding.instance.addPostFrameCallback((_) {

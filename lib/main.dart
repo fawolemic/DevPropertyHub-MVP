@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bandwidth_provider.dart';
 import 'core/providers/registration_provider.dart';
@@ -12,11 +12,11 @@ void main() async {
   // Initialize services and providers here
   
   runApp(
-    MultiProvider(
+    provider_package.MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => BandwidthProvider()),
-        ChangeNotifierProvider(create: (_) => RegistrationProvider()),
+        provider_package.ChangeNotifierProvider(create: (_) => AuthProvider()),
+        provider_package.ChangeNotifierProvider(create: (_) => BandwidthProvider()),
+        provider_package.ChangeNotifierProvider(create: (_) => RegistrationProvider()),
       ],
       child: const DevPropertyHub(),
     ),
@@ -29,9 +29,9 @@ class DevPropertyHub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Access the auth provider to handle user roles
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = provider_package.Provider.of<AuthProvider>(context);
     // Access the bandwidth provider to optimize UI based on network conditions
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     
     return MaterialApp.router(
       title: 'DevPropertyHub',

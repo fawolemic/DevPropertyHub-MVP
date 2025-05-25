@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../core/providers/bandwidth_provider.dart';
 import '../../../../core/providers/registration_provider.dart';
@@ -43,7 +43,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     final savedData = registrationProvider.step1Data;
     
     if (savedData.isNotEmpty) {
@@ -80,16 +80,16 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
       'phone': _phoneController.text.trim(),
     };
 
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     await registrationProvider.submitStep1(data);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = Provider.of<RegistrationProvider>(context);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),

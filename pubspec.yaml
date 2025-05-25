@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
 
   # State Management
-  provider: ^6.0.5
+  provider: 6.0.5
   
   # Routingflutter pub getflutter pub getflutter pub get
   go_router: ^7.0.0

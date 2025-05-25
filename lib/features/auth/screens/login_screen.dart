@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/bandwidth_provider.dart';
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final authProvider = provider_package.Provider.of<AuthProvider>(context, listen: false);
       final success = await authProvider.signIn(
         _emailController.text.trim(),
         _passwordController.text,
@@ -97,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     final theme = Theme.of(context);
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../core/providers/bandwidth_provider.dart';
 import '../../../../core/providers/registration_provider.dart';
@@ -26,7 +26,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     final savedData = registrationProvider.step3Data;
     
     if (savedData.isNotEmpty) {
@@ -60,16 +60,16 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
       'billingCycle': _isAnnualBilling ? 'annual' : 'monthly',
     };
 
-    final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
     await registrationProvider.submitStep3(data);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = Provider.of<RegistrationProvider>(context);
+    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -179,7 +179,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                   children: [
                     OutlinedButton(
                       onPressed: () {
-                        final registrationProvider = Provider.of<RegistrationProvider>(context, listen: false);
+                        final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
                         registrationProvider.goToStep(2);
                       },
                       child: const Text('Back'),
