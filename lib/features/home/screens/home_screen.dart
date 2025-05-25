@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider_package;
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/bandwidth_provider.dart';
 import '../models/featured_property.dart';
 import '../models/user_role.dart';
@@ -117,7 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        context.go('/unified-register');
+                        // Use direct HTML page URL that we know works
+                        launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html'));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -364,8 +366,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  // Direct all users to the unified registration flow
-                  GoRouter.of(context).go('/unified-register');
+                  // Use direct HTML page URL that we know works
+                  launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html'));
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -768,7 +770,8 @@ class _HomeScreenState extends State<HomeScreen> {
               // Registration button
               ElevatedButton.icon(
                 onPressed: () {
-                  GoRouter.of(context).go('/unified-register');
+                  // Use direct HTML page URL that we know works
+                  launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html'));
                 },
                 icon: const Icon(Icons.app_registration),
                 label: const Text('Register Now'),
