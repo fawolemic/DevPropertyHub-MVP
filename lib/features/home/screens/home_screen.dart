@@ -192,13 +192,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            // Navigate to buyer registration
-                            GoRouter.of(context).go('/buyer-register');
+                            // Navigate to unified registration
+                            GoRouter.of(context).go('/unified-register');
                           },
-                          icon: const Icon(Icons.person_add),
-                          label: const Text('Register as Buyer'),
+                          icon: const Icon(Icons.app_registration),
+                          label: const Text('Register Now'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.secondary,
+                            backgroundColor: theme.colorScheme.primary,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -208,17 +208,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Developer registration button
+                      // Login button
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            // Navigate to developer registration
-                            GoRouter.of(context).go('/register');
+                            // Navigate to login
+                            GoRouter.of(context).go('/login');
                           },
-                          icon: const Icon(Icons.business),
-                          label: const Text('Register as Developer'),
+                          icon: const Icon(Icons.login),
+                          label: const Text('Sign In'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
+                            backgroundColor: theme.colorScheme.secondary,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -363,13 +363,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  if (role.type == "Developer") {
-                    GoRouter.of(context).go('/register');
-                  } else if (role.type == "Buyer") {
-                    GoRouter.of(context).go('/buyer-register');
-                  } else {
-                    GoRouter.of(context).go('/login');
-                  }
+                  // Direct all users to the unified registration flow
+                  GoRouter.of(context).go('/unified-register');
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -769,26 +764,26 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 16,
             runSpacing: 16,
             children: [
-              // For buyers
+              // Registration button
               ElevatedButton.icon(
                 onPressed: () {
-                  GoRouter.of(context).go('/buyer-register');
+                  GoRouter.of(context).go('/unified-register');
                 },
-                icon: const Icon(Icons.person_add),
-                label: const Text('Register as Buyer'),
+                icon: const Icon(Icons.app_registration),
+                label: const Text('Register Now'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: theme.colorScheme.secondary,
                   backgroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 ),
               ),
-              // For developers
+              // Sign In button
               OutlinedButton.icon(
                 onPressed: () {
-                  GoRouter.of(context).go('/register');
+                  GoRouter.of(context).go('/login');
                 },
-                icon: const Icon(Icons.business),
-                label: const Text('Register as Developer'),
+                icon: const Icon(Icons.login),
+                label: const Text('Sign In'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white),

@@ -59,7 +59,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: ElevatedButton(
-            onPressed: () => GoRouter.of(context).go('/register'),
+            onPressed: () => GoRouter.of(context).go('/unified-register'),
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: Colors.white,
