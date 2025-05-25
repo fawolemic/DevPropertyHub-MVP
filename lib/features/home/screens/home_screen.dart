@@ -103,10 +103,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
                 Text(
                   'Connect developers, buyers, and investors in one comprehensive marketplace',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.8),
                   ),
                   textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                
+                // Registration buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.go('/unified-register');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: theme.colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      ),
+                      child: const Text('Register Now'),
+                    ),
+                    const SizedBox(width: 16),
+                    OutlinedButton(
+                      onPressed: () {
+                        context.go('/login');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.white),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      ),
+                      child: const Text('Login'),
+                    ),
+                  ],
                 ),
               ],
             ),
