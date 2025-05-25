@@ -3,6 +3,7 @@ import 'package:provider/provider.dart' as provider_package;
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bandwidth_provider.dart';
 import 'core/providers/registration_provider.dart';
+import 'core/providers/buyer_registration_provider.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 
@@ -17,6 +18,7 @@ void main() async {
         provider_package.ChangeNotifierProvider(create: (_) => AuthProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => BandwidthProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => RegistrationProvider()),
+        provider_package.ChangeNotifierProvider(create: (_) => BuyerRegistrationProvider()),
       ],
       child: const DevPropertyHub(),
     ),

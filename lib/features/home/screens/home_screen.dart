@@ -153,6 +153,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  // Registration options
+                  Row(
+                    children: [
+                      // Buyer registration button
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // Navigate to buyer registration
+                            GoRouter.of(context).go('/buyer-register');
+                          },
+                          icon: const Icon(Icons.person_add),
+                          label: const Text('Register as Buyer'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.secondary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      // Developer registration button
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // Navigate to developer registration
+                            GoRouter.of(context).go('/register');
+                          },
+                          icon: const Icon(Icons.business),
+                          label: const Text('Register as Developer'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -693,24 +738,26 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 16,
             runSpacing: 16,
             children: [
+              // For buyers
               ElevatedButton.icon(
                 onPressed: () {
-                  // Browse properties
+                  GoRouter.of(context).go('/buyer-register');
                 },
-                icon: const Icon(Icons.search),
-                label: const Text('Browse Properties'),
+                icon: const Icon(Icons.person_add),
+                label: const Text('Register as Buyer'),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: theme.colorScheme.primary,
+                  foregroundColor: theme.colorScheme.secondary,
                   backgroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 ),
               ),
+              // For developers
               OutlinedButton.icon(
                 onPressed: () {
                   GoRouter.of(context).go('/register');
                 },
-                icon: const Icon(Icons.add_business),
-                label: const Text('List Your Project'),
+                icon: const Icon(Icons.business),
+                label: const Text('Register as Developer'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Colors.white),
