@@ -306,24 +306,9 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      // Using individual properties instead of TabBarThemeData constructor
-      tabBarTheme: TabBarTheme(
-        indicator: const UnderlineTabIndicator(
-          borderSide: BorderSide(color: accentTeal, width: 2.0),
-        ),
-        labelColor: primaryNavy,
-        unselectedLabelColor: textSecondary,
-        labelStyle: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+      // Set tab bar properties directly without using TabBarTheme/TabBarThemeData
+      indicatorColor: accentTeal, // Default tab indicator color
+      primaryColor: primaryNavy, // Used for tab label color in some versions
       tooltipTheme: TooltipThemeData(
         decoration: BoxDecoration(
           color: primaryNavy.withOpacity(0.9),
@@ -335,9 +320,11 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      // Using more basic theme properties for dialog
+      // Set dialog properties directly
       dialogBackgroundColor: backgroundWhite,
-      dialogTheme: DialogTheme(
+      // Use a simple cardTheme for dialogs since they use Card internally
+      cardTheme: CardTheme(
+        elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
         ),
@@ -552,24 +539,9 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      // Using individual properties instead of TabBarThemeData constructor
-      tabBarTheme: TabBarTheme(
-        indicator: const UnderlineTabIndicator(
-          borderSide: BorderSide(color: accentTealLight, width: 2.0),
-        ),
-        labelColor: Colors.white,
-        unselectedLabelColor: const Color(0xFF8E8E8E),
-        labelStyle: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+      // Set tab bar properties directly without using TabBarTheme/TabBarThemeData
+      indicatorColor: accentTealLight, // Default tab indicator color
+      primaryColor: Colors.white, // Used for tab label color in some versions
       tooltipTheme: TooltipThemeData(
         decoration: BoxDecoration(
           color: const Color(0xFF333333),
@@ -581,9 +553,12 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      // Using more basic theme properties for dialog
+      // Set dialog properties directly
       dialogBackgroundColor: const Color(0xFF1E1E1E),
-      dialogTheme: DialogTheme(
+      // Use a simple cardTheme for dialogs since they use Card internally
+      cardTheme: CardTheme(
+        elevation: 3,
+        color: const Color(0xFF1E1E1E),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
         ),
