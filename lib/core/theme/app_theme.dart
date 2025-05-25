@@ -306,16 +306,19 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      tabBarTheme: const TabBarThemeData(
-        indicatorColor: accentTeal,
+      // Using individual properties instead of TabBarThemeData constructor
+      tabBarTheme: TabBarTheme(
+        indicator: const UnderlineTabIndicator(
+          borderSide: BorderSide(color: accentTeal, width: 2.0),
+        ),
         labelColor: primaryNavy,
         unselectedLabelColor: textSecondary,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontFamily: 'Inter',
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontFamily: 'Inter',
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -332,9 +335,9 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      dialogTheme: DialogThemeData(
-        backgroundColor: backgroundWhite,
-        elevation: 3,
+      // Using more basic theme properties for dialog
+      dialogBackgroundColor: backgroundWhite,
+      dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
         ),
@@ -549,16 +552,19 @@ class AppTheme {
         thickness: 1,
         space: 1,
       ),
-      tabBarTheme: const TabBarThemeData(
-        indicatorColor: accentTealLight,
+      // Using individual properties instead of TabBarThemeData constructor
+      tabBarTheme: TabBarTheme(
+        indicator: const UnderlineTabIndicator(
+          borderSide: BorderSide(color: accentTealLight, width: 2.0),
+        ),
         labelColor: Colors.white,
-        unselectedLabelColor: Color(0xFF8E8E8E),
-        labelStyle: TextStyle(
+        unselectedLabelColor: const Color(0xFF8E8E8E),
+        labelStyle: const TextStyle(
           fontFamily: 'Inter',
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontFamily: 'Inter',
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -575,9 +581,9 @@ class AppTheme {
           color: Colors.white,
         ),
       ),
-      dialogTheme: DialogThemeData(
-        backgroundColor: const Color(0xFF1E1E1E),
-        elevation: 3,
+      // Using more basic theme properties for dialog
+      dialogBackgroundColor: const Color(0xFF1E1E1E),
+      dialogTheme: DialogTheme(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLarge),
         ),

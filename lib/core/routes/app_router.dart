@@ -5,6 +5,7 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/registration/registration_screen.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
+import '../../features/home/screens/home_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
 import '../../examples/api_service_example.dart';
@@ -23,9 +24,11 @@ class AppRouter {
         // Handle authentication redirects
         final isLoggedIn = authProvider.isLoggedIn;
         final isLoginRoute = state.location == '/login';
+        final isRegistrationRoute = state.location.startsWith('/register');
+        final isPublicRoute = state.location == '/' || state.location == '/home';
         
-        // If not logged in and not on login page, redirect to login
-        if (!isLoggedIn && !isLoginRoute) {
+        // If not logged in and not on login, registration, or public page, redirect to login
+        if (!isLoggedIn && !isLoginRoute && !isRegistrationRoute && !isPublicRoute) {
           return '/login';
         }
         
@@ -39,6 +42,16 @@ class AppRouter {
       },
       refreshListenable: authProvider,
       routes: [
+        // Public routes
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        
         // Auth routes
         GoRoute(
           path: '/login',
