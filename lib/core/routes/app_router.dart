@@ -6,6 +6,7 @@ import '../../features/auth/screens/registration/registration_screen.dart';
 import '../../features/auth/screens/buyer_registration/buyer_registration_screen.dart';
 import '../../features/auth/screens/unified_registration/unified_registration_screen.dart';
 import '../../features/auth/screens/registration_test_page.dart';
+import '../../features/testing/direct_test_page.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/home/screens/home_screen.dart';
@@ -75,6 +76,10 @@ class AppRouter {
         GoRoute(
           path: '/registration-test',
           builder: (context, state) => const RegistrationTestPage(),
+        ),
+        GoRoute(
+          path: '/direct-test',
+          builder: (context, state) => const DirectTestPage(),
         ),
         
         // Dashboard route

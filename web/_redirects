@@ -1,8 +1,11 @@
-# Explicitly handle registration routes
-/unified-register /index.html 200
-/register /index.html 200
-/buyer-register /index.html 200
-/registration-test /index.html 200
+# Direct test route with highest priority
+/direct-test /index.html 200!
+
+# Explicitly handle registration routes with high priority
+/unified-register /index.html 200!
+/register /index.html 200!
+/buyer-register /index.html 200!
+/registration-test /index.html 200!
 
 # Handle authenticated routes
 /dashboard/* /index.html 200

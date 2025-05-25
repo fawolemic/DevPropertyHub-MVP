@@ -4,14 +4,45 @@
   
   # Install Flutter and build the web application - using only widely supported flags
   command = '''
+    # Clean any existing flutter directory to avoid errors
+    rm -rf flutter
     git clone https://github.com/flutter/flutter.git --branch stable --depth 1
     export PATH="$PATH:`pwd`/flutter/bin"
     flutter config --enable-web
     flutter pub get
     flutter build web --release
+    # Copy redirects and headers to the build directory
+    cp web/_redirects build/web/
+    cp web/_headers build/web/
   '''
 
-# Redirects for web routing
+# Explicitly handle direct test route
+[[redirects]]
+  from = "/direct-test"
+  to = "/index.html"
+  status = 200
+  force = true # Forces this redirect to always be used
+
+# Explicitly handle registration routes
+[[redirects]]
+  from = "/unified-register"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/register"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/buyer-register"
+  to = "/index.html"
+  status = 200
+  force = true
+
+# Fallback for all other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
