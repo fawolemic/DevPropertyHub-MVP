@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevPropertyHub Unified Registration</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a237e;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .timestamp {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #1a237e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .step.active {
+            background: #1a237e;
+        }
+        .step.completed {
+            background: #4caf50;
+        }
+        .step-label {
+            margin-top: 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .button {
+            padding: 12px 20px;
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #3949ab;
+        }
+        .button.secondary {
+            background-color: #9e9e9e;
+        }
+        .button.secondary:hover {
+            background-color: #757575;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: #1a237e;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .card.selected {
+            border-color: #1a237e;
+            background-color: #e8eaf6;
+        }
+        .card-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #1a237e;
+        }
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .card-description {
+            font-size: 14px;
+            color: #666;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .navigation-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .nav-link {
+            color: #1a237e;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Unified Registration</h1>
+        <p class="subtitle">Create your account to get started</p>
+        <p class="timestamp">Static HTML Version - Updated: 2025-05-25 17:30</p>
+        
+        <div class="steps">
+            <div class="step-container">
+                <div class="step active">1</div>
+                <div class="step-label">User Type</div>
+            </div>
+            <div class="step-container">
+                <div class="step">2</div>
+                <div class="step-label">Basic Info</div>
+            </div>
+            <div class="step-container">
+                <div class="step">3</div>
+                <div class="step-label">Role Details</div>
+            </div>
+            <div class="step-container">
+                <div class="step">4</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Select Your User Type</h2>
+            <div class="card-container">
+                <div class="card selected">
+                    <div class="card-icon">🏢</div>
+                    <div class="card-title">Developer</div>
+                    <div class="card-description">List your projects, manage properties, track sales</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🛒</div>
+                    <div class="card-title">Buyer</div>
+                    <div class="card-description">Find your dream property, compare options, secure deals</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">👓</div>
+                    <div class="card-title">Agent</div>
+                    <div class="card-description">Connect buyers with developers, earn commissions</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <a href="/" class="button secondary">Back</a>
+            <a href="/routing-test.html" class="button">Go to Routing Test</a>
+        </div>
+        
+        <div class="info-box">
+            <p><strong>Note:</strong> This is a static HTML version of the unified registration page for diagnostic purposes.</p>
+            <p>The actual registration form will be implemented using Flutter when the routing issue is resolved.</p>
+        </div>
+        
+        <div class="navigation-links">
+            <a href="/" class="nav-link">Home</a> | 
+            <a href="/routing-test.html" class="nav-link">Routing Test</a>
+        </div>
+    </div>
+</body>
+</html>
