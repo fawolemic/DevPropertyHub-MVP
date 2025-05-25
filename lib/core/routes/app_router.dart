@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/registration/registration_screen.dart';
 import '../../features/auth/screens/buyer_registration/buyer_registration_screen.dart';
+import '../../features/auth/screens/unified_registration/unified_registration_screen.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/home/screens/home_screen.dart';
@@ -65,6 +66,10 @@ class AppRouter {
         GoRoute(
           path: '/buyer-register',
           builder: (context, state) => const BuyerRegistrationScreen(),
+        ),
+        GoRoute(
+          path: '/unified-register',
+          builder: (context, state) => const UnifiedRegistrationScreen(),
         ),
         
         // Dashboard route

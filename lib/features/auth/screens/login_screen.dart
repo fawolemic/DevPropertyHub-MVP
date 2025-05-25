@@ -301,9 +301,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                context.go('/register');
+                                context.go('/unified-register');
                               },
-                              child: const Text('New Developer? Register here'),
+                              child: const Text('New to DevPropertyHub? Register here'),
                             ),
                           ),
                         ],
