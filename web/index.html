@@ -23,10 +23,13 @@
     // The value below is injected by flutter build, do not touch.
     // Using template variable {{flutter_service_worker_version}} as per updated Flutter web standards
     var serviceWorkerVersion = '{{flutter_service_worker_version}}';
+    
+    // Global bandwidth status for the app to use later
+    window.isLowBandwidth = false;
   </script>
   
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+  <!-- This script adds the flutter initialization JS code - load with highest priority -->
+  <script src="flutter.js" defer importance="high"></script>
   
   <style>
     body {
@@ -126,40 +129,77 @@
   </div>
   
   <script>
-    // Check for network speed/quality
+    // Enhanced network quality detection optimized for African market conditions
     function checkNetworkQuality() {
-      // For the demo, just detect if on mobile network
+      const bandwidthText = document.getElementById('bandwidth-text');
+      const progressBar = document.querySelector('.progress-value');
+      let isLowBandwidth = false;
+      
+      // Use Navigator Connection API if available
       if (navigator.connection) {
-        const networkType = navigator.connection.effectiveType;
-        const isLowBandwidth = 
+        const connection = navigator.connection;
+        const networkType = connection.effectiveType;
+        
+        // Check for slow connections - common in many African regions
+        isLowBandwidth = 
           networkType === '2g' || 
           networkType === '3g' || 
-          (navigator.connection.downlink && navigator.connection.downlink < 1.0);
+          (connection.downlink && connection.downlink < 1.5) || // Threshold better suited for African networks
+          (connection.rtt && connection.rtt > 500); // High latency detection
           
         if (isLowBandwidth) {
-          document.getElementById('bandwidth-text').textContent = 'Optimizing for your network conditions';
-          localStorage.setItem('isLowBandwidth', 'true');
+          bandwidthText.textContent = 'Optimizing for your connection (lower data mode)';
+          // Modify progress bar to be less resource-intensive
+          if (progressBar) {
+            progressBar.style.animationDuration = '2.5s';
+          }
         } else {
-          document.getElementById('bandwidth-text').textContent = 'Loading high quality experience';
-          localStorage.setItem('isLowBandwidth', 'false');
+          bandwidthText.textContent = 'Loading application resources...';
         }
+      } else {
+        // Fallback for browsers without Connection API
+        bandwidthText.textContent = 'Loading application...';
+        
+        // Simple image loading test as fallback bandwidth detection
+        const startTime = Date.now();
+        const testImage = new Image();
+        testImage.onload = function() {
+          const endTime = Date.now();
+          const loadTime = endTime - startTime;
+          isLowBandwidth = loadTime > 300; // Adjust threshold based on testing
+          
+          if (isLowBandwidth) {
+            bandwidthText.textContent = 'Optimizing for your connection speed...';
+          }
+        };
+        testImage.onerror = function() {
+          // Assume low bandwidth on error
+          bandwidthText.textContent = 'Optimizing for your connection...';
+          isLowBandwidth = true;
+        };
+        // Use a small image file for testing
+        testImage.src = 'icons/Icon-192.png?' + new Date().getTime();
       }
+      
+      // Store bandwidth status for the Flutter app to use
+      window.isLowBandwidth = isLowBandwidth;
+      localStorage.setItem('isLowBandwidth', isLowBandwidth.toString());
     }
     
     window.addEventListener('load', function(ev) {
+      // Check network quality early
       checkNetworkQuality();
       
       // Download main.dart.js
-      // Updated to use Flutter.load instead of loadEntrypoint as per Flutter docs
-      _flutter.loader.load({
+      _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
         }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
-      });
       });
     });
   </script>
