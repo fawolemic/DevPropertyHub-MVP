@@ -2,113 +2,30 @@ name: Flutter CI
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main ]
 
 jobs:
-  test:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        flutter-version: ['3.13.0']
-        flutter-channel: ['stable']
-    
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
-      
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ matrix.flutter-version }}
-          channel: ${{ matrix.flutter-channel }}
-      
-      - name: Install dependencies
-        run: flutter pub get
-      
-      - name: Verify formatting
-        run: dart format --set-exit-if-changed lib test
-      
-      - name: Analyze project source
-        run: flutter analyze
-      
-      - name: Run tests
-        run: flutter test --coverage
-      
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage/lcov.info
-          fail_ci_if_error: false
-
-  build-android:
-    name: Build Android APK
-    needs: test
+  build:
     runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-      
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.13.0'
-          channel: 'stable'
-      
-      - name: Install dependencies
-        run: flutter pub get
-      
-      - name: Build APK
-        run: flutter build apk --release
-      
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
 
-  build-web:
-    name: Build Web
-    needs: test
-    runs-on: ubuntu-latest
-    
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.13.0'
-          channel: 'stable'
-      
-      - name: Install dependencies
-        run: flutter pub get
-      
-      - name: Enable web
-        run: flutter config --enable-web
-      
-      - name: Build web
-        run: flutter build web --release
-      
-      - name: Upload web build
-        uses: actions/upload-artifact@v3
-        with:
-          name: web-build
-          path: build/web
+    - uses: actions/checkout@v3
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: stable
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Format (enforce code style)
+      run: dart format --set-exit-if-changed lib test
+
+    - name: Analyze
+      run: flutter analyze
+
+    - name: Run tests
+      run: flutter test
