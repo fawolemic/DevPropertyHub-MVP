@@ -191,7 +191,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
         notifyListeners();
         return true;
       } else {
-        _errorMessage = response['message'] ?? 'Registration failed';
+        _errorMessage = response['message']?.toString() ?? 'Registration failed';
         _isLoading = false;
         notifyListeners();
         return false;
