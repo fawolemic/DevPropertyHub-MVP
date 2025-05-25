@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider';
 
 import '../../../../core/providers/bandwidth_provider.dart';
 import '../../../../core/providers/registration_provider.dart';
@@ -294,7 +295,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       child: TextButton(
                         onPressed: () {
                           registrationProvider.resetRegistration();
-                          context.go('/login');
+                          GoRouter.of(context).go('/login');
                         },
                         child: const Text('Already have an account? Sign In'),
                       ),

@@ -243,7 +243,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                                   color: _selectedFile == null
                                       ? theme.colorScheme.outline.withOpacity(0.5)
                                       : theme.colorScheme.primary,
-                                  style: BorderStyle.dashed,
+                                  width: 1.5,
                                 ),
                               ),
                               child: Row(

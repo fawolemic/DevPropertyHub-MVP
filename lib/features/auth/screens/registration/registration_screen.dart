@@ -81,7 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (registrationProvider.currentStep == 1) {
-              context.go('/login');
+              GoRouter.of(context).go('/login');
             } else {
               _goToStep(registrationProvider.currentStep - 1);
             }

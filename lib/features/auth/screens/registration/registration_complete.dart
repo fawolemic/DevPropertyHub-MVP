@@ -169,7 +169,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.go('/login');
+                      GoRouter.of(context).go('/login');
                     },
                     icon: const Icon(Icons.login),
                     label: const Text('Sign In'),
