@@ -5,6 +5,13 @@ import 'package:provider/provider.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/providers/bandwidth_provider.dart';
 
+/// MainLayout
+/// 
+/// The main layout structure used across the application.
+/// Handles responsive behaviors across mobile, tablet and desktop layouts.
+/// 
+/// SEARCH TAGS: #layout #responsive #navigation #scaffold #app-structure
+
 class MainLayout extends StatelessWidget {
   final Widget body;
   final String title;
@@ -19,6 +26,8 @@ class MainLayout extends StatelessWidget {
     this.actions,
   }) : super(key: key);
 
+  // #region MAIN BUILD METHOD
+  /// Main build method that constructs the overall layout
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -146,6 +155,10 @@ class MainLayout extends StatelessWidget {
   }
   
   // Drawer for mobile layout
+  // #endregion
+
+  // #region NAVIGATION COMPONENTS
+  /// Builds the navigation drawer for mobile devices
   Widget _buildDrawer(
     BuildContext context, 
     AuthProvider authProvider,
@@ -233,6 +246,7 @@ class MainLayout extends StatelessWidget {
   }
   
   // Drawer item with selection state
+  /// Builds an individual drawer item
   Widget _buildDrawerItem(
     BuildContext context, {
     required IconData icon,
@@ -264,6 +278,7 @@ class MainLayout extends StatelessWidget {
   }
   
   // Side navigation for tablet/desktop
+  /// Builds the side navigation for tablet and desktop devices
   Widget _buildSideNavigation(
     BuildContext context, 
     AuthProvider authProvider,
@@ -415,6 +430,7 @@ class MainLayout extends StatelessWidget {
   }
   
   // Side navigation item
+  /// Builds an individual side navigation item
   Widget _buildSideNavItem(
     BuildContext context, {
     required IconData icon,
@@ -459,7 +475,9 @@ class MainLayout extends StatelessWidget {
   }
   
   // Bottom navigation for mobile
+  /// Builds the bottom navigation bar for mobile devices
   Widget _buildBottomNavBar(BuildContext context, int currentIndex) {
+    // #endregion
     final theme = Theme.of(context);
     final authProvider = Provider.of<AuthProvider>(context);
     
