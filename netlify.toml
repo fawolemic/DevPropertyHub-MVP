@@ -2,13 +2,13 @@
   # Directory to publish (relative to root of your repo)
   publish = "build/web"
   
-  # Install Flutter and build the web application with optimization flags
+  # Install Flutter and build the web application - using only widely supported flags
   command = '''
     git clone https://github.com/flutter/flutter.git --branch stable --depth 1
     export PATH="$PATH:`pwd`/flutter/bin"
     flutter config --enable-web
     flutter pub get
-    flutter build web --release --web-renderer html --dart-define=Dart2jsOptimization=O4
+    flutter build web --release
   '''
 
 # Redirects for web routing
