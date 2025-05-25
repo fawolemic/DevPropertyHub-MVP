@@ -20,6 +20,9 @@ class AppRouter {
   
   /// Create and configure the app router
   static GoRouter router(AuthProvider authProvider) {
+    // Enable URL to reflect imperative APIs for better web routing
+    GoRouter.optionURLReflectsImperativeAPIs = true;
+    
     return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
