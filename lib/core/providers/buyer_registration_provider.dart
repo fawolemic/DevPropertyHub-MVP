@@ -149,6 +149,14 @@ class BuyerRegistrationProvider with ChangeNotifier {
     return false;
   }
 
+  // Move to previous step in the registration flow
+  void previousStep() {
+    if (_currentStep > 1) {
+      _currentStep--;
+      notifyListeners();
+    }
+  }
+
   // Go to a specific step if allowed
   bool goToStep(int step) {
     if (step < 1 || step > _totalSteps) return false;

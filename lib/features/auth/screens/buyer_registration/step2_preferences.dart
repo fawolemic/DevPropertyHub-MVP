@@ -148,222 +148,202 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
-              const SizedBox(height: 24),
-              
-              // Property Types Section
-              Text(
-                'Property Types',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Select all that interest you',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-              ),
-              const SizedBox(height: 12),
-              
-              // Property Types Chips
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _availablePropertyTypes.map((type) {
-                  final isSelected = _selectedPropertyTypes.contains(type);
-                  return FilterChip(
-                    label: Text(type),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          _selectedPropertyTypes.add(type);
-                        } else {
-                          _selectedPropertyTypes.remove(type);
-                        }
-                      });
-                    },
-                    backgroundColor: theme.colorScheme.surface,
-                    selectedColor: theme.colorScheme.primary.withOpacity(0.2),
-                    checkmarkColor: theme.colorScheme.primary,
-                    labelStyle: TextStyle(
-                      color: isSelected 
-                          ? theme.colorScheme.primary 
-                          : theme.colorScheme.onBackground,
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
-              
-              // Preferred Locations Section
-              Text(
-                'Preferred Locations',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Select areas where you\'d like to find property',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-              ),
-              const SizedBox(height: 12),
-              
-              // Location Chips
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _availableLocations.map((location) {
-                  final isSelected = _selectedLocations.contains(location);
-                  return FilterChip(
-                    label: Text(location),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          _selectedLocations.add(location);
-                        } else {
-                          _selectedLocations.remove(location);
-                        }
-                      });
-                    },
-                    backgroundColor: theme.colorScheme.surface,
-                    selectedColor: theme.colorScheme.primary.withOpacity(0.2),
-                    checkmarkColor: theme.colorScheme.primary,
-                    labelStyle: TextStyle(
-                      color: isSelected 
-                          ? theme.colorScheme.primary 
-                          : theme.colorScheme.onBackground,
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
-              
-              // Budget Range Section
-              Text(
-                'Budget Range',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'What\'s your investment budget?',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onBackground.withOpacity(0.7),
-                ),
-              ),
-              const SizedBox(height: 12),
-              
-              // Budget Range Dropdown
-              DropdownButtonFormField<String>(
-                value: _budgetRange,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                ),
-                items: _availableBudgetRanges.map((range) {
-                  return DropdownMenuItem<String>(
-                    value: range,
-                    child: Text(range),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _budgetRange = value;
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 24),
-              
-              // Additional Preferences
-              Text(
-                'Additional Preferences',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              
-              // Mortgage Interest
-              CheckboxListTile(
-                title: const Text('Interested in mortgage options'),
-                subtitle: const Text('I would like to learn about financing options'),
-                value: _interestedInMortgage,
-                onChanged: (value) {
-                  setState(() {
-                    _interestedInMortgage = value ?? false;
-                  });
-                },
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-                dense: true,
-              ),
-              
-              // Investment Properties
-              CheckboxListTile(
-                title: const Text('Looking for investment properties'),
-                subtitle: const Text('I\'m interested in properties for investment purposes'),
-                value: _interestedInInvestmentProperties,
-                onChanged: (value) {
-                  setState(() {
-                    _interestedInInvestmentProperties = value ?? false;
-                  });
-                },
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-                dense: true,
-              ),
-              const SizedBox(height: 32),
-              
-              const Divider(),
-              const SizedBox(height: 24),
-              
-              // Navigation buttons
-              Row(
-                children: [
-                  // Back button
-                  OutlinedButton(
-                    onPressed: registrationProvider.isLoading
-                        ? null
-                        : () {
-                            registrationProvider.previousStep();
-                          },
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    ),
-                    child: const Text('Back'),
-                  ),
-                  const SizedBox(width: 16),
-                  
-                  // Submit button
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: registrationProvider.isLoading ? null : _submitStep,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                    const SizedBox(height: 24),
+                    
+                    // Property Types Section
+                    Text(
+                      'Property Types',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: registrationProvider.isLoading
-                          ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(),
-                            )
-                          : const Text('Complete Registration'),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Select all that interest you',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // Property type chips
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _availablePropertyTypes.map((propertyType) {
+                        final isSelected = _selectedPropertyTypes.contains(propertyType);
+                        return FilterChip(
+                          label: Text(propertyType),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedPropertyTypes.add(propertyType);
+                              } else {
+                                _selectedPropertyTypes.remove(propertyType);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    
+                    // Location Preferences Section
+                    Text(
+                      'Preferred Locations',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Select all locations you\'re interested in',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // Location chips
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _availableLocations.map((location) {
+                        final isSelected = _selectedLocations.contains(location);
+                        return FilterChip(
+                          label: Text(location),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedLocations.add(location);
+                              } else {
+                                _selectedLocations.remove(location);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    
+                    // Budget Range Section
+                    Text(
+                      'Budget Range',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // Budget range dropdown
+                    DropdownButtonFormField<String>(
+                      value: _budgetRange,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      ),
+                      items: _availableBudgetRanges.map((range) {
+                        return DropdownMenuItem(
+                          value: range,
+                          child: Text(range),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _budgetRange = value;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    
+                    // Additional Preferences Section
+                    Text(
+                      'Additional Preferences',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    
+                    // Mortgage Interest
+                    CheckboxListTile(
+                      title: const Text('Interested in mortgage options'),
+                      subtitle: const Text('I would like information about financing and mortgage options'),
+                      value: _interestedInMortgage,
+                      onChanged: (value) {
+                        setState(() {
+                          _interestedInMortgage = value ?? false;
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      dense: true,
+                    ),
+                    
+                    // Investment Properties
+                    CheckboxListTile(
+                      title: const Text('Looking for investment properties'),
+                      subtitle: const Text('I\'m interested in properties for investment purposes'),
+                      value: _interestedInInvestmentProperties,
+                      onChanged: (value) {
+                        setState(() {
+                          _interestedInInvestmentProperties = value ?? false;
+                        });
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      dense: true,
+                    ),
+                    const SizedBox(height: 32),
+                    
+                    const Divider(),
+                    const SizedBox(height: 24),
+                    
+                    // Navigation buttons
+                    Row(
+                      children: [
+                        // Back button
+                        OutlinedButton(
+                          onPressed: registrationProvider.isLoading
+                              ? null
+                              : () {
+                                  registrationProvider.previousStep();
+                                },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          ),
+                          child: const Text('Back'),
+                        ),
+                        const SizedBox(width: 16),
+                        
+                        // Submit button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: registrationProvider.isLoading ? null : _submitStep,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: registrationProvider.isLoading
+                                ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : const Text('Complete Registration'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ),
