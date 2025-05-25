@@ -1,1 +1,14 @@
+# Explicitly handle registration routes
+/unified-register /index.html 200
+/register /index.html 200
+/buyer-register /index.html 200
+/registration-test /index.html 200
+
+# Handle authenticated routes
+/dashboard/* /index.html 200
+/developments/* /index.html 200
+/leads/* /index.html 200
+/settings/* /index.html 200
+
+# Fallback for all other routes
 /* /index.html 200

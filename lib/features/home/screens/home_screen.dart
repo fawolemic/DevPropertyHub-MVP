@@ -7,6 +7,7 @@ import '../models/user_role.dart';
 import '../models/stat_item.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/mobile_navigation_drawer.dart';
+import '../../../shared/widgets/version_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -840,12 +841,19 @@ class _HomeScreenState extends State<HomeScreen> {
           // Copyright
           Divider(color: Colors.grey.shade800),
           const SizedBox(height: 24),
-          Text(
-            '© 2025 DevPropertyHub. All rights reserved. | Privacy Policy | Terms of Service',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: Colors.grey,
-            ),
-            textAlign: TextAlign.center,
+          Column(
+            children: [
+              Text(
+                '© 2025 DevPropertyHub. All rights reserved. | Privacy Policy | Terms of Service',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              // Version indicator to verify deployment updates
+              const Center(child: VersionIndicator()),
+            ],
           ),
         ],
       ),
