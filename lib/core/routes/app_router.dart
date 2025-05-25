@@ -20,9 +20,6 @@ class AppRouter {
   
   /// Create and configure the app router
   static GoRouter router(AuthProvider authProvider) {
-    // Enable URL to reflect path parameters for better web routing
-    GoRouter.optionUrlReflectsPathParameters = true;
-    
     return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
