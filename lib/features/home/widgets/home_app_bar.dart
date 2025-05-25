@@ -14,13 +14,26 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: theme.colorScheme.surface,
       elevation: 1,
-      title: const Text(
-        'DevPropertyHub',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
+      title: InkWell(
+        onTap: () => GoRouter.of(context).go('/'),
+        child: const Text(
+          'DevPropertyHub',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
       ),
+      // Add hamburger menu for mobile
+      leading: MediaQuery.of(context).size.width <= 800
+        ? IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              // Show mobile navigation drawer
+              Scaffold.of(context).openDrawer();
+            },
+          )
+        : null,
       actions: [
         // Navigation links for larger screens
         if (MediaQuery.of(context).size.width > 800) ...[

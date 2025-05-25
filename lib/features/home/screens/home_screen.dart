@@ -6,6 +6,7 @@ import '../models/featured_property.dart';
 import '../models/user_role.dart';
 import '../models/stat_item.dart';
 import '../widgets/home_app_bar.dart';
+import '../widgets/mobile_navigation_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: const HomeAppBar(),
+      drawer: const MobileNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [

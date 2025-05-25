@@ -81,7 +81,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (registrationProvider.currentStep == 1) {
-              GoRouter.of(context).go('/login');
+              // Navigate back to home page instead of login
+              GoRouter.of(context).go('/');
             } else {
               _goToStep(registrationProvider.currentStep - 1);
             }
