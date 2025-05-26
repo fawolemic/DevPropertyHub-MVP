@@ -76,22 +76,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: ElevatedButton(
-            onPressed: () async {
-              // Try using url_launcher with web-specific options
-              final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html');
-              if (!await launchUrl(
-                url,
-                mode: LaunchMode.externalApplication,
-                webOnlyWindowName: '_self',
-              )) {
-                // If url_launcher fails, fallback to Go Router
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Navigating to registration page...')),
-                  );
-                  GoRouter.of(context).go('/unified-register');
-                }
-              }
+            onPressed: () {
+              GoRouter.of(context).go('/unified-register');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
