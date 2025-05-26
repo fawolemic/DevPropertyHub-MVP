@@ -39,7 +39,8 @@ class AppRouter {
                                    state.location == '/unified-register' ||
                                    state.location.startsWith('/email-verification') ||
                                    state.location.startsWith('/subscription-selection') ||
-                                   state.location.startsWith('/approval-status');
+                                   state.location.startsWith('/approval-status') ||
+                                   state.location.startsWith('/payment');
         final isPublicRoute = state.location == '/' || state.location == '/home';
         
         debugPrint('GoRouter redirect: isLoggedIn=$isLoggedIn, path=${state.location}');
@@ -184,9 +185,28 @@ class AppRouter {
         GoRoute(
           path: '/payment',
           builder: (context, state) {
-            // Extract plan from URI parameters for older GoRouter version
-            final Uri uri = Uri.parse(state.location);
-            final String plan = uri.queryParameters['plan'] ?? 'premium';
+            // Try to get plan from both extra and URI parameters
+            String plan = 'premium';
+            
+            // First check if plan is in extra
+            if (state.extra != null && state.extra is Map) {
+              final Map<dynamic, dynamic> extra = state.extra as Map;
+              if (extra.containsKey('plan')) {
+                plan = extra['plan'] as String;
+                debugPrint('Got plan from extra: $plan');
+              }
+            }
+            
+            // If not found in extra, try URI parameters
+            if (plan == 'premium') {
+              final Uri uri = Uri.parse(state.location);
+              if (uri.queryParameters.containsKey('plan')) {
+                plan = uri.queryParameters['plan']!;
+                debugPrint('Got plan from URI parameters: $plan');
+              }
+            }
+            
+            debugPrint('Rendering PaymentScreen with plan: $plan');
             return PaymentScreen(selectedPlan: plan);
           },
         ),

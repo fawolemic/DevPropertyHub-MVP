@@ -262,7 +262,13 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
   
   void _proceedToPayment() {
     // Navigate to the payment screen with the selected plan as a query parameter
-    GoRouter.of(context).go('/payment?plan=$_selectedPlan');
+    // Use extra parameter to ensure the plan is passed correctly
+    GoRouter.of(context).go('/payment?plan=$_selectedPlan', extra: {
+      'plan': _selectedPlan,
+    });
+    
+    // Add debug print to help diagnose issues
+    debugPrint('Navigating to payment screen with plan: $_selectedPlan');
   }
   
   void _skipSubscription() {
