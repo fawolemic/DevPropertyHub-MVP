@@ -102,15 +102,12 @@ class AppRouter {
         // Dashboard routes
         GoRoute(
           path: '/dashboard',
-          builder: (context, state) {
-            // Check for query parameter to determine which dashboard to show
-            final useModern = state.queryParameters['modern'] == 'true';
-            return useModern ? const ModernDashboardScreen() : const DashboardScreen();
-          },
+          builder: (context, state) => const ModernDashboardScreen(), // Modern dashboard is now the default
         ),
+        // Legacy dashboard route - kept for backward compatibility
         GoRoute(
-          path: '/modern-dashboard',
-          builder: (context, state) => const ModernDashboardScreen(),
+          path: '/legacy-dashboard',
+          builder: (context, state) => const DashboardScreen(),
         ),
         
         // Developments route
