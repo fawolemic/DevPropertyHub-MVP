@@ -81,6 +81,9 @@ class _AgentFormState extends State<AgentForm> {
         return;
       }
       
+      // Debug print to check license document path
+      debugPrint('License document path before validation: $_licenseDocumentPath');
+      
       if (_licenseDocumentPath == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please upload your license document')),
@@ -91,6 +94,7 @@ class _AgentFormState extends State<AgentForm> {
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
       
       // Make sure the license document is marked as uploaded in the provider
+      // This is critical - ensure it's called before submitting the form
       registrationProvider.setLicenseDocumentUploaded(_licenseDocumentPath);
       
       final data = {
@@ -99,6 +103,9 @@ class _AgentFormState extends State<AgentForm> {
         'yearsOfExperience': _yearsOfExperienceController.text.trim(),
         'bio': _bioController.text.trim(),
         'specializations': _selectedSpecializations,
+        // Explicitly include the license document path and upload flag in the data
+        'licenseDocumentPath': _licenseDocumentPath,
+        'hasUploadedLicenseDocument': true,
       };
       
       if (registrationProvider.nextStep(data)) {

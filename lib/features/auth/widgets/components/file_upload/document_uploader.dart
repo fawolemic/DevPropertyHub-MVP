@@ -49,7 +49,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
       await Future.delayed(const Duration(milliseconds: 500));
       
       // Simulate file selection (in a real app, this would come from file_picker)
-      final mockFileName = 'CAC_Certificate.pdf';
+      final mockFileName = widget.label.contains('License') ? 'License_Document.pdf' : 'CAC_Certificate.pdf';
       
       // Simulate upload progress
       for (int i = 1; i <= 10; i++) {
@@ -59,18 +59,26 @@ class _DocumentUploaderState extends State<DocumentUploader> {
         });
       }
       
+      // Generate a unique file path with timestamp to avoid any caching issues
+      final uniqueFilePath = 'mock_path_${DateTime.now().millisecondsSinceEpoch}_$mockFileName';
+      
       setState(() {
         _isUploading = false;
         _selectedFileName = mockFileName;
-        _selectedFilePath = 'mock_path_for_demo'; // In a real app, this would be the actual file path
-        widget.onFileSelected(_selectedFilePath);
+        _selectedFilePath = uniqueFilePath; // In a real app, this would be the actual file path
       });
+      
+      // Important: Call onFileSelected after state is updated to ensure the callback receives the updated path
+      // This ensures the parent widget gets the correct file path
+      debugPrint('Document uploaded successfully: $_selectedFilePath');
+      widget.onFileSelected(_selectedFilePath);
     } catch (e) {
       setState(() {
         _isUploading = false;
         _errorMessage = 'Failed to upload file: ${e.toString()}';
-        widget.onFileSelected(null);
       });
+      debugPrint('Document upload failed: ${e.toString()}');
+      widget.onFileSelected(null);
     }
   }
 

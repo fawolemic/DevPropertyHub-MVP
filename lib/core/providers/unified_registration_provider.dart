@@ -209,12 +209,16 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   }
   
   bool validateAgentData() {
+    // Debug print to help diagnose issues
+    debugPrint('Validating agent data: $_step3Data');
+    
     // Check required fields for agents
     final requiredFields = ['invitationCode', 'licenseNumber', 'yearsOfExperience'];
     
     for (final field in requiredFields) {
       if (!_step3Data.containsKey(field) || _step3Data[field].toString().trim().isEmpty) {
         _errorMessage = 'Please fill in all required fields';
+        debugPrint('Missing required field: $field');
         return false;
       }
     }
@@ -223,22 +227,29 @@ class UnifiedRegistrationProvider with ChangeNotifier {
     if (!_step3Data.containsKey('specializations') || 
         (_step3Data['specializations'] as List<dynamic>).isEmpty) {
       _errorMessage = 'Please select at least one specialization area';
+      debugPrint('No specializations selected');
       return false;
     }
     
-    // Check license document upload - check both possible flags for maximum compatibility
+    // Check license document upload - check all possible flags for maximum compatibility
     bool hasUploadedLicense = _step3Data['hasUploadedLicenseDocument'] == true;
     bool hasLicensePath = _step3Data.containsKey('licenseDocumentPath') && 
                         _step3Data['licenseDocumentPath'] != null && 
                         _step3Data['licenseDocumentPath'].toString().isNotEmpty;
     
+    // Detailed debug output
+    debugPrint('License document validation check:');
+    debugPrint('- hasUploadedLicenseDocument flag: $hasUploadedLicense');
+    debugPrint('- licenseDocumentPath exists: ${_step3Data.containsKey('licenseDocumentPath')}');
+    debugPrint('- licenseDocumentPath value: ${_step3Data['licenseDocumentPath']}');
+    
     if (!hasUploadedLicense && !hasLicensePath) {
       _errorMessage = 'Please upload your license document';
-      debugPrint('License document validation failed: hasUploadedLicense=$hasUploadedLicense, hasLicensePath=$hasLicensePath');
-      debugPrint('Current step3Data: $_step3Data');
+      debugPrint('License document validation failed: document not uploaded');
       return false;
     }
     
+    debugPrint('Agent data validation successful');
     return true;
   }
 
