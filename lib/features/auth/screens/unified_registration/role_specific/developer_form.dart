@@ -195,10 +195,12 @@ class _DeveloperFormState extends State<DeveloperForm> {
             isRequired: true,
             maxSizeInMB: 10,
             onFileSelected: (filePath) {
-              setState(() {
-                _cacCertificatePath = filePath;
-              });
-            },
+  setState(() {
+    _cacCertificatePath = filePath;
+    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+    registrationProvider.step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
+  });
+},
           ),
           const SizedBox(height: 32),
           
