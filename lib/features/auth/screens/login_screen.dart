@@ -47,9 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (success) {
-        if (mounted) {
-          context.go('/dashboard');
-        }
+        // Don't manually navigate here
+        // GoRouter redirect will handle navigation based on isLoggedIn state
+        debugPrint('Login successful - GoRouter should handle redirect to dashboard');
       } else {
         setState(() {
           _errorMessage = 'Invalid email or password';
@@ -97,6 +97,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if already logged in and redirect to dashboard
+    final authProvider = provider_package.Provider.of<AuthProvider>(context);
+    if (authProvider.isLoggedIn) {
+      // Use Future.microtask to avoid build-time navigation
+      // This ensures we don't get a "setState called during build" error
+      Future.microtask(() => GoRouter.of(context).go('/dashboard'));
+      
+      // Return a loading indicator while redirecting
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
     final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;

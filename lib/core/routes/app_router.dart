@@ -6,6 +6,10 @@ import '../../features/auth/screens/registration/registration_screen.dart';
 import '../../features/auth/screens/buyer_registration/buyer_registration_screen.dart';
 import '../../features/auth/screens/unified_registration/unified_registration_screen.dart';
 import '../../features/auth/screens/registration_test_page.dart';
+import '../../features/auth/screens/additional_setup/common/email_verification_screen.dart';
+import '../../features/auth/screens/additional_setup/developer/subscription_selection.dart';
+import '../../features/auth/screens/additional_setup/developer/payment_screen.dart';
+import '../../features/auth/screens/additional_setup/agent/approval_status_screen.dart';
 import '../../features/testing/direct_test_page.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
@@ -25,20 +29,31 @@ class AppRouter {
       initialLocation: '/',
       debugLogDiagnostics: true,
       redirect: (context, state) {
-        // Handle authentication redirects
+        // Get current auth state
         final isLoggedIn = authProvider.isLoggedIn;
+        
+        // Define route types
         final isLoginRoute = state.location == '/login';
-        final isRegistrationRoute = state.location.startsWith('/register') || state.location == '/unified-register';
+        final isDashboardRoute = state.location == '/dashboard';
+        final isRegistrationRoute = state.location.startsWith('/register') || 
+                                   state.location == '/unified-register' ||
+                                   state.location.startsWith('/email-verification') ||
+                                   state.location.startsWith('/subscription-selection') ||
+                                   state.location.startsWith('/approval-status');
         final isPublicRoute = state.location == '/' || state.location == '/home';
         
-        // If not logged in and not on login, registration, or public page, redirect to login
-        if (!isLoggedIn && !isLoginRoute && !isRegistrationRoute && !isPublicRoute) {
-          return '/login';
+        debugPrint('GoRouter redirect: isLoggedIn=$isLoggedIn, path=${state.location}');
+        
+        // If logged in and on login or home page, redirect to dashboard
+        if (isLoggedIn && (isLoginRoute || isPublicRoute)) {
+          debugPrint('User is logged in and on login/home. Redirecting to dashboard.');
+          return '/dashboard';
         }
         
-        // If logged in and on login page, redirect to dashboard
-        if (isLoggedIn && isLoginRoute) {
-          return '/dashboard';
+        // If not logged in and trying to access a protected page, redirect to login
+        if (!isLoggedIn && !isLoginRoute && !isRegistrationRoute && !isPublicRoute) {
+          debugPrint('User is not logged in and trying to access a protected page. Redirecting to login.');
+          return '/login';
         }
         
         // No redirect needed
@@ -112,6 +127,81 @@ class AppRouter {
         GoRoute(
           path: '/api-example',
           builder: (context, state) => const ApiServiceExampleScreen(),
+        ),
+        
+        // Email verification route
+        GoRoute(
+          path: '/email-verification',
+          builder: (context, state) {
+            // Get email from URI parameters
+            // Using state.extra as primary source, then falling back to URI parameters if available
+            Map<String, dynamic> extra = {};
+            if (state.extra != null && state.extra is Map<String, dynamic>) {
+              extra = state.extra as Map<String, dynamic>;
+            }
+            
+            // Get parameters from extra or from the location
+            final Uri uri = Uri.parse(state.location);
+            final String email = extra['email'] as String? ?? uri.queryParameters['email'] ?? '';
+            final String userType = extra['userType'] as String? ?? uri.queryParameters['userType'] ?? '';
+            final String fullName = extra['fullName'] as String? ?? uri.queryParameters['fullName'] ?? '';
+            
+            // Create a callback based on user type
+            VoidCallback onVerificationComplete = () {
+              // Default to home page
+              GoRouter.of(context).go('/home');
+            };
+            
+            // Set the appropriate callback based on user type
+            if (userType == 'developer') {
+              onVerificationComplete = () {
+                GoRouter.of(context).go('/subscription-selection');
+              };
+            } else if (userType == 'agent') {
+              onVerificationComplete = () {
+                GoRouter.of(context).go('/approval-status', extra: {'agentName': fullName});
+              };
+            } else if (userType == 'buyer') {
+              onVerificationComplete = () {
+                GoRouter.of(context).go('/home');
+              };
+            }
+            
+            return EmailVerificationScreen(
+              email: email,
+              onVerificationComplete: onVerificationComplete,
+            );
+          },
+        ),
+        
+        // Subscription selection route for developers
+        GoRoute(
+          path: '/subscription-selection',
+          builder: (context, state) => const SubscriptionSelectionScreen(),
+        ),
+        
+        // Payment route for subscription
+        GoRoute(
+          path: '/payment',
+          builder: (context, state) {
+            // Extract plan from URI parameters for older GoRouter version
+            final Uri uri = Uri.parse(state.location);
+            final String plan = uri.queryParameters['plan'] ?? 'premium';
+            return PaymentScreen(selectedPlan: plan);
+          },
+        ),
+        
+        // Approval status route for agents
+        GoRoute(
+          path: '/approval-status',
+          builder: (context, state) {
+            final Map<String, dynamic> extra = state.extra as Map<String, dynamic>? ?? {};
+            final String agentName = extra['agentName'] as String? ?? 'Agent';
+            
+            return ApprovalStatusScreen(
+              agentName: agentName,
+            );
+          },
         ),
         
         // Development details route

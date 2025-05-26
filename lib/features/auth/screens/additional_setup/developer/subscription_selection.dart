@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// SubscriptionSelectionScreen
 /// 
@@ -260,19 +261,12 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
   }
   
   void _proceedToPayment() {
-    // In a real implementation, this would navigate to the payment screen
-    // and pass the selected plan
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Proceeding to payment for $_selectedPlan plan'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    // Navigate to the payment screen with the selected plan as a query parameter
+    GoRouter.of(context).go('/payment?plan=$_selectedPlan');
   }
   
   void _skipSubscription() {
-    // In a real implementation, this would navigate to the dashboard
-    // or next onboarding step
+    // Show a message that subscription selection was skipped
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Subscription selection skipped'),
@@ -280,7 +274,7 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
       ),
     );
     
-    // Navigate back or to the next screen
-    Navigator.of(context).pop();
+    // Navigate to the dashboard using GoRouter
+    GoRouter.of(context).go('/dashboard');
   }
 }
