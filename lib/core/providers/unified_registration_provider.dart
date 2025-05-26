@@ -171,9 +171,16 @@ class UnifiedRegistrationProvider with ChangeNotifier {
       }
     }
     
-    // Check CAC certificate upload
-    if (!_step3Data.containsKey('hasUploadedCertificate') || _step3Data['hasUploadedCertificate'] != true) {
+    // Check CAC certificate upload - check both possible flags for maximum compatibility
+    bool hasUploadedCertificate = _step3Data['hasUploadedCertificate'] == true;
+    bool hasCacPath = _step3Data.containsKey('cacCertificatePath') && 
+                     _step3Data['cacCertificatePath'] != null && 
+                     _step3Data['cacCertificatePath'].toString().isNotEmpty;
+    
+    if (!hasUploadedCertificate && !hasCacPath) {
       _errorMessage = 'Please upload your CAC certificate';
+      debugPrint('CAC certificate validation failed: hasUploadedCertificate=$hasUploadedCertificate, hasCacPath=$hasCacPath');
+      debugPrint('Current step3Data: $_step3Data');
       return false;
     }
     
@@ -224,6 +231,20 @@ class UnifiedRegistrationProvider with ChangeNotifier {
     return true;
   }
 
+  // Method to set CAC certificate upload state
+  void setCacCertificateUploaded(String? filePath) {
+    _step3Data['cacCertificatePath'] = filePath;
+    _step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
+    notifyListeners();
+  }
+
+  // Method to set license document upload state for agents
+  void setLicenseDocumentUploaded(String? filePath) {
+    _step3Data['licenseDocumentPath'] = filePath;
+    _step3Data['hasUploadedLicenseDocument'] = filePath != null && filePath.isNotEmpty;
+    notifyListeners();
+  }
+  
   // Submit registration to backend
   Future<void> submitRegistration() async {
     _isLoading = true;

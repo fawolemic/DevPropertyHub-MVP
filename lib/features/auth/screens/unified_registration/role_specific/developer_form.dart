@@ -65,11 +65,10 @@ class _DeveloperFormState extends State<DeveloperForm> {
         return;
       }
       
-      // Ensure we're setting the hasUploadedCertificate flag
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
       
-      // Explicitly set the flag in the provider's data
-      registrationProvider.step3Data['hasUploadedCertificate'] = true;
+      // Make sure the certificate is marked as uploaded in the provider
+      registrationProvider.setCacCertificateUploaded(_cacCertificatePath);
       
       final data = {
         'companyName': _companyNameController.text.trim(),
@@ -77,8 +76,6 @@ class _DeveloperFormState extends State<DeveloperForm> {
         'rcNumber': _rcNumberController.text.trim(),
         'yearsInBusiness': _yearsInBusinessController.text.trim(),
         'contactPerson': _contactPersonController.text.trim(),
-        'cacCertificatePath': _cacCertificatePath,
-        'hasUploadedCertificate': true,
       };
       
       if (registrationProvider.nextStep(data)) {
@@ -202,11 +199,10 @@ class _DeveloperFormState extends State<DeveloperForm> {
             onFileSelected: (filePath) {
   setState(() {
     _cacCertificatePath = filePath;
-    // Directly modify the provider's data to ensure the flag is set
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-    // Force update the mutable map inside the provider
-    registrationProvider._step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
   });
+  // Use the provider's method to update the state properly
+  final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+  registrationProvider.setCacCertificateUploaded(filePath);
 },
           ),
           const SizedBox(height: 32),

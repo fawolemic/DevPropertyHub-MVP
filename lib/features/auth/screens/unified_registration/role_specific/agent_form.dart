@@ -88,16 +88,18 @@ class _AgentFormState extends State<AgentForm> {
         return;
       }
       
+      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+      
+      // Make sure the license document is marked as uploaded in the provider
+      registrationProvider.setLicenseDocumentUploaded(_licenseDocumentPath);
+      
       final data = {
         'invitationCode': _invitationCodeController.text.trim(),
         'licenseNumber': _licenseNumberController.text.trim(),
         'yearsOfExperience': _yearsOfExperienceController.text.trim(),
         'bio': _bioController.text.trim(),
         'specializations': _selectedSpecializations,
-        'licenseDocumentPath': _licenseDocumentPath,
       };
-      
-      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
       
       if (registrationProvider.nextStep(data)) {
         // If this is the final step, submit registration
@@ -237,9 +239,10 @@ class _AgentFormState extends State<AgentForm> {
             onFileSelected: (path) {
   setState(() {
     _licenseDocumentPath = path;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-    registrationProvider.step3Data['hasUploadedLicenseDocument'] = path != null && path.isNotEmpty;
   });
+  // Use the provider's method to update the state properly
+  final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+  registrationProvider.setLicenseDocumentUploaded(path);
 },
           ),
           const SizedBox(height: 32),
