@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../services/email_verification_api.dart';
 
 /// EmailVerificationScreen
 /// 
@@ -88,53 +89,46 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
   
   Future<void> _verifyCode() async {
-    if (_completeCode.length != 6) {
-      setState(() {
-        _errorMessage = 'Please enter the complete 6-digit code';
-      });
-      return;
-    }
-    
+  if (_completeCode.length != 6) {
     setState(() {
-      _isVerifying = true;
-      _errorMessage = null;
+      _errorMessage = 'Please enter the complete 6-digit code';
     });
-    
-    try {
-      // In a real implementation, this would call an API to verify the code
-      // For now, we'll simulate a network delay and check against a mock code
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // For demo purposes, any code "123456" is considered valid
-      final bool isValid = _completeCode == "123456";
-      
-      if (isValid) {
-        // Show success message before navigating
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Email verified successfully'),
-            behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 2),
-          ),
-        );
-        
-        // Slight delay to show the success message before navigating
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          widget.onVerificationComplete();
-        });
-      } else {
-        setState(() {
-          _isVerifying = false;
-          _errorMessage = 'Invalid verification code. Please try again.';
-        });
-      }
-    } catch (e) {
+    return;
+  }
+
+  setState(() {
+    _isVerifying = true;
+    _errorMessage = null;
+  });
+
+  try {
+    final api = EmailVerificationApi();
+    final bool isValid = await api.verifyCode(email: widget.email, code: _completeCode);
+
+    if (isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email verified successfully'),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        widget.onVerificationComplete();
+      });
+    } else {
       setState(() {
         _isVerifying = false;
-        _errorMessage = 'Verification failed. Please try again.';
+        _errorMessage = 'Invalid verification code. Please try again.';
       });
     }
+  } catch (e) {
+    setState(() {
+      _isVerifying = false;
+      _errorMessage = 'Verification failed. Please try again.';
+    });
   }
+}
   
   Future<void> _resendCode() async {
     if (_resendCountdown > 0) return;
