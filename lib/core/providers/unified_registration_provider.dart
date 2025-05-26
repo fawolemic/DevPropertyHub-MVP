@@ -171,19 +171,17 @@ class UnifiedRegistrationProvider with ChangeNotifier {
       }
     }
     
-    // Check CAC certificate upload - check both possible flags for maximum compatibility
+    // CAC certificate upload is now optional
+    // Log the state for debugging purposes
     bool hasUploadedCertificate = _step3Data['hasUploadedCertificate'] == true;
     bool hasCacPath = _step3Data.containsKey('cacCertificatePath') && 
                      _step3Data['cacCertificatePath'] != null && 
                      _step3Data['cacCertificatePath'].toString().isNotEmpty;
     
-    if (!hasUploadedCertificate && !hasCacPath) {
-      _errorMessage = 'Please upload your CAC certificate';
-      debugPrint('CAC certificate validation failed: hasUploadedCertificate=$hasUploadedCertificate, hasCacPath=$hasCacPath');
-      debugPrint('Current step3Data: $_step3Data');
-      return false;
-    }
+    debugPrint('CAC certificate state: hasUploadedCertificate=$hasUploadedCertificate, hasCacPath=$hasCacPath');
+    debugPrint('Current step3Data: $_step3Data');
     
+    // Always return true since this is now optional
     return true;
   }
   
