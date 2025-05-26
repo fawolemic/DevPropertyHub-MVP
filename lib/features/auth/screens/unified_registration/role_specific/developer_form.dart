@@ -198,9 +198,6 @@ class _DeveloperFormState extends State<DeveloperForm> {
               setState(() {
                 _cacCertificatePath = filePath;
               });
-              // Save immediately to provider for persistence
-              final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-              registrationProvider.step3Data['cacCertificatePath'] = filePath;
             },
           ),
           const SizedBox(height: 32),
