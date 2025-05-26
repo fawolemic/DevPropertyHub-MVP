@@ -235,10 +235,12 @@ class _AgentFormState extends State<AgentForm> {
             acceptedFileTypes: 'PDF, JPG, PNG',
             maxSizeInMB: 5,
             onFileSelected: (path) {
-              setState(() {
-                _licenseDocumentPath = path;
-              });
-            },
+  setState(() {
+    _licenseDocumentPath = path;
+    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+    registrationProvider.step3Data['hasUploadedLicenseDocument'] = path != null && path.isNotEmpty;
+  });
+},
           ),
           const SizedBox(height: 32),
           

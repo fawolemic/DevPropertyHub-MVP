@@ -66,13 +66,14 @@ class _DeveloperFormState extends State<DeveloperForm> {
       }
       
       final data = {
-        'companyName': _companyNameController.text.trim(),
-        'businessAddress': _businessAddressController.text.trim(),
-        'rcNumber': _rcNumberController.text.trim(),
-        'yearsInBusiness': _yearsInBusinessController.text.trim(),
-        'contactPerson': _contactPersonController.text.trim(),
-        'cacCertificatePath': _cacCertificatePath,
-      };
+  'companyName': _companyNameController.text.trim(),
+  'businessAddress': _businessAddressController.text.trim(),
+  'rcNumber': _rcNumberController.text.trim(),
+  'yearsInBusiness': _yearsInBusinessController.text.trim(),
+  'contactPerson': _contactPersonController.text.trim(),
+  'cacCertificatePath': _cacCertificatePath,
+  'hasUploadedCertificate': _cacCertificatePath != null && _cacCertificatePath!.isNotEmpty,
+};
       
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
       
