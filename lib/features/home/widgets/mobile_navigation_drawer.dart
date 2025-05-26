@@ -41,24 +41,9 @@ class MobileNavigationDrawer extends StatelessWidget {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         Navigator.pop(context); // Close drawer
-                        
-                        // Try using url_launcher for direct HTML page
-                        final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/login.html');
-                        if (!await launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                          webOnlyWindowName: '_self',
-                        )) {
-                          // If url_launcher fails, fallback to Go Router
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Navigating to login page...')),
-                            );
-                            GoRouter.of(context).go('/login');
-                          }
-                        }
+                        GoRouter.of(context).go('/login'); // Go to login page
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

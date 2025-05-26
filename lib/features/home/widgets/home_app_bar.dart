@@ -47,22 +47,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         
         // Auth buttons
         TextButton(
-          onPressed: () async {
-            // Try using url_launcher for direct HTML page
-            final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/login.html');
-            if (!await launchUrl(
-              url,
-              mode: LaunchMode.externalApplication,
-              webOnlyWindowName: '_self',
-            )) {
-              // If url_launcher fails, fallback to Go Router
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navigating to login page...')),
-                );
-                GoRouter.of(context).go('/login');
-              }
-            }
+          onPressed: () {
+            // Use GoRouter to navigate to the login screen
+            context.go('/login');
           },
           child: Text(
             'Sign In',
