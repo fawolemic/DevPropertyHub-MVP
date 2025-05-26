@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' as provider_package;
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/config/supabase_config.dart';
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bandwidth_provider.dart';
 import 'core/providers/registration_provider.dart';
 import 'core/providers/buyer_registration_provider.dart';
 import 'core/providers/unified_registration_provider.dart';
+import 'core/providers/supabase_provider.dart';
+import 'core/providers/supabase_auth_provider.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize services and providers here
+  // Initialize Supabase
+  await SupabaseConfig.initialize();
+  
+  // Initialize other services and providers here
+  
+  // Initialize Supabase provider
+  final supabaseProvider = SupabaseProvider();
+  await supabaseProvider.initialize();
+  
+  // Initialize Supabase auth provider
+  final supabaseAuthProvider = SupabaseAuthProvider();
+  await supabaseAuthProvider.initAuth();
   
   runApp(
     provider_package.MultiProvider(
       providers: [
+        provider_package.ChangeNotifierProvider.value(value: supabaseProvider),
+        provider_package.ChangeNotifierProvider.value(value: supabaseAuthProvider),
         provider_package.ChangeNotifierProvider(create: (_) => AuthProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => BandwidthProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => RegistrationProvider()),

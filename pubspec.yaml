@@ -40,6 +40,7 @@ dependencies:
   # Forms
   flutter_form_builder: ^9.0.0
   form_builder_validators: ^9.0.0
+  supabase_flutter: ^2.8.4
 
 dev_dependencies:
   flutter_test:
