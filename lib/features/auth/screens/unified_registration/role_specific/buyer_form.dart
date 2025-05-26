@@ -3,6 +3,7 @@ import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../../core/providers/unified_registration_provider.dart';
 import '../../../../../core/providers/bandwidth_provider.dart';
+import '../../../widgets/components/selection/location_multi_select.dart';
 
 class BuyerForm extends StatefulWidget {
   const BuyerForm({Key? key}) : super(key: key);
@@ -163,44 +164,17 @@ class _BuyerFormState extends State<BuyerForm> {
           ),
           const SizedBox(height: 24),
           
-          // Location Preferences Section
-          Text(
-            'Preferred Locations',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Select all locations you\'re interested in',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
-            ),
-          ),
-          const SizedBox(height: 8),
-          
-          // Location chips
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _availableLocations.map((location) {
-              final isSelected = _selectedLocations.contains(location);
-              return FilterChip(
-                label: Text(location),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedLocations.add(location);
-                    } else {
-                      _selectedLocations.remove(location);
-                    }
-                  });
-                },
-                selectedColor: theme.colorScheme.primary.withOpacity(0.2),
-                checkmarkColor: theme.colorScheme.primary,
-              );
-            }).toList(),
+          // Location Preferences Section using enhanced multi-select component
+          LocationMultiSelect(
+            availableLocations: _availableLocations,
+            selectedLocations: _selectedLocations,
+            onChanged: (locations) {
+              setState(() {
+                _selectedLocations = locations;
+              });
+            },
+            label: 'Preferred Locations',
+            isRequired: true,
           ),
           const SizedBox(height: 24),
           

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../../core/providers/unified_registration_provider.dart';
 import '../../../../../core/providers/bandwidth_provider.dart';
+import '../../../widgets/components/file_upload/document_uploader.dart';
 
 class AgentForm extends StatefulWidget {
   const AgentForm({Key? key}) : super(key: key);
@@ -18,6 +19,9 @@ class _AgentFormState extends State<AgentForm> {
   final _licenseNumberController = TextEditingController();
   final _yearsOfExperienceController = TextEditingController();
   final _bioController = TextEditingController();
+  
+  // Document upload
+  String? _licenseDocumentPath;
   
   // Specialization areas
   final List<String> _availableSpecializations = [
@@ -56,6 +60,7 @@ class _AgentFormState extends State<AgentForm> {
       _licenseNumberController.text = savedData['licenseNumber'] ?? '';
       _yearsOfExperienceController.text = savedData['yearsOfExperience'] ?? '';
       _bioController.text = savedData['bio'] ?? '';
+      _licenseDocumentPath = savedData['licenseDocumentPath'];
       setState(() {
         _selectedSpecializations = List<String>.from(savedData['specializations'] ?? []);
       });
@@ -76,12 +81,20 @@ class _AgentFormState extends State<AgentForm> {
         return;
       }
       
+      if (_licenseDocumentPath == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please upload your license document')),
+        );
+        return;
+      }
+      
       final data = {
         'invitationCode': _invitationCodeController.text.trim(),
         'licenseNumber': _licenseNumberController.text.trim(),
         'yearsOfExperience': _yearsOfExperienceController.text.trim(),
         'bio': _bioController.text.trim(),
         'specializations': _selectedSpecializations,
+        'licenseDocumentPath': _licenseDocumentPath,
       };
       
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
@@ -213,6 +226,19 @@ class _AgentFormState extends State<AgentForm> {
             ),
             maxLines: 4,
             minLines: 3,
+          ),
+          const SizedBox(height: 24),
+          
+          // License Document Upload
+          DocumentUploader(
+            label: 'License Document',
+            acceptedFileTypes: 'PDF, JPG, PNG',
+            maxSizeInMB: 5,
+            onFileSelected: (path) {
+              setState(() {
+                _licenseDocumentPath = path;
+              });
+            },
           ),
           const SizedBox(height: 32),
           

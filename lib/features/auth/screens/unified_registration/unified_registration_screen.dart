@@ -6,7 +6,7 @@ import '../../../../core/providers/bandwidth_provider.dart';
 import 'step1_user_type.dart';
 import 'step2_basic_info.dart';
 import 'step3_role_specific.dart';
-import 'registration_complete.dart';
+import 'registration_completion_wrapper.dart';
 
 class UnifiedRegistrationScreen extends StatefulWidget {
   const UnifiedRegistrationScreen({Key? key}) : super(key: key);
@@ -104,7 +104,7 @@ class _UnifiedRegistrationScreenState extends State<UnifiedRegistrationScreen> {
       case 2:
         return const Step3RoleSpecificScreen();
       case 3:
-        return const RegistrationCompleteScreen();
+        return const RegistrationCompletionWrapper();
       default:
         return const Center(
           child: Text('Invalid step'),

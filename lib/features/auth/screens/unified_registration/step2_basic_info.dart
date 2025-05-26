@@ -3,6 +3,9 @@ import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../core/providers/unified_registration_provider.dart';
 import '../../../../core/providers/bandwidth_provider.dart';
+import '../../widgets/components/validation/password_validator.dart';
+import '../../widgets/components/validation/password_strength_indicator.dart';
+import '../../widgets/components/terms_and_conditions.dart';
 
 class Step2BasicInfoScreen extends StatefulWidget {
   const Step2BasicInfoScreen({Key? key}) : super(key: key);
@@ -68,8 +71,18 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
       
       // Check if terms are accepted
       if (!_acceptTerms) {
+        setState(() {}); // Refresh to show error text in terms checkbox
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('You must accept the terms and conditions')),
+        );
+        return;
+      }
+      
+      // Check password strength as a final validation
+      final passwordStrength = PasswordValidator.calculateStrength(_passwordController.text);
+      if (passwordStrength < 3) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please create a stronger password')),
         );
         return;
       }
@@ -239,20 +252,26 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        helperText: 'Must be at least 8 characters with numbers and letters',
                       ),
                       obscureText: _obscurePassword,
                       textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        // Trigger rebuild for password strength indicator
+                        setState(() {});
+                      },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        if (value.length < 8) {
-                          return 'Password must be at least 8 characters';
-                        }
-                        return null;
+                        return PasswordValidator.validate(value);
                       },
                     ),
+                    // Password strength indicator
+                    if (_passwordController.text.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0),
+                        child: PasswordStrengthIndicator(
+                          password: _passwordController.text,
+                        ),
+                      ),
+                    
                     const SizedBox(height: 16),
                     
                     // Confirm Password
@@ -290,22 +309,14 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                     const SizedBox(height: 24),
                     
                     // Terms and conditions checkbox
-                    CheckboxListTile(
-                      title: const Text('I accept the Terms and Conditions'),
-                      subtitle: Text(
-                        'By checking this box, you agree to our Terms of Service and Privacy Policy',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
+                    TermsAndConditionsCheckbox(
                       value: _acceptTerms,
                       onChanged: (value) {
                         setState(() {
                           _acceptTerms = value ?? false;
                         });
                       },
-                      controlAffinity: ListTileControlAffinity.leading,
-                      contentPadding: EdgeInsets.zero,
+                      errorText: !_acceptTerms ? 'You must accept the terms and conditions to continue' : null,
                     ),
                     const SizedBox(height: 32),
                     

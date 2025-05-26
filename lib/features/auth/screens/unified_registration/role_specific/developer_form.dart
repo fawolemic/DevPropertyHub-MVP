@@ -3,6 +3,7 @@ import 'package:provider/provider.dart' as provider_package;
 
 import '../../../../../core/providers/unified_registration_provider.dart';
 import '../../../../../core/providers/bandwidth_provider.dart';
+import '../../../widgets/components/file_upload/document_uploader.dart';
 
 class DeveloperForm extends StatefulWidget {
   const DeveloperForm({Key? key}) : super(key: key);
@@ -20,8 +21,8 @@ class _DeveloperFormState extends State<DeveloperForm> {
   final _yearsInBusinessController = TextEditingController();
   final _contactPersonController = TextEditingController();
   
-  // In Phase 1 (MVP), we'll skip actual file upload functionality
-  bool _hasUploadedCertificate = false;
+  // Track the CAC certificate file path
+  String? _cacCertificatePath;
 
   @override
   void initState() {
@@ -50,14 +51,14 @@ class _DeveloperFormState extends State<DeveloperForm> {
       _yearsInBusinessController.text = savedData['yearsInBusiness'] ?? '';
       _contactPersonController.text = savedData['contactPerson'] ?? '';
       setState(() {
-        _hasUploadedCertificate = savedData['hasUploadedCertificate'] ?? false;
+        _cacCertificatePath = savedData['cacCertificatePath'];
       });
     }
   }
   
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (!_hasUploadedCertificate) {
+      if (_cacCertificatePath == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please upload your CAC certificate')),
         );
@@ -70,7 +71,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
         'rcNumber': _rcNumberController.text.trim(),
         'yearsInBusiness': _yearsInBusinessController.text.trim(),
         'contactPerson': _contactPersonController.text.trim(),
-        'hasUploadedCertificate': _hasUploadedCertificate,
+        'cacCertificatePath': _cacCertificatePath,
       };
       
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
@@ -187,78 +188,17 @@ class _DeveloperFormState extends State<DeveloperForm> {
           ),
           const SizedBox(height: 24),
           
-          // CAC Certificate Upload (simplified for MVP)
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: _hasUploadedCertificate
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.outline.withOpacity(0.3),
-              ),
-              borderRadius: BorderRadius.circular(12),
-              color: _hasUploadedCertificate
-                  ? theme.colorScheme.primary.withOpacity(0.1)
-                  : null,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'CAC Certificate',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Upload a scanned copy of your CAC certificate',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _hasUploadedCertificate
-                    ? Row(
-                        children: [
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'CAC Certificate uploaded',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.green,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _hasUploadedCertificate = false;
-                              });
-                            },
-                            child: const Text('Remove'),
-                          ),
-                        ],
-                      )
-                    : ElevatedButton.icon(
-                        onPressed: () {
-                          // In MVP, we just simulate a successful upload
-                          setState(() {
-                            _hasUploadedCertificate = true;
-                          });
-                        },
-                        icon: const Icon(Icons.upload_file),
-                        label: const Text('Upload Certificate'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.secondary,
-                        ),
-                      ),
-              ],
-            ),
+          // CAC Certificate Upload using our enhanced component
+          DocumentUploader(
+            label: 'CAC Certificate',
+            acceptedFileTypes: 'pdf, jpg, png',
+            isRequired: true,
+            maxSizeInMB: 10,
+            onFileSelected: (filePath) {
+              setState(() {
+                _cacCertificatePath = filePath;
+              });
+            },
           ),
           const SizedBox(height: 32),
           
