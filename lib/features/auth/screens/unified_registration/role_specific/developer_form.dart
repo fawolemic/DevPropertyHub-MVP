@@ -58,7 +58,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
   
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (_cacCertificatePath == null) {
+      if (_cacCertificatePath == null || _cacCertificatePath!.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please upload your CAC certificate')),
         );
