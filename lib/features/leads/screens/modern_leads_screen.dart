@@ -357,20 +357,33 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                         Card(
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
                             side: BorderSide(color: Colors.grey.shade200),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
+                            padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12 : 16),
+                            child: ResponsiveUtils.isMobile(context)
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: IntrinsicHeight(
+                                    child: Row(
+                                      children: [
                                 // Status filter
-                                Expanded(
+                                Container(
+                                  width: ResponsiveUtils.isMobile(context) ? 140 : null,
+                                  margin: EdgeInsets.only(right: ResponsiveUtils.isMobile(context) ? 12 : 16),
                                   child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       labelText: 'Status',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      border: const OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, 
+                                        vertical: ResponsiveUtils.isMobile(context) ? 4 : 8
+                                      ),
+                                      isDense: ResponsiveUtils.isMobile(context),
+                                      labelStyle: ResponsiveUtils.isMobile(context) 
+                                        ? TextStyle(fontSize: 12) 
+                                        : null,
                                     ),
                                     value: 'All',
                                     items: const [
@@ -381,17 +394,27 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                       DropdownMenuItem(value: 'Offer Made', child: Text('Offer Made')),
                                     ],
                                     onChanged: (value) {},
+                                    isExpanded: true,
+                                    icon: Icon(Icons.arrow_drop_down, size: ResponsiveUtils.isMobile(context) ? 18 : 24),
                                   ),
                                 ),
-                                const SizedBox(width: 16),
                                 
                                 // Priority filter
-                                Expanded(
+                                Container(
+                                  width: ResponsiveUtils.isMobile(context) ? 140 : null,
+                                  margin: EdgeInsets.only(right: ResponsiveUtils.isMobile(context) ? 12 : 16),
                                   child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       labelText: 'Priority',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      border: const OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, 
+                                        vertical: ResponsiveUtils.isMobile(context) ? 4 : 8
+                                      ),
+                                      isDense: ResponsiveUtils.isMobile(context),
+                                      labelStyle: ResponsiveUtils.isMobile(context) 
+                                        ? TextStyle(fontSize: 12) 
+                                        : null,
                                     ),
                                     value: 'All',
                                     items: const [
@@ -401,17 +424,26 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                       DropdownMenuItem(value: 'low', child: Text('Low')),
                                     ],
                                     onChanged: (value) {},
+                                    isExpanded: true,
+                                    icon: Icon(Icons.arrow_drop_down, size: ResponsiveUtils.isMobile(context) ? 18 : 24),
                                   ),
                                 ),
-                                const SizedBox(width: 16),
                                 
                                 // Sort option
-                                Expanded(
+                                Container(
+                                  width: ResponsiveUtils.isMobile(context) ? 140 : null,
                                   child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       labelText: 'Sort By',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      border: const OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, 
+                                        vertical: ResponsiveUtils.isMobile(context) ? 4 : 8
+                                      ),
+                                      isDense: ResponsiveUtils.isMobile(context),
+                                      labelStyle: ResponsiveUtils.isMobile(context) 
+                                        ? TextStyle(fontSize: 12) 
+                                        : null,
                                     ),
                                     value: 'Recent',
                                     items: const [
@@ -421,10 +453,77 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                       DropdownMenuItem(value: 'Priority', child: Text('Priority')),
                                     ],
                                     onChanged: (value) {},
+                                    isExpanded: true,
+                                    icon: Icon(Icons.arrow_drop_down, size: ResponsiveUtils.isMobile(context) ? 18 : 24),
                                   ),
                                 ),
-                              ],
-                            ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Row(
+                                children: [
+                                  // Status filter
+                                  Expanded(
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Status',
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      ),
+                                      value: 'All',
+                                      items: const [
+                                        DropdownMenuItem(value: 'All', child: Text('All Statuses')),
+                                        DropdownMenuItem(value: 'Hot Lead', child: Text('Hot Lead')),
+                                        DropdownMenuItem(value: 'Interested', child: Text('Interested')),
+                                        DropdownMenuItem(value: 'Viewing Scheduled', child: Text('Viewing Scheduled')),
+                                        DropdownMenuItem(value: 'Offer Made', child: Text('Offer Made')),
+                                      ],
+                                      onChanged: (value) {},
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  
+                                  // Priority filter
+                                  Expanded(
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Priority',
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      ),
+                                      value: 'All',
+                                      items: const [
+                                        DropdownMenuItem(value: 'All', child: Text('All Priorities')),
+                                        DropdownMenuItem(value: 'high', child: Text('High')),
+                                        DropdownMenuItem(value: 'medium', child: Text('Medium')),
+                                        DropdownMenuItem(value: 'low', child: Text('Low')),
+                                      ],
+                                      onChanged: (value) {},
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  
+                                  // Sort option
+                                  Expanded(
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Sort By',
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      ),
+                                      value: 'Recent',
+                                      items: const [
+                                        DropdownMenuItem(value: 'Recent', child: Text('Most Recent')),
+                                        DropdownMenuItem(value: 'Name', child: Text('Name')),
+                                        DropdownMenuItem(value: 'Budget', child: Text('Budget')),
+                                        DropdownMenuItem(value: 'Priority', child: Text('Priority')),
+                                      ],
+                                      onChanged: (value) {},
+                                    ),
+                                  ),
+                                ],
+                              ),
                           ),
                         ),
                         
@@ -434,86 +533,187 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                         Card(
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
                             side: BorderSide(color: Colors.grey.shade200),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12 : 16),
                             child: Column(
                               children: [
-                                // Table header
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: Text(
-                                          'Lead',
+                                // Table header - only show on desktop/tablet
+                                ResponsiveUtils.isMobile(context)
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'All Leads (${_leads.length})',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                             color: Colors.grey.shade700,
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          'Property',
+                                        Text(
+                                          'Tap for details',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey.shade700,
+                                            fontSize: 12,
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.grey.shade500,
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          'Budget',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey.shade700,
+                                      ],
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            'Lead',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey.shade700,
+                                            ),
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          'Status',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey.shade700,
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            'Property',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey.shade700,
+                                            ),
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
-                                      ),
-                                      const SizedBox(width: 48), // Actions column
-                                    ],
+                                        Expanded(
+                                          child: Text(
+                                            'Budget',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey.shade700,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'Status',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey.shade700,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 48), // Actions column
+                                      ],
+                                    ),
                                   ),
-                                ),
                                 
                                 const Divider(),
                                 
                                 // Leads list
-                                ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: _leads.length,
-                                  separatorBuilder: (context, index) => const Divider(),
-                                  itemBuilder: (context, index) {
-                                    final lead = _leads[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
-                                      child: InkWell(
-                                        onTap: () {
-                                          // View lead details
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Viewing details for ${lead['name']}')),
-                                          );
-                                        },
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
+                                ResponsiveUtils.isMobile(context)
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: _leads.length,
+                                    itemBuilder: (context, index) {
+                                      final lead = _leads[index];
+                                      return Card(
+                                        margin: const EdgeInsets.symmetric(vertical: 8),
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          side: BorderSide(color: Colors.grey.shade200),
+                                        ),
+                                        child: ListTile(
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                          leading: CircleAvatar(
+                                            backgroundColor: theme.colorScheme.primary,
+                                            child: Text(
+                                              _getInitials(lead['name']),
+                                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            ),
+                                          ),
+                                          title: Text(
+                                            lead['name'],
+                                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(lead['property'], style: const TextStyle(fontSize: 12)),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    margin: const EdgeInsets.only(top: 4),
+                                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                    decoration: BoxDecoration(
+                                                      color: _getPriorityColor(lead['priority']).withOpacity(0.1),
+                                                      borderRadius: BorderRadius.circular(4),
+                                                    ),
+                                                    constraints: const BoxConstraints(maxWidth: 80),
+                                                    child: Text(
+                                                      lead['status'],
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: _getPriorityColor(lead['priority']),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    lead['budget'],
+                                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: IconButton(
+                                            icon: const Icon(Icons.more_vert, size: 16),
+                                            onPressed: () => _showLeadActions(context, lead),
+                                            constraints: const BoxConstraints(),
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          onTap: () {
+                                            // View lead details
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(content: Text('Viewing details for ${lead['name']}')),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : ListView.separated(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: _leads.length,
+                                    separatorBuilder: (context, index) => const Divider(),
+                                    itemBuilder: (context, index) {
+                                      final lead = _leads[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        child: InkWell(
+                                          onTap: () {
+                                            // View lead details
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(content: Text('Viewing details for ${lead['name']}')),
+                                            );
+                                          },
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
                                             children: [
                                               // Lead info
                                               Expanded(
