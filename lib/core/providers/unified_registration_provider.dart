@@ -228,6 +228,19 @@ class UnifiedRegistrationProvider with ChangeNotifier {
       return false;
     }
     
+    // Check license document upload - check both possible flags for maximum compatibility
+    bool hasUploadedLicense = _step3Data['hasUploadedLicenseDocument'] == true;
+    bool hasLicensePath = _step3Data.containsKey('licenseDocumentPath') && 
+                        _step3Data['licenseDocumentPath'] != null && 
+                        _step3Data['licenseDocumentPath'].toString().isNotEmpty;
+    
+    if (!hasUploadedLicense && !hasLicensePath) {
+      _errorMessage = 'Please upload your license document';
+      debugPrint('License document validation failed: hasUploadedLicense=$hasUploadedLicense, hasLicensePath=$hasLicensePath');
+      debugPrint('Current step3Data: $_step3Data');
+      return false;
+    }
+    
     return true;
   }
 
