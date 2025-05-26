@@ -58,17 +58,13 @@ class _DeveloperFormState extends State<DeveloperForm> {
   
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      if (_cacCertificatePath == null || _cacCertificatePath!.isEmpty) {
+      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+      if (registrationProvider.step3Data['hasUploadedCertificate'] != true) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please upload your CAC certificate')),
         );
         return;
       }
-      
-      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-      
-      // Make sure the certificate is marked as uploaded in the provider
-      registrationProvider.setCacCertificateUploaded(_cacCertificatePath);
       
       final data = {
         'companyName': _companyNameController.text.trim(),
@@ -200,7 +196,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
   setState(() {
     _cacCertificatePath = filePath;
   });
-  // Use the provider's method to update the state properly
+  // Always update the provider state via the new setter
   final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
   registrationProvider.setCacCertificateUploaded(filePath);
 },
