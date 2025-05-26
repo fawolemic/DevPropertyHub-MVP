@@ -13,6 +13,9 @@ import '../../features/auth/screens/additional_setup/agent/approval_status_scree
 import '../../features/testing/direct_test_page.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../features/dashboard/screens/modern_dashboard_screen.dart';
+import '../../features/developments/screens/modern_developments_screen.dart';
+import '../../features/leads/screens/modern_leads_screen.dart';
+import '../../features/settings/screens/modern_settings_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
@@ -113,22 +116,20 @@ class AppRouter {
         // Developments route
         GoRoute(
           path: '/developments',
-          builder: (context, state) => const DevelopmentsScreen(),
+          builder: (context, state) => const ModernDevelopmentsScreen(),
         ),
         
         // Leads route
         GoRoute(
           path: '/leads',
-          builder: (context, state) => const LeadsScreen(),
+          builder: (context, state) => const ModernLeadsScreen(),
         ),
         
-        // Settings route (admin only)
+        // Settings route
         GoRoute(
           path: '/settings',
-          builder: (context, state) => const SettingsScreen(),
-          // No redirect needed - all users can access basic settings
-          // Each setting item will handle its own permission checks
-        ),
+          builder: (context, state) => const ModernSettingsScreen(),
+        ),  
         
         // API Service example route
         GoRoute(
