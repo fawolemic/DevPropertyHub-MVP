@@ -65,17 +65,21 @@ class _DeveloperFormState extends State<DeveloperForm> {
         return;
       }
       
-      final data = {
-  'companyName': _companyNameController.text.trim(),
-  'businessAddress': _businessAddressController.text.trim(),
-  'rcNumber': _rcNumberController.text.trim(),
-  'yearsInBusiness': _yearsInBusinessController.text.trim(),
-  'contactPerson': _contactPersonController.text.trim(),
-  'cacCertificatePath': _cacCertificatePath,
-  'hasUploadedCertificate': _cacCertificatePath != null && _cacCertificatePath!.isNotEmpty,
-};
-      
+      // Ensure we're setting the hasUploadedCertificate flag
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+      
+      // Explicitly set the flag in the provider's data
+      registrationProvider.step3Data['hasUploadedCertificate'] = true;
+      
+      final data = {
+        'companyName': _companyNameController.text.trim(),
+        'businessAddress': _businessAddressController.text.trim(),
+        'rcNumber': _rcNumberController.text.trim(),
+        'yearsInBusiness': _yearsInBusinessController.text.trim(),
+        'contactPerson': _contactPersonController.text.trim(),
+        'cacCertificatePath': _cacCertificatePath,
+        'hasUploadedCertificate': true,
+      };
       
       if (registrationProvider.nextStep(data)) {
         // If this is the final step, submit registration
@@ -198,8 +202,10 @@ class _DeveloperFormState extends State<DeveloperForm> {
             onFileSelected: (filePath) {
   setState(() {
     _cacCertificatePath = filePath;
+    // Directly modify the provider's data to ensure the flag is set
     final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-    registrationProvider.step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
+    // Force update the mutable map inside the provider
+    registrationProvider._step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
   });
 },
           ),
