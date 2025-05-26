@@ -28,7 +28,7 @@ class AppRouter {
         // Handle authentication redirects
         final isLoggedIn = authProvider.isLoggedIn;
         final isLoginRoute = state.location == '/login';
-        final isRegistrationRoute = state.location.startsWith('/register');
+        final isRegistrationRoute = state.location.startsWith('/register') || state.location == '/unified-register';
         final isPublicRoute = state.location == '/' || state.location == '/home';
         
         // If not logged in and not on login, registration, or public page, redirect to login
