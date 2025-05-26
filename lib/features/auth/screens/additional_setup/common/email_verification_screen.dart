@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../services/email_verification_api.dart';
+import '../../../services/email_verification_api.dart';
 
 /// EmailVerificationScreen
 /// 

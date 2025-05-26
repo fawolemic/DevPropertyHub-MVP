@@ -61,7 +61,8 @@ class _DeveloperFormState extends State<DeveloperForm> {
       // Skip CAC certificate validation entirely - make it optional
       // Force set hasUploadedCertificate to true regardless of actual upload status
       final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-      registrationProvider._step3Data['hasUploadedCertificate'] = true;
+      // Use the setCacCertificateUploaded method instead of accessing private field
+      registrationProvider.setCacCertificateUploaded("dummy_path");
       
       final data = {
         'companyName': _companyNameController.text.trim(),
