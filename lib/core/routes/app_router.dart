@@ -12,6 +12,7 @@ import '../../features/auth/screens/additional_setup/developer/payment_screen.da
 import '../../features/auth/screens/additional_setup/agent/approval_status_screen.dart';
 import '../../features/testing/direct_test_page.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
+import '../../features/dashboard/screens/modern_dashboard_screen.dart';
 import '../../features/developments/screens/developments_screen.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
@@ -98,10 +99,18 @@ class AppRouter {
           builder: (context, state) => const DirectTestPage(),
         ),
         
-        // Dashboard route
+        // Dashboard routes
         GoRoute(
           path: '/dashboard',
-          builder: (context, state) => const DashboardScreen(),
+          builder: (context, state) {
+            // Check for query parameter to determine which dashboard to show
+            final useModern = state.queryParameters['modern'] == 'true';
+            return useModern ? const ModernDashboardScreen() : const DashboardScreen();
+          },
+        ),
+        GoRoute(
+          path: '/modern-dashboard',
+          builder: (context, state) => const ModernDashboardScreen(),
         ),
         
         // Developments route
