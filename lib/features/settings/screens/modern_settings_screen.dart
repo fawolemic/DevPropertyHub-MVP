@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/bandwidth_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../dashboard/widgets/modern_sidebar.dart';
 
 class ModernSettingsScreen extends StatefulWidget {
@@ -74,8 +75,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
     final bandwidthProvider = Provider.of<BandwidthProvider>(context);
     final theme = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final isDesktop = mediaQuery.size.width >= 1024;
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+    final isDesktop = ResponsiveUtils.isDesktop(context);
     
     // Get user info
     final userName = authProvider.userName ?? 'Admin User';
@@ -210,7 +212,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                 // Main content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                    padding: ResponsiveUtils.getResponsivePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -218,11 +220,11 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                         Card(
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
                             side: BorderSide(color: Colors.grey.shade200),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(24),
+                            padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 16 : 24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -234,12 +236,11 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                 ),
                                 const SizedBox(height: 24),
                                 
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Profile picture
-                                    Column(
+                                ResponsiveUtils.isMobile(context)
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
+                                        // Profile picture
                                         CircleAvatar(
                                           radius: 40,
                                           backgroundColor: theme.colorScheme.primary,
@@ -267,16 +268,77 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                           ),
                                           child: const Text('Change Photo'),
                                         ),
+                                        const SizedBox(height: 24),
+                                        
+                                        // Profile details
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            // Name field
+                                            TextFormField(
+                                              initialValue: userName,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Full Name',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 16),
+                                            
+                                            // Email field
+                                            TextFormField(
+                                              initialValue: 'user@example.com',
+                                              decoration: const InputDecoration(
+                                                labelText: 'Email Address',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
-                                    ),
-                                    
-                                    const SizedBox(width: 32),
-                                    
-                                    // Profile details
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
+                                    )
+                                  : Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Profile picture
+                                        Column(
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 40,
+                                              backgroundColor: theme.colorScheme.primary,
+                                              child: Text(
+                                                userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
+                                                style: const TextStyle(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 12),
+                                            OutlinedButton(
+                                              onPressed: () {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  const SnackBar(content: Text('Change photo feature coming soon')),
+                                                );
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: const Text('Change Photo'),
+                                            ),
+                                          ],
+                                        ),
+                                        
+                                        const SizedBox(width: 32),
+                                        
+                                        // Profile details
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
                                           // Name field
                                           TextFormField(
                                             initialValue: userName,

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../widgets/stats_card.dart';
 import '../widgets/property_framework_card.dart';
 import '../widgets/lead_card.dart';
@@ -317,16 +318,17 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                 // Dashboard content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                    padding: ResponsiveUtils.getResponsivePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Stats cards
                         GridView.count(
-                          crossAxisCount: isDesktop ? 3 : (mediaQuery.size.width > 600 ? 2 : 1),
-                          crossAxisSpacing: 24,
-                          mainAxisSpacing: 24,
+                          crossAxisCount: ResponsiveUtils.getResponsiveGridCount(context),
+                          crossAxisSpacing: ResponsiveUtils.isMobile(context) ? 12 : 24,
+                          mainAxisSpacing: ResponsiveUtils.isMobile(context) ? 12 : 24,
                           shrinkWrap: true,
+                          childAspectRatio: ResponsiveUtils.isMobile(context) ? 1.2 : 1.0,
                           physics: const NeverScrollableScrollPhysics(),
                           children: _statsCards.map((card) {
                             return StatsCard(
@@ -344,7 +346,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                         const SizedBox(height: 32),
                         
                         // Active Frameworks and Quick Actions
-                        if (isDesktop)
+                        if (ResponsiveUtils.isDesktop(context))
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -353,7 +355,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                                 child: _buildActiveFrameworks(),
                               ),
                               
-                              const SizedBox(width: 24),
+                              SizedBox(width: ResponsiveUtils.isMobile(context) ? 12 : 24),
                               
                               // Quick Actions
                               Expanded(
@@ -365,7 +367,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                           Column(
                             children: [
                               _buildActiveFrameworks(),
-                              const SizedBox(height: 24),
+                              SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
                               _buildQuickActions(),
                             ],
                           ),
@@ -373,7 +375,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                         const SizedBox(height: 32),
                         
                         // Recent Leads
-                        _buildRecentLeads(),
+                        _buildRecentLeads(context),
                         
                         const SizedBox(height: 32),
                         
@@ -391,14 +393,16 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
     );
   }
   
-  Widget _buildSectionHeader(String title, {VoidCallback? onViewAll}) {
+  Widget _buildSectionHeader(BuildContext context, String title, {VoidCallback? onViewAll}) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: TextStyle(
-            fontSize: 20,
+            fontSize: isMobile ? 16 : 20,
             fontWeight: FontWeight.bold,
             color: Colors.grey.shade900,
           ),
@@ -406,17 +410,18 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
         if (onViewAll != null)
           TextButton.icon(
             onPressed: onViewAll,
-            icon: const Text('View All'),
-            label: const Icon(
+            icon: Text('View All', style: TextStyle(fontSize: isMobile ? 12 : 14)),
+            label: Icon(
               Icons.chevron_right,
-              size: 16,
+              size: isMobile ? 14 : 16,
             ),
             style: TextButton.styleFrom(
               foregroundColor: Colors.blue,
-              textStyle: const TextStyle(
+              textStyle: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: isMobile ? 12 : 14,
               ),
+              padding: isMobile ? const EdgeInsets.symmetric(horizontal: 8, vertical: 4) : null,
             ),
           ),
       ],
@@ -424,38 +429,69 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
   }
   
   Widget _buildActiveFrameworks() {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         side: BorderSide(color: Colors.grey.shade100),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSectionHeader(
+              context,
               'Active Frameworks',
               onViewAll: () => context.push('/developments'),
             ),
-            const SizedBox(height: 24),
-            ...List.generate(_activeFrameworks.length, (index) {
-              final framework = _activeFrameworks[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: index < _activeFrameworks.length - 1 ? 16 : 0),
-                child: PropertyFrameworkCard(
-                  name: framework['name'],
-                  location: framework['location'],
-                  units: framework['units'],
-                  sold: framework['sold'],
-                  revenue: framework['revenue'],
-                  status: framework['status'],
-                  completion: framework['completion'],
-                  color: framework['color'],
+            SizedBox(height: isMobile ? 16 : 24),
+            if (isMobile)
+              // For mobile, use horizontal scrolling list
+              SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _activeFrameworks.length,
+                  itemBuilder: (context, index) {
+                    final framework = _activeFrameworks[index];
+                    return Container(
+                      width: ResponsiveUtils.getResponsiveCardWidth(context),
+                      margin: const EdgeInsets.only(right: 12),
+                      child: PropertyFrameworkCard(
+                        name: framework['name'],
+                        location: framework['location'],
+                        units: framework['units'],
+                        sold: framework['sold'],
+                        revenue: framework['revenue'],
+                        status: framework['status'],
+                        completion: framework['completion'],
+                        color: framework['color'],
+                      ),
+                    );
+                  },
                 ),
-              );
-            }),
+              )
+            else
+              // For desktop/tablet, use vertical list
+              ...List.generate(_activeFrameworks.length, (index) {
+                final framework = _activeFrameworks[index];
+                return Padding(
+                  padding: EdgeInsets.only(bottom: index < _activeFrameworks.length - 1 ? 16 : 0),
+                  child: PropertyFrameworkCard(
+                    name: framework['name'],
+                    location: framework['location'],
+                    units: framework['units'],
+                    sold: framework['sold'],
+                    revenue: framework['revenue'],
+                    status: framework['status'],
+                    completion: framework['completion'],
+                    color: framework['color'],
+                  ),
+                );
+              }),
           ],
         ),
       ),
@@ -463,24 +499,27 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
   }
   
   Widget _buildQuickActions() {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         side: BorderSide(color: Colors.grey.shade100),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionHeader('Quick Actions'),
-            const SizedBox(height: 24),
+            _buildSectionHeader(context, 'Quick Actions'),
+            SizedBox(height: isMobile ? 16 : 24),
             GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+              crossAxisCount: isMobile ? 2 : 2,
+              crossAxisSpacing: isMobile ? 8 : 16,
+              mainAxisSpacing: isMobile ? 8 : 16,
               shrinkWrap: true,
+              childAspectRatio: isMobile ? 0.8 : 1.0, // Taller buttons on mobile
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 QuickActionButton(
@@ -523,54 +562,147 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
     );
   }
   
-  Widget _buildRecentLeads() {
+  Widget _buildRecentLeads(BuildContext context) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         side: BorderSide(color: Colors.grey.shade100),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildSectionHeader(
-                  'Recent Leads',
-                  onViewAll: () => context.push('/leads'),
+                Expanded(
+                  child: _buildSectionHeader(
+                    context,
+                    'Recent Leads',
+                    onViewAll: () => context.push('/leads'),
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.filter_list),
                   onPressed: () {},
                   color: Colors.grey.shade500,
-                  iconSize: 20,
+                  iconSize: isMobile ? 18 : 20,
+                  padding: isMobile ? EdgeInsets.zero : null,
+                  constraints: isMobile ? const BoxConstraints(minWidth: 36, minHeight: 36) : null,
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            ...List.generate(_recentLeads.length, (index) {
-              final lead = _recentLeads[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: index < _recentLeads.length - 1 ? 16 : 0),
-                child: LeadCard(
-                  id: lead['id'],
-                  name: lead['name'],
-                  email: lead['email'],
-                  property: lead['property'],
-                  budget: lead['budget'],
-                  status: lead['status'],
-                  time: lead['time'],
-                  priority: lead['priority'],
-                ),
-              );
-            }),
+            SizedBox(height: isMobile ? 16 : 24),
+            if (isMobile)
+              // For mobile, use a more compact lead card layout
+              ...List.generate(_recentLeads.length, (index) {
+                final lead = _recentLeads[index];
+                return Card(
+                  margin: EdgeInsets.only(bottom: 8),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(color: Colors.grey.shade200),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Text(
+                        _getInitials(lead['name']),
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                    title: Text(
+                      lead['name'],
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(lead['property'], style: const TextStyle(fontSize: 12)),
+                        Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: _getPriorityColor(lead['priority']).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                lead['status'],
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: _getPriorityColor(lead['priority']),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              lead['budget'],
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    trailing: const Icon(Icons.chevron_right, size: 16),
+                    onTap: () => context.push('/leads'),
+                  ),
+                );
+              })
+            else
+              // For desktop/tablet, use the full lead card
+              ...List.generate(_recentLeads.length, (index) {
+                final lead = _recentLeads[index];
+                return Padding(
+                  padding: EdgeInsets.only(bottom: index < _recentLeads.length - 1 ? 16 : 0),
+                  child: LeadCard(
+                    id: lead['id'],
+                    name: lead['name'],
+                    email: lead['email'],
+                    property: lead['property'],
+                    budget: lead['budget'],
+                    status: lead['status'],
+                    time: lead['time'],
+                    priority: lead['priority'],
+                  ),
+                );
+              }),
           ],
         ),
       ),
     );
+  }
+  
+  String _getInitials(String name) {
+    final nameParts = name.split(' ');
+    if (nameParts.length > 1) {
+      return '${nameParts[0][0]}${nameParts[1][0]}';
+    } else if (name.isNotEmpty) {
+      return name[0];
+    }
+    return '';
+  }
+  
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case 'high':
+        return Colors.red.shade800;
+      case 'medium':
+        return Colors.orange.shade800;
+      case 'low':
+        return Colors.green.shade800;
+      default:
+        return Colors.grey.shade800;
+    }
+  }
   }
   
   Widget _buildAuthTestingSection() {
@@ -649,4 +781,3 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
       ),
     );
   }
-}

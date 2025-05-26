@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../../core/providers/auth_provider.dart';
+import '../../../../../core/utils/responsive_utils.dart';
 
 /// PaymentScreen
 /// 
@@ -71,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: ResponsiveUtils.getResponsivePadding(context),
           child: Form(
             key: _formKey,
             child: Column(
@@ -80,10 +84,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 // Order summary
                 Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12 : 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../dashboard/widgets/modern_sidebar.dart';
 import '../../dashboard/widgets/lead_card.dart';
 
@@ -118,8 +119,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final theme = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final isDesktop = mediaQuery.size.width >= 1024;
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+    final isDesktop = ResponsiveUtils.isDesktop(context);
     
     // Get user info
     final userName = authProvider.userName ?? 'Admin User';
@@ -278,41 +280,76 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                 // Main content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                    padding: ResponsiveUtils.getResponsivePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Header with add button
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'All Leads',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade900,
-                              ),
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                // Navigate to add lead screen
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Add lead functionality coming soon')),
-                                );
-                              },
-                              icon: const Icon(Icons.add),
-                              label: const Text('Add Lead'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.primary,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                        ResponsiveUtils.isMobile(context)
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'All Leads',
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade900,
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 16),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      // Navigate to add lead screen
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Add lead functionality coming soon')),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.add, size: 18),
+                                    label: const Text('Add Lead'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme.colorScheme.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'All Leads',
+                                  style: theme.textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade900,
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Navigate to add lead screen
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Add lead functionality coming soon')),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Add Lead'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: theme.colorScheme.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
                         
                         const SizedBox(height: 24),
                         

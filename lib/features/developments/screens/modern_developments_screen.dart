@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../dashboard/widgets/modern_sidebar.dart';
 import '../../dashboard/widgets/property_framework_card.dart';
 
@@ -98,8 +99,9 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final theme = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final isDesktop = mediaQuery.size.width >= 1024;
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+    final isDesktop = ResponsiveUtils.isDesktop(context);
     
     // Get user info
     final userName = authProvider.userName ?? 'Admin User';
@@ -258,39 +260,72 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                 // Main content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                    padding: ResponsiveUtils.getResponsivePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Header with add button
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'All Developments',
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade900,
-                              ),
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                // Navigate to add development screen
-                                context.go('/developments/add');
-                              },
-                              icon: const Icon(Icons.add),
-                              label: const Text('Add Development'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.primary,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                        ResponsiveUtils.isMobile(context)
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'All Developments',
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade900,
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 16),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      // Navigate to add development screen
+                                      context.go('/developments/add');
+                                    },
+                                    icon: const Icon(Icons.add, size: 18),
+                                    label: const Text('Add Development'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme.colorScheme.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'All Developments',
+                                  style: theme.textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade900,
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Navigate to add development screen
+                                    context.go('/developments/add');
+                                  },
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Add Development'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: theme.colorScheme.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
                         
                         const SizedBox(height: 24),
                         
@@ -298,102 +333,183 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                         Card(
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
                             side: BorderSide(color: Colors.grey.shade200),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                // Status filter
-                                Expanded(
-                                  child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Status',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12 : 16),
+                            child: ResponsiveUtils.isMobile(context)
+                              ? Column(
+                                  children: [
+                                    // Status filter
+                                    DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(
+                                        labelText: 'Status',
+                                        border: const OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: ResponsiveUtils.isMobile(context) ? 4 : 8),
+                                        isDense: ResponsiveUtils.isMobile(context),
+                                      ),
+                                      value: 'All',
+                                      items: const [
+                                        DropdownMenuItem(value: 'All', child: Text('All Statuses')),
+                                        DropdownMenuItem(value: 'Under Construction', child: Text('Under Construction')),
+                                        DropdownMenuItem(value: 'Ready to Move', child: Text('Ready to Move')),
+                                      ],
+                                      onChanged: (value) {},
                                     ),
-                                    value: 'All',
-                                    items: const [
-                                      DropdownMenuItem(value: 'All', child: Text('All Statuses')),
-                                      DropdownMenuItem(value: 'Under Construction', child: Text('Under Construction')),
-                                      DropdownMenuItem(value: 'Ready to Move', child: Text('Ready to Move')),
-                                    ],
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                
-                                // Location filter
-                                Expanded(
-                                  child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Location',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    const SizedBox(height: 12),
+                                    
+                                    // Location filter
+                                    DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(
+                                        labelText: 'Location',
+                                        border: const OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: ResponsiveUtils.isMobile(context) ? 4 : 8),
+                                        isDense: ResponsiveUtils.isMobile(context),
+                                      ),
+                                      value: 'All',
+                                      items: const [
+                                        DropdownMenuItem(value: 'All', child: Text('All Locations')),
+                                        DropdownMenuItem(value: 'Downtown', child: Text('Downtown')),
+                                        DropdownMenuItem(value: 'Marina', child: Text('Marina')),
+                                        DropdownMenuItem(value: 'Business', child: Text('Business District')),
+                                      ],
+                                      onChanged: (value) {},
                                     ),
-                                    value: 'All',
-                                    items: const [
-                                      DropdownMenuItem(value: 'All', child: Text('All Locations')),
-                                      DropdownMenuItem(value: 'Downtown', child: Text('Downtown')),
-                                      DropdownMenuItem(value: 'Marina', child: Text('Marina')),
-                                      DropdownMenuItem(value: 'Business', child: Text('Business District')),
-                                    ],
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                
-                                // Sort option
-                                Expanded(
-                                  child: DropdownButtonFormField<String>(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Sort By',
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    const SizedBox(height: 12),
+                                    
+                                    // Sort option
+                                    DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(
+                                        labelText: 'Sort By',
+                                        border: const OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: ResponsiveUtils.isMobile(context) ? 4 : 8),
+                                        isDense: ResponsiveUtils.isMobile(context),
+                                      ),
+                                      value: 'Name',
+                                      items: const [
+                                        DropdownMenuItem(value: 'Name', child: Text('Name')),
+                                        DropdownMenuItem(value: 'Units', child: Text('Units')),
+                                        DropdownMenuItem(value: 'Revenue', child: Text('Revenue')),
+                                        DropdownMenuItem(value: 'Completion', child: Text('Completion')),
+                                      ],
+                                      onChanged: (value) {},
                                     ),
-                                    value: 'Name',
-                                    items: const [
-                                      DropdownMenuItem(value: 'Name', child: Text('Name')),
-                                      DropdownMenuItem(value: 'Units', child: Text('Units')),
-                                      DropdownMenuItem(value: 'Revenue', child: Text('Revenue')),
-                                      DropdownMenuItem(value: 'Completion', child: Text('Completion')),
-                                    ],
-                                    onChanged: (value) {},
-                                  ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    // Status filter
+                                    Expanded(
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          labelText: 'Status',
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        ),
+                                        value: 'All',
+                                        items: const [
+                                          DropdownMenuItem(value: 'All', child: Text('All Statuses')),
+                                          DropdownMenuItem(value: 'Under Construction', child: Text('Under Construction')),
+                                          DropdownMenuItem(value: 'Ready to Move', child: Text('Ready to Move')),
+                                        ],
+                                        onChanged: (value) {},
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    
+                                    // Location filter
+                                    Expanded(
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          labelText: 'Location',
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        ),
+                                        value: 'All',
+                                        items: const [
+                                          DropdownMenuItem(value: 'All', child: Text('All Locations')),
+                                          DropdownMenuItem(value: 'Downtown', child: Text('Downtown')),
+                                          DropdownMenuItem(value: 'Marina', child: Text('Marina')),
+                                          DropdownMenuItem(value: 'Business', child: Text('Business District')),
+                                        ],
+                                        onChanged: (value) {},
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    
+                                    // Sort option
+                                    Expanded(
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: const InputDecoration(
+                                          labelText: 'Sort By',
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        ),
+                                        value: 'Name',
+                                        items: const [
+                                          DropdownMenuItem(value: 'Name', child: Text('Name')),
+                                          DropdownMenuItem(value: 'Units', child: Text('Units')),
+                                          DropdownMenuItem(value: 'Revenue', child: Text('Revenue')),
+                                          DropdownMenuItem(value: 'Completion', child: Text('Completion')),
+                                        ],
+                                        onChanged: (value) {},
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
                           ),
                         ),
                         
                         const SizedBox(height: 24),
                         
                         // Developments grid
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: isDesktop ? 2 : 1,
-                            crossAxisSpacing: 24,
-                            mainAxisSpacing: 24,
-                            childAspectRatio: isDesktop ? 2 : 1.5,
-                          ),
-                          itemCount: _developments.length,
-                          itemBuilder: (context, index) {
-                            final development = _developments[index];
-                            return PropertyFrameworkCard(
-                              name: development['name'],
-                              location: development['location'],
-                              units: development['units'],
-                              sold: development['sold'],
-                              revenue: development['revenue'],
-                              status: development['status'],
-                              completion: development['completion'],
-                              color: development['color'],
-                            );
-                          },
-                        ),
+                        ResponsiveUtils.isMobile(context)
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _developments.length,
+                              itemBuilder: (context, index) {
+                                final development = _developments[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: PropertyFrameworkCard(
+                                    name: development['name'],
+                                    location: development['location'],
+                                    units: development['units'],
+                                    sold: development['sold'],
+                                    revenue: development['revenue'],
+                                    status: development['status'],
+                                    completion: development['completion'],
+                                    color: development['color'],
+                                  ),
+                                );
+                              },
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: ResponsiveUtils.isDesktop(context) ? 2 : 1,
+                                crossAxisSpacing: ResponsiveUtils.isDesktop(context) ? 24 : 16,
+                                mainAxisSpacing: ResponsiveUtils.isDesktop(context) ? 24 : 16,
+                                childAspectRatio: ResponsiveUtils.isDesktop(context) ? 2 : 1.5,
+                              ),
+                              itemCount: _developments.length,
+                              itemBuilder: (context, index) {
+                                final development = _developments[index];
+                                return PropertyFrameworkCard(
+                                  name: development['name'],
+                                  location: development['location'],
+                                  units: development['units'],
+                                  sold: development['sold'],
+                                  revenue: development['revenue'],
+                                  status: development['status'],
+                                  completion: development['completion'],
+                                  color: development['color'],
+                                );
+                              },
+                            ),
                       ],
                     ),
                   ),
