@@ -107,6 +107,40 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
     },
   ];
 
+  // Handle section changes with actual navigation
+  void _handleSectionChange(String section) {
+    setState(() {
+      _activeSection = section;
+    });
+    
+    // Map section to route using GoRouter
+    switch (section) {
+      case 'overview':
+        context.go('/dashboard');
+        break;
+      case 'properties':
+        context.go('/developments');
+        break;
+      case 'leads':
+        context.go('/leads');
+        break;
+      case 'analytics':
+        // If you don't have these routes yet, you can keep them local or create placeholder screens
+        context.go('/dashboard');
+        debugPrint('Analytics section selected - route not implemented yet');
+        break;
+      case 'documents':
+        context.go('/dashboard');
+        debugPrint('Documents section selected - route not implemented yet');
+        break;
+      case 'settings':
+        context.go('/settings');
+        break;
+      default:
+        context.go('/dashboard');
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -128,11 +162,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
               width: 256,
               child: ModernSidebar(
                 activeSection: _activeSection,
-                onSectionChanged: (section) {
-                  setState(() {
-                    _activeSection = section;
-                  });
-                },
+                onSectionChanged: _handleSectionChange, // Use the new navigation handler
                 isMobile: !isDesktop,
                 onClose: isDesktop ? null : () {
                   setState(() {
@@ -457,25 +487,33 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                   icon: Icons.add,
                   label: 'Add Property',
                   hoverColor: Colors.blue,
-                  onPressed: () => context.push('/add-property'),
+                  onPressed: () => context.go('/developments/add'),
                 ),
                 QuickActionButton(
                   icon: Icons.download,
                   label: 'Export Report',
                   hoverColor: Colors.green,
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Exporting report...')),
+                    );
+                  },
                 ),
                 QuickActionButton(
                   icon: Icons.bar_chart,
                   label: 'View Analytics',
                   hoverColor: Colors.purple,
-                  onPressed: () => context.push('/analytics'),
+                  onPressed: () => _handleSectionChange('analytics'),
                 ),
                 QuickActionButton(
                   icon: Icons.refresh,
                   label: 'Sync Data',
                   hoverColor: Colors.orange,
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Syncing data...')),
+                    );
+                  },
                 ),
               ],
             ),
