@@ -136,82 +136,87 @@
     <div class="progress-bar">
       <div class="progress-value"></div>
     </div>
-    <div class="bandwidth-text" id="bandwidth-text">Checking connection...</div>
+    <div class="bandwidth-text" id="bandwidth-text">Loading application...</div>
   </div>
   
   <script>
-    // Enhanced network quality detection optimized for African market conditions
+    // Simplified network quality check that doesn't depend on the external script
     function checkNetworkQuality() {
       const bandwidthText = document.getElementById('bandwidth-text');
-      const progressBar = document.querySelector('.progress-value');
-      let isLowBandwidth = false;
-      
-      // Use Navigator Connection API if available
-      if (navigator.connection) {
-        const connection = navigator.connection;
-        const networkType = connection.effectiveType;
-        
-        // Check for slow connections - common in many African regions
-        isLowBandwidth = 
-          networkType === '2g' || 
-          networkType === '3g' || 
-          (connection.downlink && connection.downlink < 1.5) || // Threshold better suited for African networks
-          (connection.rtt && connection.rtt > 500); // High latency detection
-          
-        if (isLowBandwidth) {
-          bandwidthText.textContent = 'Optimizing for your connection (lower data mode)';
-          // Modify progress bar to be less resource-intensive
-          if (progressBar) {
-            progressBar.style.animationDuration = '2.5s';
-          }
-        } else {
-          bandwidthText.textContent = 'Loading application resources...';
-        }
-      } else {
-        // Fallback for browsers without Connection API
+      if (bandwidthText) {
         bandwidthText.textContent = 'Loading application...';
-        
-        // Simple image loading test as fallback bandwidth detection
-        const startTime = Date.now();
-        const testImage = new Image();
-        testImage.onload = function() {
-          const endTime = Date.now();
-          const loadTime = endTime - startTime;
-          isLowBandwidth = loadTime > 300; // Adjust threshold based on testing
-          
-          if (isLowBandwidth) {
-            bandwidthText.textContent = 'Optimizing for your connection speed...';
-          }
-        };
-        testImage.onerror = function() {
-          // Assume low bandwidth on error
-          bandwidthText.textContent = 'Optimizing for your connection...';
-          isLowBandwidth = true;
-        };
-        // Use a small image file for testing
-        testImage.src = 'icons/Icon-192.png?' + new Date().getTime();
       }
       
-      // Store bandwidth status for the Flutter app to use
-      window.isLowBandwidth = isLowBandwidth;
-      localStorage.setItem('isLowBandwidth', isLowBandwidth.toString());
+      // Set default to false - no optimization needed
+      window.isLowBandwidth = false;
+      localStorage.setItem('isLowBandwidth', 'false');
     }
     
     window.addEventListener('load', function(ev) {
       // Check network quality early
       checkNetworkQuality();
       
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
+      // Add a timeout to ensure the app loads even if service worker registration hangs
+      let appInitTimeout = setTimeout(() => {
+        console.warn('App initialization timed out, loading without waiting for service worker');
+        try {
+          if (window._flutter && window._flutter.loader) {
+            // Attempt to load the Flutter app directly if we hit the timeout
+            window._flutter.loader.loadEntrypoint({
+              serviceWorker: { serviceWorkerVersion: null },
+              onEntrypointLoaded: function(engineInitializer) {
+                engineInitializer.initializeEngine().then(function(appRunner) {
+                  appRunner.runApp();
+                });
+              }
+            });
+          } else {
+            console.error('Flutter loader not available after timeout');
+            document.getElementById('loading').innerHTML = 
+              '<div class="app-icon"></div>' +
+              '<div class="app-name">DevPropertyHub</div>' +
+              '<div class="loading-text">Error loading application. Please try refreshing the page.</div>';
+          }
+        } catch (e) {
+          console.error('Failed to load app after timeout:', e);
         }
-      });
+      }, 10000); // 10 second timeout
+      
+      // Normal initialization path
+      try {
+        if (window._flutter && window._flutter.loader) {
+          window._flutter.loader.loadEntrypoint({
+            serviceWorker: {
+              serviceWorkerVersion: serviceWorkerVersion,
+            },
+            onEntrypointLoaded: function(engineInitializer) {
+              // Clear the timeout since we've loaded successfully
+              clearTimeout(appInitTimeout);
+              
+              engineInitializer.initializeEngine().then(function(appRunner) {
+                appRunner.runApp();
+              }).catch(function(error) {
+                console.error('Failed to initialize engine:', error);
+              });
+            }
+          });
+        } else {
+          console.error('Flutter loader not available');
+          clearTimeout(appInitTimeout);
+          document.getElementById('loading').innerHTML = 
+            '<div class="app-icon"></div>' +
+            '<div class="app-name">DevPropertyHub</div>' +
+            '<div class="loading-text">Error loading application. Flutter framework not available.</div>';
+        }
+      } catch (e) {
+        console.error('Error during app initialization:', e);
+        clearTimeout(appInitTimeout);
+        // Fallback to basic HTML display if loading fails completely
+        document.getElementById('loading').innerHTML = 
+          '<div class="app-icon"></div>' +
+          '<div class="app-name">DevPropertyHub</div>' +
+          '<div class="loading-text">Error loading application. Please try refreshing the page.</div>';
+      }
     });
   </script>
 </body>
