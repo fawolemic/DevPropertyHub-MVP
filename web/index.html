@@ -27,6 +27,13 @@
     
     // Global bandwidth status for the app to use later
     window.isLowBandwidth = false;
+    
+    // Add error handling for service worker
+    if (serviceWorkerVersion === '{{flutter_service_worker_version}}') {
+      // Template wasn't replaced, use a fallback version or disable service worker
+      console.warn('Service worker version was not injected properly.');
+      serviceWorkerVersion = null; // This will effectively disable the service worker
+    }
   </script>
   
   <!-- Performance optimization script for African market with bandwidth considerations -->  
