@@ -16,11 +16,17 @@ INSERT INTO storage.buckets (id, name, public) VALUES ('backups', 'Database Back
 CREATE TABLE IF NOT EXISTS public.users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT NOT NULL UNIQUE,
-  full_name TEXT,
-  photo_url TEXT,
-  role TEXT NOT NULL DEFAULT 'buyer' CHECK (role IN ('developer', 'buyer', 'admin')),
-  is_email_verified BOOLEAN NOT NULL DEFAULT FALSE,
-  metadata JSONB,
+  first_name TEXT,
+  last_name TEXT,
+  phone TEXT,
+  avatar_url TEXT,
+  company_name TEXT,
+  bio TEXT,
+  user_type TEXT NOT NULL DEFAULT 'buyer' CHECK (user_type IN ('developer', 'buyer', 'admin', 'viewer')),
+  is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  last_login TIMESTAMP WITH TIME ZONE,
+  preferences JSONB DEFAULT '{}'::jsonb,
+  profile_data JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE
 );
@@ -53,8 +59,8 @@ CREATE TABLE IF NOT EXISTS public.properties (
   description TEXT NOT NULL,
   developer_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   development_id UUID REFERENCES public.developments(id) ON DELETE SET NULL,
-  type TEXT NOT NULL DEFAULT 'apartment' CHECK (type IN ('apartment', 'house', 'villa', 'land', 'commercial', 'other')),
-  status TEXT NOT NULL DEFAULT 'available' CHECK (status IN ('available', 'reserved', 'sold', 'under_construction', 'coming_soon')),
+  type TEXT NOT NULL DEFAULT 'apartment' CHECK (type IN ('apartment', 'house', 'villa', 'penthouse', 'land', 'commercial', 'duplex', 'studio', 'office', 'retail', 'other')),
+  status TEXT NOT NULL DEFAULT 'under_construction' CHECK (status IN ('pre_launch', 'under_construction', 'ready_to_move', 'sold_out')),
   price DOUBLE PRECISION NOT NULL,
   price_unit TEXT DEFAULT 'USD',
   bedrooms INTEGER NOT NULL DEFAULT 0,
@@ -74,18 +80,28 @@ CREATE TABLE IF NOT EXISTS public.properties (
 -- Leads table
 CREATE TABLE IF NOT EXISTS public.leads (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  phone TEXT,
   property_id UUID REFERENCES public.properties(id) ON DELETE SET NULL,
-  property_name TEXT,
+  buyer_id UUID REFERENCES public.users(id) ON DELETE SET NULL,
   developer_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-  status TEXT NOT NULL DEFAULT 'new_lead' CHECK (status IN ('new_lead', 'interested', 'viewing_scheduled', 'offer_made', 'converted', 'lost')),
-  priority TEXT NOT NULL DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
-  budget TEXT,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'interested', 'viewing_scheduled', 'negotiating', 'converted', 'lost')),
+  priority TEXT NOT NULL DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high', 'urgent')),
+  budget_range JSONB DEFAULT '{}'::jsonb,
+  requirements JSONB DEFAULT '{}'::jsonb,
+  source TEXT,
   notes TEXT,
-  last_contact_date TIMESTAMP WITH TIME ZONE,
-  tags TEXT[],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE
+);
+
+-- Lead Activities table
+CREATE TABLE IF NOT EXISTS public.lead_activities (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  lead_id UUID NOT NULL REFERENCES public.leads(id) ON DELETE CASCADE,
+  activity_type TEXT NOT NULL CHECK (activity_type IN ('call', 'email', 'meeting', 'site_visit', 'document_sent')),
+  description TEXT,
+  scheduled_at TIMESTAMP WITH TIME ZONE,
+  completed_at TIMESTAMP WITH TIME ZONE,
+  created_by UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE
 );
@@ -97,6 +113,7 @@ ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.developments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.properties ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.lead_activities ENABLE ROW LEVEL SECURITY;
 
 -- Users table policies
 CREATE POLICY "Users can view their own profile" ON public.users
@@ -109,7 +126,7 @@ CREATE POLICY "Admins can view all users" ON public.users
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'admin'
+      WHERE id = auth.uid() AND user_type = 'admin'
     )
   );
 
@@ -130,7 +147,7 @@ CREATE POLICY "Buyers can view all developments" ON public.developments
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'buyer'
+      WHERE id = auth.uid() AND user_type = 'buyer'
     )
   );
 
@@ -138,7 +155,7 @@ CREATE POLICY "Admins can view all developments" ON public.developments
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'admin'
+      WHERE id = auth.uid() AND user_type = 'admin'
     )
   );
 
@@ -159,7 +176,7 @@ CREATE POLICY "Buyers can view all properties" ON public.properties
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'buyer'
+      WHERE id = auth.uid() AND user_type = 'buyer'
     )
   );
 
@@ -167,7 +184,7 @@ CREATE POLICY "Admins can view all properties" ON public.properties
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'admin'
+      WHERE id = auth.uid() AND user_type = 'admin'
     )
   );
 
@@ -188,7 +205,7 @@ CREATE POLICY "Admins can view all leads" ON public.leads
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.users
-      WHERE id = auth.uid() AND role = 'admin'
+      WHERE id = auth.uid() AND user_type = 'admin'
     )
   );
 

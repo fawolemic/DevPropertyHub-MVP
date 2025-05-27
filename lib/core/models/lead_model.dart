@@ -1,11 +1,13 @@
 import 'base_model.dart';
+import 'lead_activity_model.dart';
 
 /// Lead status types
 enum LeadStatus {
   new_lead,
+  contacted,
   interested,
-  viewingScheduled,
-  offerMade,
+  viewing_scheduled,
+  negotiating,
   converted,
   lost,
 }
@@ -15,72 +17,73 @@ enum LeadPriority {
   low,
   medium,
   high,
+  urgent,
 }
 
 /// Lead model extending the base model
 class LeadModel extends BaseModel {
-  final String name;
-  final String email;
-  final String? phone;
   final String? propertyId;
-  final String? propertyName;
+  final String? buyerId;
   final String developerId;
   final LeadStatus status;
   final LeadPriority priority;
-  final String? budget;
+  final Map<String, dynamic>? budgetRange;
+  final Map<String, dynamic>? requirements;
+  final String? source;
   final String? notes;
-  final DateTime? lastContactDate;
-  final List<String>? tags;
+  final List<LeadActivityModel>? activities;
 
   LeadModel({
     required super.id,
     required super.createdAt,
     super.updatedAt,
-    required this.name,
-    required this.email,
-    this.phone,
     this.propertyId,
-    this.propertyName,
+    this.buyerId,
     required this.developerId,
     required this.status,
     required this.priority,
-    this.budget,
+    this.budgetRange,
+    this.requirements,
+    this.source,
     this.notes,
-    this.lastContactDate,
-    this.tags,
+    this.activities,
   });
 
   /// Convert lead status to string
   static String statusToString(LeadStatus status) {
     switch (status) {
       case LeadStatus.new_lead:
-        return 'new_lead';
+        return 'new';
+      case LeadStatus.contacted:
+        return 'contacted';
       case LeadStatus.interested:
         return 'interested';
-      case LeadStatus.viewingScheduled:
+      case LeadStatus.viewing_scheduled:
         return 'viewing_scheduled';
-      case LeadStatus.offerMade:
-        return 'offer_made';
+      case LeadStatus.negotiating:
+        return 'negotiating';
       case LeadStatus.converted:
         return 'converted';
       case LeadStatus.lost:
         return 'lost';
       default:
-        return 'new_lead';
+        return 'new';
     }
   }
 
   /// Convert string to lead status
   static LeadStatus stringToStatus(String? statusStr) {
     switch (statusStr) {
-      case 'new_lead':
+      case 'new':
         return LeadStatus.new_lead;
+      case 'contacted':
+        return LeadStatus.contacted;
       case 'interested':
         return LeadStatus.interested;
       case 'viewing_scheduled':
-        return LeadStatus.viewingScheduled;
-      case 'offer_made':
-        return LeadStatus.offerMade;
+        return LeadStatus.viewing_scheduled;
+      case 'negotiating':
+        return LeadStatus.negotiating;
       case 'converted':
         return LeadStatus.converted;
       case 'lost':
@@ -99,6 +102,8 @@ class LeadModel extends BaseModel {
         return 'medium';
       case LeadPriority.high:
         return 'high';
+      case LeadPriority.urgent:
+        return 'urgent';
       default:
         return 'medium';
     }
@@ -113,6 +118,8 @@ class LeadModel extends BaseModel {
         return LeadPriority.medium;
       case 'high':
         return LeadPriority.high;
+      case 'urgent':
+        return LeadPriority.urgent;
       default:
         return LeadPriority.medium;
     }
@@ -122,18 +129,16 @@ class LeadModel extends BaseModel {
   Map<String, dynamic> toMap() {
     final map = super.toMap();
     map.addAll({
-      'name': name,
-      'email': email,
-      'phone': phone,
       'property_id': propertyId,
-      'property_name': propertyName,
+      'buyer_id': buyerId,
       'developer_id': developerId,
       'status': statusToString(status),
       'priority': priorityToString(priority),
-      'budget': budget,
+      'budget_range': budgetRange ?? {}, // Ensure we don't send null
+      'requirements': requirements ?? {}, // Ensure we don't send null
+      'source': source,
       'notes': notes,
-      'last_contact_date': lastContactDate?.toIso8601String(),
-      'tags': tags,
+      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -148,20 +153,20 @@ class LeadModel extends BaseModel {
       updatedAt: map['updated_at'] != null
           ? DateTime.parse(map['updated_at'])
           : null,
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-      phone: map['phone'],
       propertyId: map['property_id'],
-      propertyName: map['property_name'],
+      buyerId: map['buyer_id'],
       developerId: map['developer_id'] ?? '',
-      status: stringToStatus(map['status']),
-      priority: stringToPriority(map['priority']),
-      budget: map['budget'],
+      status: stringToStatus(map['status'] ?? 'new'), // Provide default value
+      priority: stringToPriority(map['priority'] ?? 'medium'), // Provide default value
+      budgetRange: map['budget_range'] != null 
+          ? Map<String, dynamic>.from(map['budget_range'])
+          : {}, // Safe conversion with empty default
+      requirements: map['requirements'] != null 
+          ? Map<String, dynamic>.from(map['requirements'])
+          : {}, // Safe conversion with empty default
+      source: map['source'],
       notes: map['notes'],
-      lastContactDate: map['last_contact_date'] != null
-          ? DateTime.parse(map['last_contact_date'])
-          : null,
-      tags: map['tags'] != null ? List<String>.from(map['tags']) : null,
+      activities: null, // Activities need to be loaded separately
     );
   }
 
@@ -170,35 +175,31 @@ class LeadModel extends BaseModel {
     String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? name,
-    String? email,
-    String? phone,
     String? propertyId,
-    String? propertyName,
+    String? buyerId,
     String? developerId,
     LeadStatus? status,
     LeadPriority? priority,
-    String? budget,
+    Map<String, dynamic>? budgetRange,
+    Map<String, dynamic>? requirements,
+    String? source,
     String? notes,
-    DateTime? lastContactDate,
-    List<String>? tags,
+    List<LeadActivityModel>? activities,
   }) {
     return LeadModel(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
       propertyId: propertyId ?? this.propertyId,
-      propertyName: propertyName ?? this.propertyName,
+      buyerId: buyerId ?? this.buyerId,
       developerId: developerId ?? this.developerId,
       status: status ?? this.status,
       priority: priority ?? this.priority,
-      budget: budget ?? this.budget,
+      budgetRange: budgetRange ?? this.budgetRange,
+      requirements: requirements ?? this.requirements,
+      source: source ?? this.source,
       notes: notes ?? this.notes,
-      lastContactDate: lastContactDate ?? this.lastContactDate,
-      tags: tags ?? this.tags,
+      activities: activities ?? this.activities,
     );
   }
 }

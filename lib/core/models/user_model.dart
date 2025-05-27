@@ -4,28 +4,41 @@ import 'base_model.dart';
 enum UserRole {
   developer,
   buyer,
+  viewer,
   admin,
 }
 
 /// User model extending the base model
 class UserModel extends BaseModel {
   final String email;
-  final String? fullName;
-  final String? photoUrl;
+  final String? firstName;
+  final String? lastName;
+  final String? phone;
+  final String? avatarUrl;
+  final String? companyName;
+  final String? bio;
   final UserRole role;
-  final bool isEmailVerified;
-  final Map<String, dynamic>? metadata;
+  final bool isVerified;
+  final DateTime? lastLogin;
+  final Map<String, dynamic>? preferences;
+  final Map<String, dynamic>? profileData;
 
   UserModel({
     required super.id,
     required super.createdAt,
     super.updatedAt,
     required this.email,
-    this.fullName,
-    this.photoUrl,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.avatarUrl,
+    this.companyName,
+    this.bio,
     required this.role,
-    this.isEmailVerified = false,
-    this.metadata,
+    this.isVerified = false,
+    this.lastLogin,
+    this.preferences,
+    this.profileData,
   });
 
   /// Convert the user role to a string
@@ -35,6 +48,8 @@ class UserModel extends BaseModel {
         return 'developer';
       case UserRole.buyer:
         return 'buyer';
+      case UserRole.viewer:
+        return 'viewer';
       case UserRole.admin:
         return 'admin';
       default:
@@ -49,6 +64,8 @@ class UserModel extends BaseModel {
         return UserRole.developer;
       case 'buyer':
         return UserRole.buyer;
+      case 'viewer':
+        return UserRole.viewer;
       case 'admin':
         return UserRole.admin;
       default:
@@ -61,11 +78,18 @@ class UserModel extends BaseModel {
     final map = super.toMap();
     map.addAll({
       'email': email,
-      'full_name': fullName,
-      'photo_url': photoUrl,
-      'role': roleToString(role),
-      'is_email_verified': isEmailVerified,
-      'metadata': metadata,
+      'first_name': firstName,
+      'last_name': lastName,
+      'phone': phone,
+      'avatar_url': avatarUrl,
+      'company_name': companyName,
+      'bio': bio,
+      'user_type': roleToString(role),
+      'is_verified': isVerified,
+      'last_login': lastLogin?.toIso8601String(),
+      'preferences': preferences ?? {},
+      'profile_data': profileData ?? {},
+      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -81,11 +105,23 @@ class UserModel extends BaseModel {
           ? DateTime.parse(map['updated_at'])
           : null,
       email: map['email'] ?? '',
-      fullName: map['full_name'],
-      photoUrl: map['photo_url'],
-      role: stringToRole(map['role']),
-      isEmailVerified: map['is_email_verified'] ?? false,
-      metadata: map['metadata'],
+      firstName: map['first_name'],
+      lastName: map['last_name'],
+      phone: map['phone'],
+      avatarUrl: map['avatar_url'],
+      companyName: map['company_name'],
+      bio: map['bio'],
+      role: stringToRole(map['user_type'] ?? 'buyer'), // Provide default value
+      isVerified: map['is_verified'] ?? false,
+      lastLogin: map['last_login'] != null
+          ? DateTime.parse(map['last_login'])
+          : null,
+      preferences: map['preferences'] != null 
+          ? Map<String, dynamic>.from(map['preferences'])
+          : {}, // Safe conversion with empty default
+      profileData: map['profile_data'] != null 
+          ? Map<String, dynamic>.from(map['profile_data'])
+          : {}, // Safe conversion with empty default
     );
   }
 
@@ -95,22 +131,34 @@ class UserModel extends BaseModel {
     DateTime? createdAt,
     DateTime? updatedAt,
     String? email,
-    String? fullName,
-    String? photoUrl,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? avatarUrl,
+    String? companyName,
+    String? bio,
     UserRole? role,
-    bool? isEmailVerified,
-    Map<String, dynamic>? metadata,
+    bool? isVerified,
+    DateTime? lastLogin,
+    Map<String, dynamic>? preferences,
+    Map<String, dynamic>? profileData,
   }) {
     return UserModel(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       email: email ?? this.email,
-      fullName: fullName ?? this.fullName,
-      photoUrl: photoUrl ?? this.photoUrl,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      companyName: companyName ?? this.companyName,
+      bio: bio ?? this.bio,
       role: role ?? this.role,
-      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
-      metadata: metadata ?? this.metadata,
+      isVerified: isVerified ?? this.isVerified,
+      lastLogin: lastLogin ?? this.lastLogin,
+      preferences: preferences ?? this.preferences,
+      profileData: profileData ?? this.profileData,
     );
   }
 }

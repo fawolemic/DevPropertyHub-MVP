@@ -2,11 +2,10 @@ import 'base_model.dart';
 
 /// Property status types
 enum PropertyStatus {
-  available,
-  reserved,
-  sold,
-  underConstruction,
-  comingSoon,
+  pre_launch,
+  under_construction,
+  ready_to_move,
+  sold_out,
 }
 
 /// Property type categories
@@ -14,8 +13,13 @@ enum PropertyType {
   apartment,
   house,
   villa,
+  penthouse,
   land,
   commercial,
+  duplex,
+  studio,
+  office,
+  retail,
   other,
 }
 
@@ -67,36 +71,32 @@ class PropertyModel extends BaseModel {
   /// Convert property status to string
   static String statusToString(PropertyStatus status) {
     switch (status) {
-      case PropertyStatus.available:
-        return 'available';
-      case PropertyStatus.reserved:
-        return 'reserved';
-      case PropertyStatus.sold:
-        return 'sold';
-      case PropertyStatus.underConstruction:
+      case PropertyStatus.pre_launch:
+        return 'pre_launch';
+      case PropertyStatus.under_construction:
         return 'under_construction';
-      case PropertyStatus.comingSoon:
-        return 'coming_soon';
+      case PropertyStatus.ready_to_move:
+        return 'ready_to_move';
+      case PropertyStatus.sold_out:
+        return 'sold_out';
       default:
-        return 'available';
+        return 'under_construction';
     }
   }
 
   /// Convert string to property status
   static PropertyStatus stringToStatus(String? statusStr) {
     switch (statusStr) {
-      case 'available':
-        return PropertyStatus.available;
-      case 'reserved':
-        return PropertyStatus.reserved;
-      case 'sold':
-        return PropertyStatus.sold;
+      case 'pre_launch':
+        return PropertyStatus.pre_launch;
       case 'under_construction':
-        return PropertyStatus.underConstruction;
-      case 'coming_soon':
-        return PropertyStatus.comingSoon;
+        return PropertyStatus.under_construction;
+      case 'ready_to_move':
+        return PropertyStatus.ready_to_move;
+      case 'sold_out':
+        return PropertyStatus.sold_out;
       default:
-        return PropertyStatus.available;
+        return PropertyStatus.under_construction;
     }
   }
 
@@ -109,10 +109,20 @@ class PropertyModel extends BaseModel {
         return 'house';
       case PropertyType.villa:
         return 'villa';
+      case PropertyType.penthouse:
+        return 'penthouse';
       case PropertyType.land:
         return 'land';
       case PropertyType.commercial:
         return 'commercial';
+      case PropertyType.duplex:
+        return 'duplex';
+      case PropertyType.studio:
+        return 'studio';
+      case PropertyType.office:
+        return 'office';
+      case PropertyType.retail:
+        return 'retail';
       case PropertyType.other:
         return 'other';
       default:
@@ -129,10 +139,20 @@ class PropertyModel extends BaseModel {
         return PropertyType.house;
       case 'villa':
         return PropertyType.villa;
+      case 'penthouse':
+        return PropertyType.penthouse;
       case 'land':
         return PropertyType.land;
       case 'commercial':
         return PropertyType.commercial;
+      case 'duplex':
+        return PropertyType.duplex;
+      case 'studio':
+        return PropertyType.studio;
+      case 'office':
+        return PropertyType.office;
+      case 'retail':
+        return PropertyType.retail;
       case 'other':
         return PropertyType.other;
       default:
@@ -151,17 +171,18 @@ class PropertyModel extends BaseModel {
       'type': typeToString(type),
       'status': statusToString(status),
       'price': price,
-      'price_unit': priceUnit,
+      'price_unit': priceUnit ?? 'USD',
       'bedrooms': bedrooms,
       'bathrooms': bathrooms,
       'area': area,
-      'area_unit': areaUnit,
+      'area_unit': areaUnit ?? 'sqft',
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
-      'features': features,
-      'image_urls': imageUrls,
-      'additional_details': additionalDetails,
+      'features': features ?? [],
+      'image_urls': imageUrls ?? [],
+      'additional_details': additionalDetails ?? {},
+      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -180,8 +201,8 @@ class PropertyModel extends BaseModel {
       description: map['description'] ?? '',
       developerId: map['developer_id'] ?? '',
       developmentId: map['development_id'],
-      type: stringToType(map['type']),
-      status: stringToStatus(map['status']),
+      type: stringToType(map['type'] ?? 'apartment'), // Provide default value
+      status: stringToStatus(map['status'] ?? 'under_construction'), // Provide default value
       price: (map['price'] ?? 0).toDouble(),
       priceUnit: map['price_unit'] ?? 'USD',
       bedrooms: map['bedrooms'] ?? 0,
@@ -191,9 +212,11 @@ class PropertyModel extends BaseModel {
       location: map['location'] ?? '',
       latitude: map['latitude']?.toDouble(),
       longitude: map['longitude']?.toDouble(),
-      features: map['features'] != null ? List<String>.from(map['features']) : null,
-      imageUrls: map['image_urls'] != null ? List<String>.from(map['image_urls']) : null,
-      additionalDetails: map['additional_details'],
+      features: map['features'] != null ? List<String>.from(map['features']) : [], // Empty list instead of null
+      imageUrls: map['image_urls'] != null ? List<String>.from(map['image_urls']) : [], // Empty list instead of null
+      additionalDetails: map['additional_details'] != null 
+          ? Map<String, dynamic>.from(map['additional_details'])
+          : {}, // Safe conversion with empty default
     );
   }
 
