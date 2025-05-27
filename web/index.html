@@ -197,6 +197,11 @@
                 appRunner.runApp();
               }).catch(function(error) {
                 console.error('Failed to initialize engine:', error);
+                clearTimeout(appInitTimeout); // Clear timeout in engine initialization error path
+                document.getElementById('loading').innerHTML = 
+                  '<div class="app-icon"></div>' +
+                  '<div class="app-name">DevPropertyHub</div>' +
+                  '<div class="loading-text">Error loading application. Engine initialization failed.</div>';
               });
             }
           });
