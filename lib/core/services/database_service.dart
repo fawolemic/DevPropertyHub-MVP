@@ -61,10 +61,11 @@ class DatabaseService {
   /// Get database statistics
   Future<Map<String, dynamic>> getDatabaseStats() async {
     try {
-      final userCount = await _client.from('users').select('id', const FetchOptions(count: CountOption.exact));
-      final leadCount = await _client.from('leads').select('id', const FetchOptions(count: CountOption.exact));
-      final developmentCount = await _client.from('developments').select('id', const FetchOptions(count: CountOption.exact));
-      final propertyCount = await _client.from('properties').select('id', const FetchOptions(count: CountOption.exact));
+      // Using the correct count syntax for Supabase Flutter SDK v2.8.4
+      final userCount = await _client.from('users').select('*').count();
+      final leadCount = await _client.from('leads').select('*').count();
+      final developmentCount = await _client.from('developments').select('*').count();
+      final propertyCount = await _client.from('properties').select('*').count();
       
       return {
         'users': userCount.count,
