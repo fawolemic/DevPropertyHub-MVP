@@ -220,6 +220,9 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey.shade900,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
                             ),
                             Text(
                               "Here's what's happening with your properties today",

@@ -190,6 +190,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade900,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
                       ),
                       
