@@ -180,153 +180,247 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                 // App bar
                 Container(
                   height: 64,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 2,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
                     border: Border(
                       bottom: BorderSide(color: Colors.grey.shade200),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      // Menu button (mobile only)
-                      if (!isDesktop)
-                        SizedBox(
-                          width: 40,
-                          child: IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              setState(() {
-                                _sidebarOpen = true;
-                              });
-                            },
-                            color: Colors.grey.shade700,
-                            padding: EdgeInsets.zero,
-                          ),
-                        ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Determine screen size categories
+                      final isVerySmallScreen = constraints.maxWidth < 300;
+                      final isSmallScreen = constraints.maxWidth < 360;
                       
-                      const SizedBox(width: 4), // Small spacing
+                      // Choose appropriate title based on available width
+                      final String welcomeText = isVerySmallScreen ? 'Welcome!' : 
+                                             isSmallScreen ? 'Welcome!' : 'Welcome, $userName';
                       
-                      // Welcome message
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              // Abbreviate greeting on very small screens
-                              MediaQuery.of(context).size.width < 360 
-                                ? 'Welcome!' 
-                                : 'Welcome, $userName',
-                              style: theme.textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade900,
-                                fontSize: isDesktop ? 20 : 18, // Smaller on mobile
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                            if (isDesktop) // Only show subtitle on desktop
-                              Text(
-                                "Here's what's happening with your properties today",
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.grey.shade600,
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // LEFT SECTION: Menu + Welcome message
+                          Row(
+                            children: [
+                              // Menu button (mobile only)
+                              if (!isDesktop)
+                                SizedBox(
+                                  width: 36,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.menu, size: 20),
+                                    onPressed: () {
+                                      setState(() {
+                                        _sidebarOpen = true;
+                                      });
+                                    },
+                                    color: Colors.grey.shade700,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              
+                              // Welcome message with constraints
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: isVerySmallScreen ? 100 : 
+                                            isSmallScreen ? 150 : 200,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      welcomeText,
+                                      style: theme.textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade900,
+                                        fontSize: isDesktop ? 20 : 18,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                    ),
+                                    if (isDesktop && !isSmallScreen) // Only show subtitle on desktop
+                                      Text(
+                                        "Here's what's happening today",
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  ],
                                 ),
                               ),
+                            ],
+                          ),
+                          
+                          // RIGHT SECTION: Actions based on screen size
+                          if (isVerySmallScreen)
+                            // Just the avatar on very small screens
+                            CircleAvatar(
+                              radius: 14,
+                              backgroundColor: theme.colorScheme.primary,
+                              child: const Icon(
+                                Icons.person,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            )
+                          else if (isSmallScreen)
+                            // Avatar + one icon on small screens
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.search, size: 20),
+                                  onPressed: () {},
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(maxWidth: 32),
+                                ),
+                                const SizedBox(width: 4),
+                                CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: theme.colorScheme.primary,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 14,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          else if (!isDesktop)
+                            // More icons on medium mobile screens
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.search, size: 20),
+                                  onPressed: () {},
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(maxWidth: 32),
+                                ),
+                                Stack(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.notifications_outlined, size: 20),
+                                      onPressed: () {},
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(maxWidth: 32),
+                                    ),
+                                    Positioned(
+                                      top: 8,
+                                      right: 8,
+                                      child: Container(
+                                        width: 6,
+                                        height: 6,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 4),
+                                CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: theme.colorScheme.primary,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 14,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          else
+                            // Full desktop view
+                            Row(
+                              children: [
+                                // Search bar
+                                Container(
+                                  width: 240,
+                                  height: 40,
+                                  margin: const EdgeInsets.only(right: 16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.grey.shade300),
+                                  ),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Search...',
+                                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color: Colors.grey.shade400,
+                                        size: 20,
+                                      ),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                    ),
+                                  ),
+                                ),
+                                
+                                // Notification bell
+                                Stack(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.notifications_outlined),
+                                      onPressed: () {},
+                                      color: Colors.grey.shade700,
+                                    ),
+                                    Positioned(
+                                      top: 8,
+                                      right: 8,
+                                      child: Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                
+                                // User profile
+                                const SizedBox(width: 8),
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 16,
+                                      backgroundColor: theme.colorScheme.primary,
+                                      child: const Icon(
+                                        Icons.person,
+                                        size: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      userName,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.logout, size: 16),
+                                      onPressed: () {
+                                        // Log out
+                                        authProvider.signOut();
+                                        context.go('/');
+                                      },
+                                      color: Colors.grey.shade700,
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      ),
-                      
-                      const SizedBox(width: 8), // Push trailing widgets to the right
-                      
-                      // Search bar
-                      if (isDesktop)
-                        Container(
-                          width: 240,
-                          height: 40,
-                          margin: const EdgeInsets.only(right: 16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              hintStyle: TextStyle(color: Colors.grey.shade400),
-                              prefixIcon: Icon(
-                                Icons.search,
-                                color: Colors.grey.shade400,
-                                size: 20,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                          ),
-                        ),
-                      
-                      // Notification bell
-                      Stack(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.notifications_outlined),
-                            onPressed: () {},
-                            color: Colors.grey.shade700,
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      
-                      // User profile
-                      const SizedBox(width: 8),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: theme.colorScheme.primary,
-                            child: Icon(
-                              Icons.person,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            userName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.logout, size: 16),
-                            onPressed: () {
-                              // Logout action
-                              authProvider.signOut();
-                              context.go('/login');
-                            },
-                            color: Colors.grey.shade500,
-                          ),
-                        ],
                       ),
                     ],
                   ),
