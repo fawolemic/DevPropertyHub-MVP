@@ -13,8 +13,11 @@ class AuthService {
   Future<UserModel?> signUp({
     required String email,
     required String password,
-    required String fullName,
+    required String firstName,
+    String? lastName,
     required UserRole role,
+    String? phone,
+    String? companyName,
   }) async {
     try {
       // Create the user in Supabase Auth
@@ -22,8 +25,9 @@ class AuthService {
         email: email,
         password: password,
         data: {
-          'full_name': fullName,
-          'role': UserModel.roleToString(role),
+          'first_name': firstName,
+          'last_name': lastName,
+          'user_type': UserModel.roleToString(role),
         },
       );
 
@@ -35,10 +39,16 @@ class AuthService {
       final userData = {
         'id': response.user!.id,
         'email': email,
-        'full_name': fullName,
-        'role': UserModel.roleToString(role),
-        'is_email_verified': false,
+        'first_name': firstName,
+        'last_name': lastName,
+        'phone': phone,
+        'company_name': companyName,
+        'user_type': UserModel.roleToString(role),
+        'is_verified': false,
+        'last_login': DateTime.now().toIso8601String(),
         'created_at': DateTime.now().toIso8601String(),
+        'preferences': {},
+        'profile_data': {},
       };
 
       await _client.from('users').insert(userData);
@@ -125,9 +135,14 @@ class AuthService {
   /// Update user profile
   Future<UserModel> updateUserProfile({
     required String userId,
-    String? fullName,
-    String? photoUrl,
-    Map<String, dynamic>? metadata,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? avatarUrl,
+    String? companyName,
+    String? bio,
+    Map<String, dynamic>? preferences,
+    Map<String, dynamic>? profileData,
   }) async {
     try {
       // Get the current user data
@@ -141,9 +156,14 @@ class AuthService {
 
       // Update the user data
       final updatedData = {
-        'full_name': fullName ?? user.fullName,
-        'photo_url': photoUrl ?? user.photoUrl,
-        'metadata': metadata ?? user.metadata,
+        'first_name': firstName ?? user.firstName,
+        'last_name': lastName ?? user.lastName,
+        'phone': phone ?? user.phone,
+        'avatar_url': avatarUrl ?? user.avatarUrl,
+        'company_name': companyName ?? user.companyName,
+        'bio': bio ?? user.bio,
+        'preferences': preferences ?? user.preferences,
+        'profile_data': profileData ?? user.profileData,
         'updated_at': DateTime.now().toIso8601String(),
       };
 
@@ -155,9 +175,14 @@ class AuthService {
 
       // Return the updated user
       return user.copyWith(
-        fullName: fullName,
-        photoUrl: photoUrl,
-        metadata: metadata,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        avatarUrl: avatarUrl,
+        companyName: companyName,
+        bio: bio,
+        preferences: preferences,
+        profileData: profileData,
         updatedAt: DateTime.now(),
       );
     } catch (e) {
@@ -169,5 +194,109 @@ class AuthService {
   /// Check if user is authenticated
   bool isAuthenticated() {
     return _auth.currentUser != null;
+  }
+  
+  /// Update user's last login time
+  Future<void> updateLastLogin(String userId) async {
+    try {
+      await _client
+          .from('users')
+          .update({
+            'last_login': DateTime.now().toIso8601String(),
+          })
+          .eq('id', userId);
+    } catch (e) {
+      debugPrint('Error updating last login: $e');
+    }
+  }
+  
+  /// Check if user has a specific role
+  Future<bool> hasRole(String userId, UserRole role) async {
+    try {
+      final userData = await _client
+          .from('users')
+          .select('user_type')
+          .eq('id', userId)
+          .single();
+      
+      final userRole = UserModel.stringToRole(userData['user_type']);
+      return userRole == role;
+    } catch (e) {
+      debugPrint('Error checking user role: $e');
+      return false;
+    }
+  }
+  
+  /// Check if user has permission to access a resource
+  Future<bool> hasPermission(String userId, String resource, String action) async {
+    try {
+      final userData = await _client
+          .from('users')
+          .select('user_type')
+          .eq('id', userId)
+          .single();
+      
+      final userRole = UserModel.stringToRole(userData['user_type']);
+      
+      // Define role-based permissions
+      switch (resource) {
+        case 'properties':
+          switch (action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+              return userRole == UserRole.developer || userRole == UserRole.admin;
+            case 'read':
+              return true; // All authenticated users can read properties
+            default:
+              return false;
+          }
+          
+        case 'leads':
+          switch (action) {
+            case 'create':
+            case 'read':
+            case 'update':
+            case 'delete':
+              // Only developers who own the leads or admins can manage leads
+              return userRole == UserRole.developer || userRole == UserRole.admin;
+            default:
+              return false;
+          }
+          
+        case 'developments':
+          switch (action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+              return userRole == UserRole.developer || userRole == UserRole.admin;
+            case 'read':
+              return true; // All authenticated users can read developments
+            default:
+              return false;
+          }
+          
+        case 'users':
+          switch (action) {
+            case 'read':
+            case 'update':
+              // Users can read and update their own profiles
+              return true;
+            case 'read_all':
+            case 'update_all':
+            case 'delete':
+              // Only admins can manage all users
+              return userRole == UserRole.admin;
+            default:
+              return false;
+          }
+          
+        default:
+          return false;
+      }
+    } catch (e) {
+      debugPrint('Error checking user permission: $e');
+      return false;
+    }
   }
 }

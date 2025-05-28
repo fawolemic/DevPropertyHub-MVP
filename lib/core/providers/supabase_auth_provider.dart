@@ -24,12 +24,25 @@ class SupabaseAuthProvider with ChangeNotifier {
   String? get authToken => _authToken;
   String? get userId => _currentUser?.id;
   String? get userEmail => _currentUser?.email;
-  String? get userName => _currentUser?.fullName;
+  String? get userName => _currentUser != null 
+      ? '${_currentUser!.firstName ?? ''} ${_currentUser!.lastName ?? ''}'.trim()
+      : null;
   
   // Role-based checks
   bool get isDeveloper => _currentUser?.role == UserRole.developer;
   bool get isBuyer => _currentUser?.role == UserRole.buyer;
   bool get isAdmin => _currentUser?.role == UserRole.admin;
+  bool get isViewer => _currentUser?.role == UserRole.viewer;
+  
+  // User profile getters
+  String? get firstName => _currentUser?.firstName;
+  String? get lastName => _currentUser?.lastName;
+  String? get phone => _currentUser?.phone;
+  String? get avatarUrl => _currentUser?.avatarUrl;
+  String? get companyName => _currentUser?.companyName;
+  String? get bio => _currentUser?.bio;
+  bool get isVerified => _currentUser?.isVerified ?? false;
+  DateTime? get lastLogin => _currentUser?.lastLogin;
   
   // Initialize auth state from storage and Supabase
   Future<void> initAuth() async {
@@ -155,6 +168,9 @@ class SupabaseAuthProvider with ChangeNotifier {
               : null;
         }
         
+        // Update last login time
+        await _authService.updateLastLogin(user.id);
+        
         await _saveAuthData();
         notifyListeners();
         return true;
@@ -167,14 +183,34 @@ class SupabaseAuthProvider with ChangeNotifier {
     }
   }
   
+  // Check if user has permission to access a resource
+  Future<bool> hasPermission(String resource, String action) async {
+    if (!_isLoggedIn || _currentUser == null) {
+      return false;
+    }
+    
+    return _authService.hasPermission(_currentUser!.id, resource, action);
+  }
+  
   // Sign up with email and password
-  Future<bool> signUp(String email, String password, String fullName, UserRole role) async {
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String firstName,
+    String? lastName,
+    required UserRole role,
+    String? phone,
+    String? companyName,
+  }) async {
     try {
       final user = await _authService.signUp(
         email: email,
         password: password,
-        fullName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         role: role,
+        phone: phone,
+        companyName: companyName,
       );
       
       if (user != null) {
@@ -190,6 +226,9 @@ class SupabaseAuthProvider with ChangeNotifier {
               ? DateTime.fromMillisecondsSinceEpoch(session.expiresAt! * 1000) 
               : null;
         }
+        
+        // Update last login time
+        await _authService.updateLastLogin(user.id);
         
         await _saveAuthData();
         notifyListeners();
@@ -211,6 +250,65 @@ class SupabaseAuthProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint('Error signing out: $e');
+    }
+  }
+  
+  // Check if user is the owner of a resource
+  Future<bool> isResourceOwner(String resourceType, String resourceId) async {
+    if (!_isLoggedIn || _currentUser == null) {
+      return false;
+    }
+    
+    try {
+      final client = SupabaseConfig.client;
+      final data = await client
+          .from(resourceType)
+          .select('developer_id')
+          .eq('id', resourceId)
+          .single();
+      
+      return data['developer_id'] == _currentUser!.id;
+    } catch (e) {
+      debugPrint('Error checking resource ownership: $e');
+      return false;
+    }
+  }
+  
+  // Update user profile
+  Future<bool> updateProfile({
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? avatarUrl,
+    String? companyName,
+    String? bio,
+    Map<String, dynamic>? preferences,
+    Map<String, dynamic>? profileData,
+  }) async {
+    if (!_isLoggedIn || _currentUser == null) {
+      return false;
+    }
+    
+    try {
+      final updatedUser = await _authService.updateUserProfile(
+        userId: _currentUser!.id,
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        avatarUrl: avatarUrl,
+        companyName: companyName,
+        bio: bio,
+        preferences: preferences,
+        profileData: profileData,
+      );
+      
+      _currentUser = updatedUser;
+      await _saveAuthData();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('Error updating profile: $e');
+      return false;
     }
   }
   

@@ -9,6 +9,7 @@ import 'core/providers/buyer_registration_provider.dart';
 import 'core/providers/unified_registration_provider.dart';
 import 'core/providers/supabase_provider.dart';
 import 'core/providers/supabase_auth_provider.dart';
+import 'core/providers/rbac_provider.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 
@@ -38,6 +39,11 @@ void main() async {
         provider_package.ChangeNotifierProvider(create: (_) => RegistrationProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => BuyerRegistrationProvider()),
         provider_package.ChangeNotifierProvider(create: (_) => UnifiedRegistrationProvider()),
+        provider_package.ChangeNotifierProvider(
+          create: (context) => RBACProvider(
+            provider_package.Provider.of<SupabaseAuthProvider>(context, listen: false),
+          ),
+        ),
       ],
       child: const DevPropertyHub(),
     ),
