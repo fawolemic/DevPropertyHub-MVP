@@ -198,17 +198,21 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                     children: [
                       // Menu button (mobile only)
                       if (!isDesktop)
-                        IconButton(
-                          icon: const Icon(Icons.menu),
-                          onPressed: () {
-                            setState(() {
-                              _sidebarOpen = true;
-                            });
-                          },
-                          color: Colors.grey.shade700,
-                          constraints: const BoxConstraints(maxWidth: 40),
-                          padding: EdgeInsets.zero,
+                        SizedBox(
+                          width: 40,
+                          child: IconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () {
+                              setState(() {
+                                _sidebarOpen = true;
+                              });
+                            },
+                            color: Colors.grey.shade700,
+                            padding: EdgeInsets.zero,
+                          ),
                         ),
+                      
+                      const SizedBox(width: 4), // Small spacing
                       
                       // Welcome message
                       Flexible(
@@ -218,7 +222,10 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Welcome, $userName',
+                              // Abbreviate greeting on very small screens
+                              MediaQuery.of(context).size.width < 360 
+                                ? 'Welcome!' 
+                                : 'Welcome, $userName',
                               style: theme.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey.shade900,
@@ -238,6 +245,8 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                           ],
                         ),
                       ),
+                      
+                      const SizedBox(width: 8), // Push trailing widgets to the right
                       
                       // Search bar
                       if (isDesktop)

@@ -170,25 +170,30 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                   ),
                   child: Row(
                     children: [
-                      // Menu button (mobile only)
+                      // Menu button (mobile only) - fixed width
                       if (!isDesktop)
-                        IconButton(
-                          icon: const Icon(Icons.menu),
-                          onPressed: () {
-                            setState(() {
-                              _sidebarOpen = true;
-                            });
-                          },
-                          color: Colors.grey.shade700,
-                          constraints: const BoxConstraints(maxWidth: 40),
-                          padding: EdgeInsets.zero,
+                        SizedBox(
+                          width: 40,
+                          child: IconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () {
+                              setState(() {
+                                _sidebarOpen = true;
+                              });
+                            },
+                            color: Colors.grey.shade700,
+                            padding: EdgeInsets.zero,
+                          ),
                         ),
                       
-                      // Page title
+                      const SizedBox(width: 4), // Small spacing
+                      
+                      // Page title - use Flexible with tight fit
                       Flexible(
                         fit: FlexFit.tight,
                         child: Text(
-                          'Leads Management',
+                          // Use shorter title on very small screens
+                          MediaQuery.of(context).size.width < 360 ? 'Leads' : 'Leads Management',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade900,
@@ -199,6 +204,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                           softWrap: false,
                         ),
                       ),
+                      
+                      const SizedBox(width: 8), // Push trailing widgets to the right
                       
                       // Search bar - desktop only
                       if (isDesktop)
@@ -225,56 +232,62 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                           ),
                         ),
                       
-                      // On mobile, only show a compact set of icons
-                      if (!isDesktop)
-                        // Search icon for mobile
-                        IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            // Show search dialog
-                          },
-                          color: Colors.grey.shade700,
-                          constraints: const BoxConstraints(maxWidth: 40),
-                          padding: EdgeInsets.zero,
-                        ),
-                        
-                      // Notification bell - more compact on mobile
+                      // Trailing widgets in fixed-width container
                       SizedBox(
-                        width: isDesktop ? 40 : 32,
-                        child: Stack(
+                        width: isDesktop ? 240 : 100, // Fixed width for trailing widgets
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.notifications_outlined),
-                              onPressed: () {},
-                              color: Colors.grey.shade700,
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(maxWidth: isDesktop ? 40 : 32),
-                            ),
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: Container(
-                                width: 8,
-                                height: 8,
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  shape: BoxShape.circle,
+                            // On mobile, only show a compact set of icons
+                            if (!isDesktop)
+                              // Search icon for mobile
+                              IconButton(
+                                icon: const Icon(Icons.search),
+                                onPressed: () {
+                                  // Show search dialog
+                                },
+                                color: Colors.grey.shade700,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(maxWidth: 32),
+                              ),
+                              
+                            // Notification bell - more compact on mobile
+                            Stack(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.notifications_outlined),
+                                  onPressed: () {},
+                                  color: Colors.grey.shade700,
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(maxWidth: isDesktop ? 40 : 32),
                                 ),
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            
+                            // User profile - simplified on mobile
+                            if (isDesktop) const SizedBox(width: 8),
+                            CircleAvatar(
+                              radius: isDesktop ? 16 : 14,
+                              backgroundColor: theme.colorScheme.primary,
+                              child: Icon(
+                                Icons.person,
+                                size: isDesktop ? 16 : 14,
+                                color: Colors.white,
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      
-                      // User profile - simplified on mobile
-                      if (isDesktop) const SizedBox(width: 8),
-                      CircleAvatar(
-                        radius: isDesktop ? 16 : 14,
-                        backgroundColor: theme.colorScheme.primary,
-                        child: Icon(
-                          Icons.person,
-                          size: isDesktop ? 16 : 14,
-                          color: Colors.white,
                         ),
                       ),
                       
