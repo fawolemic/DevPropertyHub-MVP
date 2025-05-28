@@ -180,15 +180,19 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                             });
                           },
                           color: Colors.grey.shade700,
+                          constraints: const BoxConstraints(maxWidth: 40),
+                          padding: EdgeInsets.zero,
                         ),
                       
                       // Page title
                       Flexible(
+                        fit: FlexFit.tight,
                         child: Text(
                           'Leads Management',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade900,
+                            fontSize: isDesktop ? 20 : 18, // Smaller on mobile
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -196,7 +200,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                         ),
                       ),
                       
-                      // Search bar
+                      // Search bar - desktop only
                       if (isDesktop)
                         Container(
                           width: 240,
@@ -221,54 +225,73 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                           ),
                         ),
                       
-                      // Notification bell
-                      Stack(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.notifications_outlined),
-                            onPressed: () {},
-                            color: Colors.grey.shade700,
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
+                      // On mobile, only show a compact set of icons
+                      if (!isDesktop)
+                        // Search icon for mobile
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            // Show search dialog
+                          },
+                          color: Colors.grey.shade700,
+                          constraints: const BoxConstraints(maxWidth: 40),
+                          padding: EdgeInsets.zero,
+                        ),
+                        
+                      // Notification bell - more compact on mobile
+                      SizedBox(
+                        width: isDesktop ? 40 : 32,
+                        child: Stack(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.notifications_outlined),
+                              onPressed: () {},
+                              color: Colors.grey.shade700,
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(maxWidth: isDesktop ? 40 : 32),
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       
-                      // User profile
-                      const SizedBox(width: 8),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: theme.colorScheme.primary,
-                            child: Icon(
-                              Icons.person,
-                              size: 16,
-                              color: Colors.white,
-                            ),
+                      // User profile - simplified on mobile
+                      if (isDesktop) const SizedBox(width: 8),
+                      CircleAvatar(
+                        radius: isDesktop ? 16 : 14,
+                        backgroundColor: theme.colorScheme.primary,
+                        child: Icon(
+                          Icons.person,
+                          size: isDesktop ? 16 : 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                      
+                      // Only show username on desktop
+                      if (isDesktop) ...[  
+                        const SizedBox(width: 8),
+                        Text(
+                          userName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey.shade700,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            userName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.logout, size: 16),
-                            onPressed: () {
-                              // Logout action
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.logout, size: 16),
+                          onPressed: () {
+                            // Logout action
                               authProvider.signOut();
                               context.go('/login');
                             },

@@ -206,10 +206,13 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                             });
                           },
                           color: Colors.grey.shade700,
+                          constraints: const BoxConstraints(maxWidth: 40),
+                          padding: EdgeInsets.zero,
                         ),
                       
                       // Welcome message
                       Flexible(
+                        fit: FlexFit.tight,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,17 +222,19 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                               style: theme.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey.shade900,
+                                fontSize: isDesktop ? 20 : 18, // Smaller on mobile
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               softWrap: false,
                             ),
-                            Text(
-                              "Here's what's happening with your properties today",
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: Colors.grey.shade600,
+                            if (isDesktop) // Only show subtitle on desktop
+                              Text(
+                                "Here's what's happening with your properties today",
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: Colors.grey.shade600,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),
