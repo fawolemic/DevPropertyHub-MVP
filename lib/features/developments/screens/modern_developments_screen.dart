@@ -178,10 +178,13 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
           Expanded(
             child: Column(
               children: [
-                // App bar
+                // App bar with robust layout
                 Container(
                   height: 64,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(
+                    // Use smaller padding on mobile
+                    horizontal: isDesktop ? 16 : 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border(
@@ -191,211 +194,91 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       // Determine screen size categories
-                      final isVerySmallScreen = constraints.maxWidth < 300;
-                      final isSmallScreen = constraints.maxWidth < 360;
+                      final screenWidth = constraints.maxWidth;
+                      final isVerySmallScreen = screenWidth < 320;
+                      final isSmallScreen = screenWidth < 375;
                       
                       // Choose appropriate title based on available width
                       final String title = isVerySmallScreen ? 'Devs' : 
-                                         isSmallScreen ? 'Devs' : 'Developments';
+                                          isSmallScreen ? 'Devs' : 'Developments';
+                      
+                      // Calculate trailing widget width based on screen size
+                      final trailingWidth = isVerySmallScreen ? 40 : 
+                                           isSmallScreen ? 70 : 100;
                       
                       return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // LEFT SECTION: Menu + Title
-                          Row(
-                            children: [
-                              // Menu button (mobile only)
-                              if (!isDesktop)
-                                SizedBox(
-                                  width: 36,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.menu, size: 20),
-                                    onPressed: () {
-                                      setState(() {
-                                        _sidebarOpen = true;
-                                      });
-                                    },
-                                    color: Colors.grey.shade700,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                ),
-                              
-                              // Title with constraints
-                              Container(
-                                constraints: BoxConstraints(
-                                  maxWidth: isVerySmallScreen ? 100 : 
-                                            isSmallScreen ? 150 : 200,
-                                ),
-                                child: Text(
-                                  title,
-                                  style: theme.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey.shade900,
-                                    fontSize: isDesktop ? 20 : 18,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
+                          // Menu button (mobile only) - fixed width
+                          if (!isDesktop)
+                            SizedBox(
+                              width: 32, // Even smaller fixed width
+                              child: IconButton(
+                                icon: const Icon(Icons.menu, size: 18),
+                                onPressed: () {
+                                  setState(() {
+                                    _sidebarOpen = true;
+                                  });
+                                },
+                                color: Colors.grey.shade700,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
-                            ],
-                          ),
-                          
-                          // RIGHT SECTION: Actions
-                          // Only show one icon on very small screens
-                          if (isVerySmallScreen)
-                            // Just the avatar on very small screens
-                            CircleAvatar(
-                              radius: 14,
-                              backgroundColor: theme.colorScheme.primary,
-                              child: const Icon(
-                                Icons.person,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                            )
-                          else if (isSmallScreen)
-                            // Avatar + one icon on small screens
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.search, size: 20),
-                                  onPressed: () {},
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(maxWidth: 32),
-                                ),
-                                const SizedBox(width: 4),
-                                CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: theme.colorScheme.primary,
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else if (!isDesktop)
-                            // More icons on medium mobile screens
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.search, size: 20),
-                                  onPressed: () {},
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(maxWidth: 32),
-                                ),
-                                Stack(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.notifications_outlined, size: 20),
-                                      onPressed: () {},
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(maxWidth: 32),
-                                    ),
-                                    Positioned(
-                                      top: 8,
-                                      right: 8,
-                                      child: Container(
-                                        width: 6,
-                                        height: 6,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 4),
-                                CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: theme.colorScheme.primary,
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
                             )
                           else
-                            // Full desktop view
-                            Row(
+                            const SizedBox(width: 4),
+                          
+                          const SizedBox(width: 4), // Small spacing
+                          
+                          // Title - use Flexible with tight fit
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Text(
+                              title,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade900,
+                                fontSize: isDesktop ? 20 : 18,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                            ),
+                          ),
+                          
+                          const SizedBox(width: 4), // Small spacing
+                          
+                          // Trailing widgets in fixed-width container
+                          SizedBox(
+                            width: trailingWidth, // Fixed width for trailing widgets
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Search bar
-                                Container(
-                                  width: 240,
-                                  height: 40,
-                                  margin: const EdgeInsets.only(right: 16),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: Colors.grey.shade300),
+                                // On very small screens, just show user icon
+                                if (!isVerySmallScreen && !isSmallScreen) ...[                                  
+                                  // Search icon - only on medium+ screens
+                                  IconButton(
+                                    icon: const Icon(Icons.search, size: 18),
+                                    onPressed: () {},
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(maxWidth: 24, maxHeight: 24),
                                   ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      hintText: 'Search developments...',
-                                      hintStyle: TextStyle(color: Colors.grey.shade400),
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: Colors.grey.shade400,
-                                        size: 20,
-                                      ),
-                                      border: InputBorder.none,
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                                    ),
+                                  const SizedBox(width: 4),
+                                ],
+                                
+                                // Always show user icon
+                                CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: theme.colorScheme.primary,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 14,
+                                    color: Colors.white,
                                   ),
-                                ),
-                                
-                                // Notification bell
-                                Stack(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.notifications_outlined),
-                                      onPressed: () {},
-                                      color: Colors.grey.shade700,
-                                    ),
-                                    Positioned(
-                                      top: 8,
-                                      right: 8,
-                                      child: Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                
-                                // User profile
-                                const SizedBox(width: 8),
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 16,
-                                      backgroundColor: theme.colorScheme.primary,
-                                      child: const Icon(
-                                        Icons.person,
-                                        size: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      userName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),
+                          ),
                         ],
                       );
                     },

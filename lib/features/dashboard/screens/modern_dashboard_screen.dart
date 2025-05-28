@@ -3,12 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
-import '../../../core/utils/responsive_utils.dart';
-import '../widgets/stats_card.dart';
-import '../widgets/property_framework_card.dart';
-import '../widgets/lead_card.dart';
-import '../widgets/quick_action_button.dart';
-import '../widgets/modern_sidebar.dart';
+import '../../../core/widgets/modern_sidebar.dart';
 
 class ModernDashboardScreen extends StatefulWidget {
   const ModernDashboardScreen({Key? key}) : super(key: key);
@@ -19,135 +14,13 @@ class ModernDashboardScreen extends StatefulWidget {
 
 class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
   bool _sidebarOpen = false;
-  String _activeSection = 'overview';
+  String _activeSection = 'dashboard';
 
-  // Sample data for the dashboard
-  final List<Map<String, dynamic>> _statsCards = [
-    {
-      'title': 'Total Properties',
-      'value': '5',
-      'subtitle': 'Active Developments',
-      'trend': '+12%',
-      'trendUp': true,
-      'color': Colors.blue,
-      'icon': Icons.business,
-    },
-    {
-      'title': 'Enquiries',
-      'value': '43',
-      'subtitle': 'This Month',
-      'trend': '+28%',
-      'trendUp': true,
-      'color': Colors.orange,
-      'icon': Icons.people,
-    },
-    {
-      'title': 'Revenue',
-      'value': '\$2.4M',
-      'subtitle': 'Total Sales',
-      'trend': '+15%',
-      'trendUp': true,
-      'color': Colors.green,
-      'icon': Icons.attach_money,
-    },
-  ];
-
-  final List<Map<String, dynamic>> _activeFrameworks = [
-    {
-      'name': 'Target Heights',
-      'location': 'Downtown District',
-      'units': 45,
-      'sold': 23,
-      'revenue': '\$1.2M',
-      'status': 'Under Construction',
-      'completion': '75%',
-      'color': Colors.red,
-    },
-    {
-      'name': 'Prop Developers',
-      'location': 'Marina Bay',
-      'units': 78,
-      'sold': 56,
-      'revenue': '\$2.8M',
-      'status': 'Ready to Move',
-      'completion': '100%',
-      'color': Colors.blue,
-    },
-  ];
-
-  final List<Map<String, dynamic>> _recentLeads = [
-    {
-      'id': 1,
-      'name': 'John Smith',
-      'email': 'john.smith@email.com',
-      'property': 'Target Heights - Unit 2A',
-      'budget': '\$850K',
-      'status': 'Hot Lead',
-      'time': '2 hours ago',
-      'priority': 'high',
-    },
-    {
-      'id': 2,
-      'name': 'Sarah Johnson',
-      'email': 'sarah.j@email.com',
-      'property': 'Prop Developers - Unit 5B',
-      'budget': '\$1.2M',
-      'status': 'Interested',
-      'time': '5 hours ago',
-      'priority': 'medium',
-    },
-    {
-      'id': 3,
-      'name': 'Mike Thompson',
-      'email': 'mike.t@email.com',
-      'property': 'Target Heights - Unit 1C',
-      'budget': '\$750K',
-      'status': 'Viewing Scheduled',
-      'time': '1 day ago',
-      'priority': 'low',
-    },
-  ];
-
-  // Handle section changes with actual navigation
-  void _handleSectionChange(String section) {
-    setState(() {
-      _activeSection = section;
-    });
-    
-    // Map section to route using GoRouter
-    switch (section) {
-      case 'overview':
-        context.go('/dashboard');
-        break;
-      case 'properties':
-        context.go('/developments');
-        break;
-      case 'leads':
-        context.go('/leads');
-        break;
-      case 'analytics':
-        // If you don't have these routes yet, you can keep them local or create placeholder screens
-        context.go('/dashboard');
-        debugPrint('Analytics section selected - route not implemented yet');
-        break;
-      case 'documents':
-        context.go('/dashboard');
-        debugPrint('Documents section selected - route not implemented yet');
-        break;
-      case 'settings':
-        context.go('/settings');
-        break;
-      default:
-        context.go('/dashboard');
-    }
-  }
-  
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
     final theme = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
-    final isDesktop = mediaQuery.size.width >= 1024;
+    final authProvider = Provider.of<AuthProvider>(context);
+    final isDesktop = MediaQuery.of(context).size.width > 1024;
     
     // Get user info
     final userName = authProvider.userName ?? 'Admin User';
@@ -177,10 +50,13 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
           Expanded(
             child: Column(
               children: [
-                // App bar
+                // App bar with robust layout
                 Container(
                   height: 64,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(
+                    // Use smaller padding on mobile
+                    horizontal: isDesktop ? 16 : 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border(
@@ -190,308 +66,192 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       // Determine screen size categories
-                      final isVerySmallScreen = constraints.maxWidth < 300;
-                      final isSmallScreen = constraints.maxWidth < 360;
+                      final screenWidth = constraints.maxWidth;
+                      final isVerySmallScreen = screenWidth < 320;
+                      final isSmallScreen = screenWidth < 375;
                       
                       // Choose appropriate title based on available width
                       final String welcomeText = isVerySmallScreen ? 'Welcome!' : 
-                                             isSmallScreen ? 'Welcome!' : 'Welcome, $userName';
+                                               isSmallScreen ? 'Welcome!' : 'Welcome, $userName';
+                      
+                      // Calculate trailing widget width based on screen size
+                      final trailingWidth = isVerySmallScreen ? 40 : 
+                                           isSmallScreen ? 70 : 100;
                       
                       return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // LEFT SECTION: Menu + Welcome message
-                          Row(
-                            children: [
-                              // Menu button (mobile only)
-                              if (!isDesktop)
-                                SizedBox(
-                                  width: 36,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.menu, size: 20),
-                                    onPressed: () {
-                                      setState(() {
-                                        _sidebarOpen = true;
-                                      });
-                                    },
-                                    color: Colors.grey.shade700,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                ),
-                              
-                              // Welcome message with constraints
-                              Container(
-                                constraints: BoxConstraints(
-                                  maxWidth: isVerySmallScreen ? 100 : 
-                                            isSmallScreen ? 150 : 200,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      welcomeText,
-                                      style: theme.textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade900,
-                                        fontSize: isDesktop ? 20 : 18,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                    if (isDesktop && !isSmallScreen) // Only show subtitle on desktop
-                                      Text(
-                                        "Here's what's happening today",
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: Colors.grey.shade600,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                  ],
-                                ),
+                          // Menu button (mobile only) - fixed width
+                          if (!isDesktop)
+                            SizedBox(
+                              width: 32, // Even smaller fixed width
+                              child: IconButton(
+                                icon: const Icon(Icons.menu, size: 18),
+                                onPressed: () {
+                                  setState(() {
+                                    _sidebarOpen = true;
+                                  });
+                                },
+                                color: Colors.grey.shade700,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
-                            ],
-                          ),
-                          
-                          // RIGHT SECTION: Actions based on screen size
-                          if (isVerySmallScreen)
-                            // Just the avatar on very small screens
-                            CircleAvatar(
-                              radius: 14,
-                              backgroundColor: theme.colorScheme.primary,
-                              child: const Icon(
-                                Icons.person,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                            )
-                          else if (isSmallScreen)
-                            // Avatar + one icon on small screens
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.search, size: 20),
-                                  onPressed: () {},
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(maxWidth: 32),
-                                ),
-                                const SizedBox(width: 4),
-                                CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: theme.colorScheme.primary,
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else if (!isDesktop)
-                            // More icons on medium mobile screens
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.search, size: 20),
-                                  onPressed: () {},
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(maxWidth: 32),
-                                ),
-                                Stack(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.notifications_outlined, size: 20),
-                                      onPressed: () {},
-                                      padding: EdgeInsets.zero,
-                                      constraints: const BoxConstraints(maxWidth: 32),
-                                    ),
-                                    Positioned(
-                                      top: 8,
-                                      right: 8,
-                                      child: Container(
-                                        width: 6,
-                                        height: 6,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 4),
-                                CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: theme.colorScheme.primary,
-                                  child: const Icon(
-                                    Icons.person,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
                             )
                           else
-                            // Full desktop view
-                            Row(
+                            const SizedBox(width: 4),
+                          
+                          const SizedBox(width: 4), // Small spacing
+                          
+                          // Welcome message - use Flexible with tight fit
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Search bar
-                                Container(
-                                  width: 240,
-                                  height: 40,
-                                  margin: const EdgeInsets.only(right: 16),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: Colors.grey.shade300),
+                                Text(
+                                  welcomeText,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey.shade900,
+                                    fontSize: isDesktop ? 20 : 18,
                                   ),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      hintText: 'Search...',
-                                      hintStyle: TextStyle(color: Colors.grey.shade400),
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: Colors.grey.shade400,
-                                        size: 20,
-                                      ),
-                                      border: InputBorder.none,
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                                if (isDesktop && !isSmallScreen) // Only show subtitle on desktop
+                                  Text(
+                                    "Here's what's happening today",
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey.shade600,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          const SizedBox(width: 4), // Small spacing
+                          
+                          // Trailing widgets in fixed-width container
+                          SizedBox(
+                            width: trailingWidth, // Fixed width for trailing widgets
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // On very small screens, just show user icon
+                                if (!isVerySmallScreen && !isSmallScreen) ...[                                  
+                                  // Search icon - only on medium+ screens
+                                  IconButton(
+                                    icon: const Icon(Icons.search, size: 18),
+                                    onPressed: () {},
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(maxWidth: 24, maxHeight: 24),
+                                  ),
+                                  const SizedBox(width: 4),
+                                ],
                                 
-                                // Notification bell
-                                Stack(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.notifications_outlined),
-                                      onPressed: () {},
-                                      color: Colors.grey.shade700,
-                                    ),
-                                    Positioned(
-                                      top: 8,
-                                      right: 8,
-                                      child: Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                
-                                // User profile
-                                const SizedBox(width: 8),
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 16,
-                                      backgroundColor: theme.colorScheme.primary,
-                                      child: const Icon(
-                                        Icons.person,
-                                        size: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      userName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.logout, size: 16),
-                                      onPressed: () {
-                                        // Log out
-                                        authProvider.signOut();
-                                        context.go('/');
-                                      },
-                                      color: Colors.grey.shade700,
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                  ],
+                                // Always show user icon
+                                CircleAvatar(
+                                  radius: 14,
+                                  backgroundColor: theme.colorScheme.primary,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 14,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 
-                // Dashboard content
+                // Main content area
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: ResponsiveUtils.getResponsivePadding(context),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Stats cards
+                        // Dashboard title
+                        Text(
+                          'Dashboard',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 24),
+                        
+                        // Stats overview
                         GridView.count(
-                          crossAxisCount: ResponsiveUtils.getResponsiveGridCount(context),
-                          crossAxisSpacing: ResponsiveUtils.isMobile(context) ? 12 : 24,
-                          mainAxisSpacing: ResponsiveUtils.isMobile(context) ? 12 : 24,
+                          crossAxisCount: isDesktop ? 4 : 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
                           shrinkWrap: true,
-                          childAspectRatio: ResponsiveUtils.isMobile(context) ? 1.2 : 1.0,
                           physics: const NeverScrollableScrollPhysics(),
-                          children: _statsCards.map((card) {
-                            return StatsCard(
-                              title: card['title'],
-                              value: card['value'],
-                              subtitle: card['subtitle'],
-                              trend: card['trend'],
-                              trendUp: card['trendUp'],
-                              color: card['color'],
-                              icon: card['icon'],
-                            );
-                          }).toList(),
+                          children: [
+                            _buildStatCard(
+                              context,
+                              'Total Developments',
+                              '12',
+                              Icons.business,
+                              Colors.blue,
+                            ),
+                            _buildStatCard(
+                              context,
+                              'Active Leads',
+                              '48',
+                              Icons.people,
+                              Colors.green,
+                            ),
+                            _buildStatCard(
+                              context,
+                              'Revenue (MTD)',
+                              '\$125,000',
+                              Icons.attach_money,
+                              Colors.orange,
+                            ),
+                            _buildStatCard(
+                              context,
+                              'Conversion Rate',
+                              '24%',
+                              Icons.trending_up,
+                              Colors.purple,
+                            ),
+                          ],
                         ),
                         
                         const SizedBox(height: 32),
                         
-                        // Active Frameworks and Quick Actions
-                        if (ResponsiveUtils.isDesktop(context))
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Active Frameworks
-                              Expanded(
-                                child: _buildActiveFrameworks(),
-                              ),
-                              
-                              SizedBox(width: ResponsiveUtils.isMobile(context) ? 12 : 24),
-                              
-                              // Quick Actions
-                              Expanded(
-                                child: _buildQuickActions(),
-                              ),
-                            ],
-                          )
-                        else
-                          Column(
-                            children: [
-                              _buildActiveFrameworks(),
-                              SizedBox(height: ResponsiveUtils.isMobile(context) ? 16 : 24),
-                              _buildQuickActions(),
-                            ],
-                          ),
+                        // Active frameworks section
+                        _buildSectionHeader(context, 'Active Frameworks', onViewAll: () {
+                          context.go('/frameworks');
+                        }),
+                        const SizedBox(height: 16),
+                        _buildActiveFrameworks(),
                         
                         const SizedBox(height: 32),
                         
-                        // Recent Leads
+                        // Quick actions section
+                        _buildSectionHeader(context, 'Quick Actions'),
+                        const SizedBox(height: 16),
+                        _buildQuickActions(),
+                        
+                        const SizedBox(height: 32),
+                        
+                        // Recent leads section
+                        _buildSectionHeader(context, 'Recent Leads', onViewAll: () {
+                          context.go('/leads');
+                        }),
+                        const SizedBox(height: 16),
                         _buildRecentLeads(context),
-                        
-                        const SizedBox(height: 32),
-                        
-                        // Authentication Testing Section
-                        _buildAuthTestingSection(),
                       ],
                     ),
                   ),
@@ -503,392 +263,456 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
       ),
     );
   }
-  
+
   Widget _buildSectionHeader(BuildContext context, String title, {VoidCallback? onViewAll}) {
-    final isMobile = ResponsiveUtils.isMobile(context);
+    final theme = Theme.of(context);
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: isMobile ? 16 : 20,
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade900,
           ),
         ),
         if (onViewAll != null)
-          TextButton.icon(
+          TextButton(
             onPressed: onViewAll,
-            icon: Text('View All', style: TextStyle(fontSize: isMobile ? 12 : 14)),
-            label: Icon(
-              Icons.chevron_right,
-              size: isMobile ? 14 : 16,
-            ),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.blue,
-              textStyle: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: isMobile ? 12 : 14,
-              ),
-              padding: isMobile ? const EdgeInsets.symmetric(horizontal: 8, vertical: 4) : null,
+            child: Row(
+              children: [
+                Text(
+                  'View all',
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.arrow_forward,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+              ],
             ),
           ),
       ],
     );
   }
-  
+
   Widget _buildActiveFrameworks() {
-    final isMobile = ResponsiveUtils.isMobile(context);
+    final isDesktop = MediaQuery.of(context).size.width > 1024;
     
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
-        side: BorderSide(color: Colors.grey.shade100),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionHeader(
-              context,
-              'Active Frameworks',
-              onViewAll: () => context.push('/developments'),
-            ),
-            SizedBox(height: isMobile ? 16 : 24),
-            if (isMobile)
-              // For mobile, use horizontal scrolling list
-              SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _activeFrameworks.length,
-                  itemBuilder: (context, index) {
-                    final framework = _activeFrameworks[index];
-                    return Container(
-                      width: ResponsiveUtils.getResponsiveCardWidth(context),
-                      margin: const EdgeInsets.only(right: 12),
-                      child: PropertyFrameworkCard(
-                        name: framework['name'],
-                        location: framework['location'],
-                        units: framework['units'],
-                        sold: framework['sold'],
-                        revenue: framework['revenue'],
-                        status: framework['status'],
-                        completion: framework['completion'],
-                        color: framework['color'],
-                      ),
-                    );
-                  },
-                ),
-              )
-            else
-              // For desktop/tablet, use vertical list
-              ...List.generate(_activeFrameworks.length, (index) {
-                final framework = _activeFrameworks[index];
-                return Padding(
-                  padding: EdgeInsets.only(bottom: index < _activeFrameworks.length - 1 ? 16 : 0),
-                  child: PropertyFrameworkCard(
-                    name: framework['name'],
-                    location: framework['location'],
-                    units: framework['units'],
-                    sold: framework['sold'],
-                    revenue: framework['revenue'],
-                    status: framework['status'],
-                    completion: framework['completion'],
-                    color: framework['color'],
-                  ),
-                );
-              }),
-          ],
+    return GridView.count(
+      crossAxisCount: isDesktop ? 3 : 1,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: isDesktop ? 2.5 : 3,
+      children: [
+        _buildFrameworkCard(
+          'Sales Framework',
+          'Active',
+          Colors.green,
+          'Last updated: 2 days ago',
+          '12 leads in pipeline',
         ),
-      ),
+        _buildFrameworkCard(
+          'Marketing Framework',
+          'Active',
+          Colors.green,
+          'Last updated: 1 week ago',
+          '3 campaigns running',
+        ),
+        _buildFrameworkCard(
+          'Development Framework',
+          'Pending',
+          Colors.orange,
+          'Last updated: 3 days ago',
+          '2 projects in progress',
+        ),
+      ],
     );
   }
-  
-  Widget _buildQuickActions() {
-    final isMobile = ResponsiveUtils.isMobile(context);
-    
+
+  Widget _buildFrameworkCard(
+    String title,
+    String status,
+    Color statusColor,
+    String lastUpdated,
+    String description,
+  ) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
-        side: BorderSide(color: Colors.grey.shade100),
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: Padding(
-        padding: EdgeInsets.all(isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionHeader(context, 'Quick Actions'),
-            SizedBox(height: isMobile ? 16 : 24),
-            GridView.count(
-              crossAxisCount: isMobile ? 2 : 2,
-              crossAxisSpacing: isMobile ? 8 : 16,
-              mainAxisSpacing: isMobile ? 8 : 16,
-              shrinkWrap: true,
-              childAspectRatio: isMobile ? 0.8 : 1.0, // Taller buttons on mobile
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                QuickActionButton(
-                  icon: Icons.add,
-                  label: 'Add Property',
-                  hoverColor: Colors.blue,
-                  onPressed: () => context.go('/developments/add'),
-                ),
-                QuickActionButton(
-                  icon: Icons.download,
-                  label: 'Export Report',
-                  hoverColor: Colors.green,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Exporting report...')),
-                    );
-                  },
-                ),
-                QuickActionButton(
-                  icon: Icons.bar_chart,
-                  label: 'View Analytics',
-                  hoverColor: Colors.purple,
-                  onPressed: () => _handleSectionChange('analytics'),
-                ),
-                QuickActionButton(
-                  icon: Icons.refresh,
-                  label: 'Sync Data',
-                  hoverColor: Colors.orange,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Syncing data...')),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildRecentLeads(BuildContext context) {
-    final isMobile = ResponsiveUtils.isMobile(context);
-    
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
-        side: BorderSide(color: Colors.grey.shade100),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(isMobile ? 16 : 24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: _buildSectionHeader(
-                    context,
-                    'Recent Leads',
-                    onViewAll: () => context.push('/leads'),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.filter_list),
-                  onPressed: () {},
-                  color: Colors.grey.shade500,
-                  iconSize: isMobile ? 18 : 20,
-                  padding: isMobile ? EdgeInsets.zero : null,
-                  constraints: isMobile ? const BoxConstraints(minWidth: 36, minHeight: 36) : null,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: statusColor,
+                    ),
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: isMobile ? 16 : 24),
-            if (isMobile)
-              // For mobile, use a more compact lead card layout
-              ...List.generate(_recentLeads.length, (index) {
-                final lead = _recentLeads[index];
-                return Card(
-                  margin: EdgeInsets.only(bottom: 8),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: Colors.grey.shade200),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      child: Text(
-                        _getInitials(lead['name']),
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+            const SizedBox(height: 8),
+            Text(
+              lastUpdated,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              description,
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickActions() {
+    final isDesktop = MediaQuery.of(context).size.width > 1024;
+    final theme = Theme.of(context);
+    
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        _buildActionButton(
+          context,
+          'Add Lead',
+          Icons.person_add,
+          theme.colorScheme.primary,
+          () {
+            context.go('/leads/add');
+          },
+        ),
+        _buildActionButton(
+          context,
+          'New Development',
+          Icons.business,
+          Colors.blue,
+          () {
+            context.go('/developments/add');
+          },
+        ),
+        _buildActionButton(
+          context,
+          'Schedule Meeting',
+          Icons.calendar_today,
+          Colors.orange,
+          () {
+            // Schedule meeting action
+          },
+        ),
+        _buildActionButton(
+          context,
+          'Generate Report',
+          Icons.bar_chart,
+          Colors.purple,
+          () {
+            // Generate report action
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton(
+    BuildContext context,
+    String label,
+    IconData icon,
+    Color color,
+    VoidCallback onPressed,
+  ) {
+    final isDesktop = MediaQuery.of(context).size.width > 1024;
+    
+    return SizedBox(
+      width: isDesktop ? 150 : double.infinity,
+      child: ElevatedButton.icon(
+        icon: Icon(icon),
+        label: Text(label),
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecentLeads(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDesktop = MediaQuery.of(context).size.width > 1024;
+    
+    // Sample data
+    final leads = [
+      {
+        'name': 'John Smith',
+        'email': 'john.smith@example.com',
+        'date': '2023-05-15',
+        'status': 'New',
+        'priority': 'High',
+      },
+      {
+        'name': 'Emily Brown',
+        'email': 'emily.brown@example.com',
+        'date': '2023-05-14',
+        'status': 'Contacted',
+        'priority': 'Medium',
+      },
+      {
+        'name': 'David Wilson',
+        'email': 'david.wilson@example.com',
+        'date': '2023-05-12',
+        'status': 'Qualified',
+        'priority': 'Low',
+      },
+    ];
+    
+    return Column(
+      children: leads.map((lead) {
+        return Card(
+          elevation: 0,
+          margin: const EdgeInsets.only(bottom: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+          child: InkWell(
+            onTap: () {
+              // Navigate to lead details
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Avatar or initials
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                    child: Text(
+                      _getInitials(lead['name']!),
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    title: Text(
-                      lead['name'],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
-                    subtitle: Column(
+                  ),
+                  const SizedBox(width: 16),
+                  // Lead info
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(lead['property'], style: const TextStyle(fontSize: 12)),
+                        Text(
+                          lead['name']!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          lead['email']!,
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Status and priority
+                  if (isDesktop)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(lead['status']!).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            lead['status']!,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: _getStatusColor(lead['status']!),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
                         Row(
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(top: 4),
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              width: 8,
+                              height: 8,
                               decoration: BoxDecoration(
-                                color: _getPriorityColor(lead['priority']).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                lead['status'],
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: _getPriorityColor(lead['priority']),
-                                ),
+                                color: _getPriorityColor(lead['priority']!),
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 4),
                             Text(
-                              lead['budget'],
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                              '${lead['priority']} Priority',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
                           ],
                         ),
                       ],
+                    )
+                  else
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _getPriorityColor(lead['priority']!),
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                    trailing: const Icon(Icons.chevron_right, size: 16),
-                    onTap: () => context.push('/leads'),
-                  ),
-                );
-              })
-            else
-              // For desktop/tablet, use the full lead card
-              ...List.generate(_recentLeads.length, (index) {
-                final lead = _recentLeads[index];
-                return Padding(
-                  padding: EdgeInsets.only(bottom: index < _recentLeads.length - 1 ? 16 : 0),
-                  child: LeadCard(
-                    id: lead['id'],
-                    name: lead['name'],
-                    email: lead['email'],
-                    property: lead['property'],
-                    budget: lead['budget'],
-                    status: lead['status'],
-                    time: lead['time'],
-                    priority: lead['priority'],
-                  ),
-                );
-              }),
-          ],
-        ),
-      ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
-  
+
   String _getInitials(String name) {
-    final nameParts = name.split(' ');
-    if (nameParts.length > 1) {
-      return '${nameParts[0][0]}${nameParts[1][0]}';
-    } else if (name.isNotEmpty) {
-      return name[0];
+    final parts = name.split(' ');
+    String initials = '';
+    for (var part in parts) {
+      if (part.isNotEmpty) {
+        initials += part[0];
+      }
     }
-    return '';
+    return initials;
   }
-  
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'New':
+        return Colors.blue;
+      case 'Contacted':
+        return Colors.orange;
+      case 'Qualified':
+        return Colors.purple;
+      case 'Proposal':
+        return Colors.teal;
+      case 'Negotiation':
+        return Colors.amber.shade800;
+      case 'Closed Won':
+        return Colors.green;
+      case 'Closed Lost':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
   Color _getPriorityColor(String priority) {
     switch (priority) {
-      case 'high':
-        return Colors.red.shade800;
-      case 'medium':
-        return Colors.orange.shade800;
-      case 'low':
-        return Colors.green.shade800;
+      case 'High':
+        return Colors.red;
+      case 'Medium':
+        return Colors.orange;
+      case 'Low':
+        return Colors.green;
       default:
-        return Colors.grey.shade800;
+        return Colors.grey;
     }
   }
-  }
-  
-  Widget _buildAuthTestingSection() {
+
+  Widget _buildStatCard(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade100),
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Colors.grey.shade300),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Icon(
+              icon,
+              color: color,
+              size: 24,
+            ),
+            const SizedBox(height: 8),
             Text(
-              'Authentication Testing',
-              style: TextStyle(
-                fontSize: 20,
+              value,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.grey.shade900,
+                fontSize: 24,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             Text(
-              'Test your API authentication and view system logs',
+              label,
               style: TextStyle(
                 color: Colors.grey.shade600,
+                fontSize: 14,
               ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Run auth test
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Run Auth Test',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                OutlinedButton(
-                  onPressed: () {
-                    // View system logs
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.grey.shade700,
-                    side: BorderSide(color: Colors.grey.shade300),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'View System Logs',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
       ),
     );
   }
+
+  void _handleSectionChange(String section) {
+    setState(() {
+      _activeSection = section;
+    });
+  }
+}
