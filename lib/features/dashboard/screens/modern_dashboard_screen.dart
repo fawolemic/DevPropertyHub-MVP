@@ -209,7 +209,7 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                         ),
                       
                       // Welcome message
-                      Expanded(
+                      Flexible(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,

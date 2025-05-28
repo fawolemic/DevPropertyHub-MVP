@@ -183,7 +183,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                         ),
                       
                       // Page title
-                      Expanded(
+                      Flexible(
                         child: Text(
                           'Leads Management',
                           style: theme.textTheme.titleLarge?.copyWith(

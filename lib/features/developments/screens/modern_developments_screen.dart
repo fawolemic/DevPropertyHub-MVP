@@ -163,7 +163,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                         ),
                       
                       // Page title
-                      Expanded(
+                      Flexible(
                         child: Text(
                           'Developments',
                           style: theme.textTheme.titleLarge?.copyWith(
