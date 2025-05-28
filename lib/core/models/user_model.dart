@@ -41,37 +41,40 @@ class UserModel extends BaseModel {
     this.profileData,
   });
 
-  /// Convert the user role to a string
+  /// Convert role to string for database storage (user_type field)
   static String roleToString(UserRole role) {
     switch (role) {
       case UserRole.developer:
         return 'developer';
       case UserRole.buyer:
         return 'buyer';
-      case UserRole.viewer:
-        return 'viewer';
       case UserRole.admin:
         return 'admin';
+      case UserRole.viewer:
+        return 'viewer';
       default:
-        return 'buyer';
+        return 'viewer';
     }
   }
 
-  /// Convert a string to a user role
+  /// Convert string from database (user_type field) to role enum
   static UserRole stringToRole(String? roleStr) {
     switch (roleStr) {
       case 'developer':
         return UserRole.developer;
       case 'buyer':
         return UserRole.buyer;
-      case 'viewer':
-        return UserRole.viewer;
       case 'admin':
         return UserRole.admin;
+      case 'viewer':
+        return UserRole.viewer;
       default:
-        return UserRole.buyer;
+        return UserRole.viewer;
     }
   }
+  
+  /// Get database field name for role
+  static String get roleFieldName => 'user_type';
 
   @override
   Map<String, dynamic> toMap() {

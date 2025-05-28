@@ -106,14 +106,38 @@ CREATE TABLE IF NOT EXISTS public.lead_activities (
   updated_at TIMESTAMP WITH TIME ZONE
 );
 
+-- Audit Logs table for tracking sensitive operations
+CREATE TABLE IF NOT EXISTS public.audit_logs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  resource TEXT NOT NULL,
+  resource_id TEXT NOT NULL,
+  action TEXT NOT NULL,
+  details JSONB DEFAULT '{}'::jsonb,
+  ip_address TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Set up Row Level Security (RLS)
 
--- Enable RLS on all tables
+-- Enable and force RLS on all tables (deny by default for extra safety)
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE public.developments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.developments FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE public.properties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.properties FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.leads FORCE ROW LEVEL SECURITY;
+
 ALTER TABLE public.lead_activities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.lead_activities FORCE ROW LEVEL SECURITY;
+
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.audit_logs FORCE ROW LEVEL SECURITY;
 
 -- Users table policies
 CREATE POLICY "Users can view their own profile" ON public.users
@@ -208,6 +232,41 @@ CREATE POLICY "Admins can view all leads" ON public.leads
       WHERE id = auth.uid() AND user_type = 'admin'
     )
   );
+  
+-- Audit logs policies
+CREATE POLICY "Only admins can view all audit logs" ON public.audit_logs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.users
+      WHERE id = auth.uid() AND user_type = 'admin'
+    )
+  );
+
+CREATE POLICY "Users can view their own audit logs" ON public.audit_logs
+  FOR SELECT USING (user_id = auth.uid());
+  
+CREATE POLICY "Developers can view audit logs for their resources" ON public.audit_logs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.users
+      WHERE id = auth.uid() AND user_type = 'developer'
+      AND resource IN ('properties', 'leads', 'developments')
+      AND EXISTS (
+        SELECT 1 FROM public[resource]
+        WHERE id::text = audit_logs.resource_id AND developer_id = auth.uid()
+      )
+    )
+  );
+  
+CREATE POLICY "System can insert audit logs" ON public.audit_logs
+  FOR INSERT WITH CHECK (true);
+  
+-- Explicitly deny other operations on audit logs
+CREATE POLICY "Deny update on audit logs" ON public.audit_logs
+  FOR UPDATE USING (false);
+  
+CREATE POLICY "Deny delete on audit logs" ON public.audit_logs
+  FOR DELETE USING (false);
 
 -- Create functions for database initialization
 
