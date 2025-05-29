@@ -309,12 +309,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 icon: const Icon(Icons.add),
                                 label: const Text('Add Development'),
                                 onPressed: () {
-                                  final developerId = authProvider.currentUser?.id;
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AddProjectWizard(developerId: developerId ?? ''),
-                                    ),
-                                  );
+                                  // Use GoRouter for navigation - better for web
+                                  context.go('/developments/add');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: theme.colorScheme.primary,
@@ -326,12 +322,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               IconButton(
                                 icon: const Icon(Icons.add),
                                 onPressed: () {
-                                  final developerId = authProvider.currentUser?.id;
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AddProjectWizard(developerId: developerId ?? ''),
-                                    ),
-                                  );
+                                  // Use GoRouter for navigation - better for web
+                                  context.go('/developments/add');
                                 },
                                 color: theme.colorScheme.primary,
                               ),
