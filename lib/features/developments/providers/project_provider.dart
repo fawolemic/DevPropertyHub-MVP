@@ -220,8 +220,12 @@ class ProjectProvider extends ChangeNotifier {
   }
   
   // Remove a unit type
-  void removeUnitType(UnitType unitType) {
-    _unitTypes.removeWhere((type) => type.id == unitType.id);
+  void removeUnitType(dynamic unitTypeOrId) {
+    if (unitTypeOrId is UnitType) {
+      _unitTypes.removeWhere((type) => type.id == unitTypeOrId.id);
+    } else if (unitTypeOrId is String) {
+      _unitTypes.removeWhere((type) => type.id == unitTypeOrId);
+    }
     notifyListeners();
   }
   

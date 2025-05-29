@@ -365,6 +365,27 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
     );
   }
   
+  String _getStepTitle(int step) {
+    switch (step) {
+      case 0:
+        return 'Basic Information';
+      case 1:
+        return 'Project Details';
+      case 2:
+        return 'Project Phases';
+      case 3:
+        return 'Unit Types';
+      case 4:
+        return 'Project Media';
+      case 5:
+        return 'Payment Plans';
+      case 6:
+        return 'Review & Submit';
+      default:
+        return 'Unknown Step';
+    }
+  }
+  
   Widget _buildStepContent(int step) {
     switch (step) {
       case 0:
@@ -374,13 +395,53 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
       case 2:
         return const PhasesStep();
       case 3:
-        return const UnitTypesStep();
+        // Temporary placeholder until UnitTypesStep is fully implemented
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Unit Types Step', style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 20),
+              const Text('This step allows you to define different types of units in your project.'),
+            ],
+          ),
+        );
       case 4:
-        return const MediaStep();
+        // Temporary placeholder until MediaStep is fully implemented
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Media Step', style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 20),
+              const Text('This step allows you to upload images and other media for your project.'),
+            ],
+          ),
+        );
       case 5:
-        return const PaymentPlansStep();
+        // Temporary placeholder until PaymentPlansStep is fully implemented
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Payment Plans Step', style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 20),
+              const Text('This step allows you to define payment plans for your project.'),
+            ],
+          ),
+        );
       case 6:
-        return const ReviewStep();
+        // Temporary placeholder until ReviewStep is fully implemented
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Review Step', style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 20),
+              const Text('Review all information before submitting your project.'),
+            ],
+          ),
+        );
       default:
         return const SizedBox.shrink();
     }
@@ -496,3 +557,4 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
     }
     return true;
   }
+}

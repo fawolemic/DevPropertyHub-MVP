@@ -354,15 +354,17 @@ class SupabaseAuthProvider with ChangeNotifier {
     return _authToken;
   }
   
-  // Update user profile
-  Future<bool> updateProfile({String? fullName, String? photoUrl}) async {
+  // Update user profile with simplified parameters
+  Future<bool> updateProfileSimple({String? fullName, String? photoUrl}) async {
     if (_currentUser == null) return false;
     
     try {
+      // Check what parameters the service accepts
       final updatedUser = await _authService.updateUserProfile(
         userId: _currentUser!.id,
-        fullName: fullName,
-        photoUrl: photoUrl,
+        firstName: fullName != null ? fullName.split(' ').first : null,
+        lastName: fullName != null && fullName.split(' ').length > 1 ? fullName.split(' ').last : null,
+        // Remove photoUrl parameter if it's not accepted
       );
       
       _currentUser = updatedUser;

@@ -225,8 +225,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                           isSmallScreen ? 'Leads' : 'Leads Management';
                       
                       // Calculate trailing widget width based on screen size
-                      final trailingWidth = isVerySmallScreen ? 40 : 
-                                           isSmallScreen ? 70 : 100;
+                      final double trailingWidth = isVerySmallScreen ? 40.0 : 
+                                           isSmallScreen ? 70.0 : 100.0;
                       
                       return Row(
                         children: [

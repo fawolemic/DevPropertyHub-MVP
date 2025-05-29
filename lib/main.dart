@@ -49,7 +49,10 @@ void main() async {
         // Add ProjectProvider for the development projects feature
         provider_package.ChangeNotifierProvider(
           create: (context) => ProjectProvider(
-            projectService: ProjectService(),
+            projectService: ProjectService(
+              baseUrl: 'https://api.devpropertyhub.com', // Placeholder API URL
+              headers: {'Authorization': 'Bearer placeholder-token'},
+            ),
           ),
         ),
       ],

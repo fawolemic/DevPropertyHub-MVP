@@ -42,6 +42,14 @@ class Project {
   }) : 
     this.createdAt = createdAt ?? DateTime.now(),
     this.updatedAt = updatedAt ?? DateTime.now();
+    
+  // Convenience getter for location display
+  String get location {
+    if (locationAddress != null && locationAddress!.isNotEmpty) {
+      return locationAddress!;
+    }
+    return '$locationLga, $locationState';
+  }
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(

@@ -103,10 +103,16 @@ class SupabaseProvider extends ChangeNotifier {
     _clearError();
     
     try {
+      // Split the full name into first and last name
+      final nameParts = fullName.split(' ');
+      final firstName = nameParts.first;
+      final lastName = nameParts.length > 1 ? nameParts.last : null;
+      
       final user = await _authService.signUp(
         email: email,
         password: password,
-        fullName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         role: role,
       );
       
@@ -145,10 +151,16 @@ class SupabaseProvider extends ChangeNotifier {
     _clearError();
     
     try {
+      // Split fullName into firstName and lastName for the service
+      final nameParts = fullName?.split(' ') ?? [];
+      final firstName = nameParts.isNotEmpty ? nameParts.first : null;
+      final lastName = nameParts.length > 1 ? nameParts.last : null;
+      
       final updatedUser = await _authService.updateUserProfile(
         userId: _currentUser!.id,
-        fullName: fullName,
-        photoUrl: photoUrl,
+        firstName: firstName,
+        lastName: lastName,
+        // Remove photoUrl parameter if it's not accepted
       );
       
       _currentUser = updatedUser;

@@ -159,21 +159,27 @@ class DatabaseService {
         query = query.eq(column, value);
       }
       
+      // Create a variable to hold the transformed query
+      dynamic transformedQuery = query;
+      
       // Add ordering if provided
       if (orderBy != null) {
-        query = ascending 
-            ? query.order(orderBy, ascending: true)
-            : query.order(orderBy, ascending: false);
+        transformedQuery = ascending 
+            ? transformedQuery.order(orderBy, ascending: true)
+            : transformedQuery.order(orderBy, ascending: false);
       }
       
       // Add pagination if provided
       if (limit != null) {
-        query = query.limit(limit);
+        transformedQuery = transformedQuery.limit(limit);
       }
       
       if (offset != null) {
-        query = query.range(offset, offset + (limit ?? 10) - 1);
+        transformedQuery = transformedQuery.range(offset, offset + (limit ?? 10) - 1);
       }
+      
+      // Use the transformed query for execution
+      query = transformedQuery;
       
       // Execute the query
       final response = await query;

@@ -13,6 +13,27 @@ enum UserType {
   buyer     // Property buyers/investors (secondary users)
 }
 
+// Simple user model for the current user
+class User {
+  final String id;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final UserType userType;
+  final UserRole role;
+  
+  User({
+    required this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    required this.userType,
+    required this.role,
+  });
+  
+  String get fullName => '$firstName $lastName';
+}
+
 class AuthProvider with ChangeNotifier {
   bool _isLoggedIn = false;
   UserRole _userRole = UserRole.viewer;
@@ -45,6 +66,16 @@ class AuthProvider with ChangeNotifier {
   String? get verificationStatus => _verificationStatus;
   List<String> get permissions => _permissions;
   bool get isTokenExpired => _tokenExpiry != null ? DateTime.now().isAfter(_tokenExpiry!) : true;
+  
+  // Current user getter
+  User? get currentUser => _isLoggedIn && _userId != null ? User(
+    id: _userId!,
+    firstName: _userName?.split(' ').first,
+    lastName: _userName != null && _userName!.split(' ').length > 1 ? _userName!.split(' ').last : null,
+    email: _userEmail,
+    userType: _userType,
+    role: _userRole,
+  ) : null;
   
   // Role-based permission checks
   bool get isAdmin => _userRole == UserRole.admin;

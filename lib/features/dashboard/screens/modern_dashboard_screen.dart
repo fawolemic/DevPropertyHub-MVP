@@ -34,15 +34,50 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               width: 256,
-              child: ModernSidebar(
-                activeSection: _activeSection,
-                onSectionChanged: _handleSectionChange, // Use the new navigation handler
-                isMobile: !isDesktop,
-                onClose: isDesktop ? null : () {
-                  setState(() {
-                    _sidebarOpen = false;
-                  });
-                },
+              child: Material(
+                elevation: 2,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    // Header
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Theme.of(context).colorScheme.primary,
+                      child: Row(
+                        children: [
+                          Icon(Icons.business, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            'DevPropertyHub',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          if (!isDesktop)
+                            IconButton(
+                              icon: Icon(Icons.close, color: Colors.white),
+                              onPressed: () {
+                                setState(() {
+                                  _sidebarOpen = false;
+                                });
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                    // Navigation items
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: [
+                          _buildNavItem('Dashboard', Icons.dashboard, 'dashboard', _activeSection == 'dashboard'),
+                          _buildNavItem('Developments', Icons.business, 'developments', _activeSection == 'developments'),
+                          _buildNavItem('Leads', Icons.people, 'leads', _activeSection == 'leads'),
+                          _buildNavItem('Settings', Icons.settings, 'settings', _activeSection == 'settings'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           
@@ -75,8 +110,8 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
                                                isSmallScreen ? 'Welcome!' : 'Welcome, $userName';
                       
                       // Calculate trailing widget width based on screen size
-                      final trailingWidth = isVerySmallScreen ? 40 : 
-                                           isSmallScreen ? 70 : 100;
+                      final double trailingWidth = isVerySmallScreen ? 40.0 : 
+                                           isSmallScreen ? 70.0 : 100.0;
                       
                       return Row(
                         children: [
@@ -714,5 +749,20 @@ class _ModernDashboardScreenState extends State<ModernDashboardScreen> {
     setState(() {
       _activeSection = section;
     });
+  }
+  
+  Widget _buildNavItem(String title, IconData icon, String section, bool isActive) {
+    return ListTile(
+      leading: Icon(icon, color: isActive ? Theme.of(context).colorScheme.primary : Colors.grey.shade600),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isActive ? Theme.of(context).colorScheme.primary : Colors.grey.shade800,
+          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      tileColor: isActive ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : null,
+      onTap: () => _handleSectionChange(section),
+    );
   }
 }
