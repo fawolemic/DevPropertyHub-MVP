@@ -309,9 +309,10 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 icon: const Icon(Icons.add),
                                 label: const Text('Add Development'),
                                 onPressed: () {
+                                  final developerId = authProvider.currentUser?.id;
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const AddProjectWizard(),
+                                      builder: (context) => AddProjectWizard(developerId: developerId ?? ''),
                                     ),
                                   );
                                 },
@@ -325,9 +326,10 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               IconButton(
                                 icon: const Icon(Icons.add),
                                 onPressed: () {
+                                  final developerId = authProvider.currentUser?.id;
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const AddProjectWizard(),
+                                      builder: (context) => AddProjectWizard(developerId: developerId ?? ''),
                                     ),
                                   );
                                 },
