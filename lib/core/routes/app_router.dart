@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/registration/registration_screen.dart';
@@ -122,7 +123,8 @@ class AppRouter {
         GoRoute(
           path: '/developments/add',
           builder: (context, state) {
-            // Get the developer ID from the auth provider
+            // Get the developer ID from the auth provider using Provider.of
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
             final developerId = authProvider.currentUser?.id ?? '';
             return AddProjectWizard(developerId: developerId);
           },
