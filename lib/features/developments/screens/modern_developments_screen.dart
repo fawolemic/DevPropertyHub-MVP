@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import 'add_project/add_project_wizard.dart';
 
 class ModernDevelopmentsScreen extends StatefulWidget {
   const ModernDevelopmentsScreen({Key? key}) : super(key: key);
@@ -308,7 +309,11 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 icon: const Icon(Icons.add),
                                 label: const Text('Add Development'),
                                 onPressed: () {
-                                  context.go('/developments/add');
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddProjectWizard(),
+                                    ),
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: theme.colorScheme.primary,
@@ -320,7 +325,11 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               IconButton(
                                 icon: const Icon(Icons.add),
                                 onPressed: () {
-                                  context.go('/developments/add');
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const AddProjectWizard(),
+                                    ),
+                                  );
                                 },
                                 color: theme.colorScheme.primary,
                               ),
