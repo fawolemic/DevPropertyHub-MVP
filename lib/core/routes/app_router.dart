@@ -31,6 +31,8 @@ class AppRouter {
   
   /// Create and configure the app router
   static GoRouter router(AuthProvider authProvider) {
+    // Store a reference to the authProvider for use in redirects
+    // but use Provider.of in route builders to ensure proper context
     return GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
@@ -126,6 +128,13 @@ class AppRouter {
             // Get the developer ID from the auth provider using Provider.of
             final authProvider = Provider.of<AuthProvider>(context, listen: false);
             final developerId = authProvider.currentUser?.id ?? '';
+            
+            // Access the ProjectProvider to ensure it's initialized
+            final projectProvider = Provider.of<ProjectProvider>(context, listen: false);
+            
+            debugPrint('Navigating to AddProjectWizard with developerId: $developerId');
+            
+            // Return the AddProjectWizard with the developer ID
             return AddProjectWizard(developerId: developerId);
           },
         ),

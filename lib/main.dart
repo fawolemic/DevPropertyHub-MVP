@@ -10,6 +10,8 @@ import 'core/providers/unified_registration_provider.dart';
 import 'core/providers/supabase_provider.dart';
 import 'core/providers/supabase_auth_provider.dart';
 import 'core/providers/rbac_provider.dart';
+import 'features/developments/providers/project_provider.dart';
+import 'features/developments/services/project_service.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 
@@ -42,6 +44,12 @@ void main() async {
         provider_package.ChangeNotifierProvider(
           create: (context) => RBACProvider(
             provider_package.Provider.of<SupabaseAuthProvider>(context, listen: false),
+          ),
+        ),
+        // Add ProjectProvider for the development projects feature
+        provider_package.ChangeNotifierProvider(
+          create: (context) => ProjectProvider(
+            projectService: ProjectService(),
           ),
         ),
       ],
