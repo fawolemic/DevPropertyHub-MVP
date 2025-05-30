@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (authProvider.isLoggedIn) {
       // Use Future.microtask to avoid build-time navigation
       // This ensures we don't get a "setState called during build" error
-      Future.microtask(() => GoRouter.of(context).go('/dashboard'));
+      Future.microtask(() => GoRouter.of(context).go('/developments'));
       
       // Return a loading indicator while redirecting
       return const Scaffold(

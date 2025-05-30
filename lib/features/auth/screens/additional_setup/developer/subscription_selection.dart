@@ -281,6 +281,6 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
     );
     
     // Navigate to the dashboard using GoRouter
-    GoRouter.of(context).go('/dashboard');
+    GoRouter.of(context).go('/developments');
   }
 }

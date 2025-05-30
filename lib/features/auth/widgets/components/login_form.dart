@@ -61,7 +61,7 @@ class _LoginFormState extends State<LoginForm> {
 
       if (success) {
         if (mounted) {
-          context.go('/dashboard');
+          context.go('/developments');
         }
       } else {
         setState(() {

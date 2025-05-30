@@ -294,7 +294,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           );
           
           // Navigate to dashboard
-          GoRouter.of(context).go('/dashboard');
+          GoRouter.of(context).go('/developments');
         }
       });
     }

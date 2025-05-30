@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/bandwidth_provider.dart';
 import '../../../shared/layouts/main_layout.dart';
@@ -74,12 +75,8 @@ class _DevelopmentsScreenState extends State<DevelopmentsScreen> {
                           if (authProvider.userRole != 'viewer')
                             ElevatedButton.icon(
                               onPressed: () {
-                                // Add new development functionality would go here
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Add development feature coming soon!'),
-                                  ),
-                                );
+                                // Navigate to the new multi-step wizard
+                                context.go('/developments/add');
                               },
                               icon: const Icon(Icons.add),
                               label: const Text('Add New'),

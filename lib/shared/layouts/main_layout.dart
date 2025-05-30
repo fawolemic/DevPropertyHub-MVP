@@ -198,7 +198,7 @@ class MainLayout extends StatelessWidget {
             icon: Icons.dashboard,
             title: 'Dashboard',
             isSelected: currentIndex == 0,
-            onTap: () => context.go('/dashboard'),
+            onTap: () => context.go('/developments'),
           ),
           _buildDrawerItem(
             context,
@@ -376,7 +376,7 @@ class MainLayout extends StatelessWidget {
                   icon: Icons.dashboard,
                   title: 'Dashboard',
                   isSelected: currentIndex == 0,
-                  onTap: () => context.go('/dashboard'),
+                  onTap: () => context.go('/developments'),
                 ),
                 _buildSideNavItem(
                   context,
@@ -486,7 +486,7 @@ class MainLayout extends StatelessWidget {
       onDestinationSelected: (index) {
         switch (index) {
           case 0:
-            context.go('/dashboard');
+            context.go('/developments');
             break;
           case 1:
             context.go('/developments');

@@ -122,7 +122,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                     title: const Text('Dashboard'),
                     onTap: () {
                       Navigator.pop(context);
-                      context.go('/dashboard');
+                      context.go('/developments');
                     },
                   ),
                   ListTile(
@@ -188,7 +188,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                     ),
                   ),
                   // Navigation items
-                  _buildNavItem(context, 'Dashboard', Icons.dashboard, '/dashboard'),
+                  _buildNavItem(context, 'Developments', Icons.business, '/developments'),
                   _buildNavItem(context, 'Developments', Icons.business, '/developments'),
                   _buildNavItem(context, 'Leads', Icons.people, '/leads', isActive: true),
                   _buildNavItem(context, 'Settings', Icons.settings, '/settings'),

@@ -1,7 +1,6 @@
 // **************************************************************************
-// DEPRECATED: This dashboard is obsolete. Do not use for new features or navigation.
-// This file will be removed in a future version.
-// All developer users should be directed to '/developments' after login.
+// DEPRECATED: This dashboard is deprecated and will be removed in a future version.
+// Do not add new features to this file. Use ModernDashboardScreen instead.
 // All "Add Development" buttons should navigate to the new wizard at '/developments/add'.
 // **************************************************************************
 
@@ -15,11 +14,11 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Automatically redirect to the developments dashboard after a short delay
+    // Automatically redirect to the modern dashboard after a short delay
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 3), () {
         if (context.mounted) {
-          context.go('/developments');
+          context.go('/dashboard');
         }
       });
     });
@@ -63,9 +62,9 @@ class DashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
-                onPressed: () => context.go('/developments'),
+                onPressed: () => context.go('/dashboard'),
                 icon: const Icon(Icons.arrow_forward),
-                label: const Text('Go to Developments Dashboard Now'),
+                label: const Text('Go to New Dashboard Now'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade700,
                   foregroundColor: Colors.white,

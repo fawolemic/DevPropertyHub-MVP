@@ -42,7 +42,8 @@ class AppRouter {
         
         // Define route types
         final isLoginRoute = state.location == '/login';
-        final isDashboardRoute = state.location == '/dashboard';
+        // No longer need to check for dashboard route as it redirects to developments
+        // final isDashboardRoute = state.location == '/dashboard';
         final isRegistrationRoute = state.location.startsWith('/register') || 
                                    state.location == '/unified-register' ||
                                    state.location.startsWith('/email-verification') ||
@@ -53,10 +54,10 @@ class AppRouter {
         
         debugPrint('GoRouter redirect: isLoggedIn=$isLoggedIn, path=${state.location}');
         
-        // If logged in and on login or home page, redirect to dashboard
+        // If logged in and on login or home page, redirect to developments dashboard
         if (isLoggedIn && (isLoginRoute || isPublicRoute)) {
-          debugPrint('User is logged in and on login/home. Redirecting to dashboard.');
-          return '/dashboard';
+          debugPrint('User is logged in and on login/home. Redirecting to developments dashboard.');
+          return '/developments';
         }
         
         // If not logged in and trying to access a protected page, redirect to login
@@ -106,15 +107,17 @@ class AppRouter {
           builder: (context, state) => const DirectTestPage(),
         ),
         
-        // Dashboard routes
+        // DEPRECATED: Old dashboard routes have been removed
+        // All dashboard routes now redirect to the developments dashboard
         GoRoute(
           path: '/dashboard',
-          builder: (context, state) => const ModernDashboardScreen(), // Modern dashboard is now the default
+          redirect: (_, __) => '/developments',
         ),
-        // Legacy dashboard route - kept for backward compatibility
+        // Legacy dashboard route - redirects to developments dashboard
+        // This ensures any bookmarked or hardcoded links to the old dashboard are redirected
         GoRoute(
           path: '/legacy-dashboard',
-          builder: (context, state) => const DashboardScreen(),
+          redirect: (_, __) => '/developments',
         ),
         
         // Developments routes
@@ -266,7 +269,7 @@ class AppRouter {
         // Root redirect
         GoRoute(
           path: '/',
-          redirect: (_, __) => '/dashboard',
+          redirect: (_, __) => '/developments',
         ),
       ],
       errorBuilder: (context, state) => Scaffold(
@@ -294,7 +297,7 @@ class AppRouter {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => context.go('/dashboard'),
+                onPressed: () => context.go('/developments'),
                 child: const Text('Go to Dashboard'),
               ),
             ],

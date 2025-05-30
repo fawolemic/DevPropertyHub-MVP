@@ -101,7 +101,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     title: const Text('Dashboard'),
                     onTap: () {
                       Navigator.pop(context);
-                      context.go('/dashboard');
+                      // Stay on developments screen
+                      // No navigation needed as we're already on the developments screen
                     },
                   ),
                   ListTile(
@@ -167,7 +168,6 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     ),
                   ),
                   // Navigation items
-                  _buildNavItem(context, 'Dashboard', Icons.dashboard, '/dashboard'),
                   _buildNavItem(context, 'Developments', Icons.business, '/developments', isActive: true),
                   _buildNavItem(context, 'Leads', Icons.people, '/leads'),
                   _buildNavItem(context, 'Settings', Icons.settings, '/settings'),

@@ -34,7 +34,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
     // Map section to route using GoRouter
     switch (section) {
       case 'overview':
-        context.go('/dashboard');
+        context.go('/developments');
         break;
       case 'properties':
         context.go('/developments');
@@ -43,18 +43,18 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
         context.go('/leads');
         break;
       case 'analytics':
-        context.go('/dashboard');
+        context.go('/developments');
         debugPrint('Analytics section selected - route not implemented yet');
         break;
       case 'documents':
-        context.go('/dashboard');
+        context.go('/developments');
         debugPrint('Documents section selected - route not implemented yet');
         break;
       case 'settings':
         context.go('/settings');
         break;
       default:
-        context.go('/dashboard');
+        context.go('/developments');
     }
   }
 
