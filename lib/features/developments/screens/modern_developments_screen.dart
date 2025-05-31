@@ -97,8 +97,9 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.dashboard),
-                    title: const Text('Dashboard'),
+                    leading: const Icon(Icons.business),
+                    title: const Text('Developments'),
+                    selected: true,
                     onTap: () {
                       Navigator.pop(context);
                       // Stay on developments screen

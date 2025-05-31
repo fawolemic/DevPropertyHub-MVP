@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A modern sidebar widget for the dashboard
+/// A modern sidebar widget for the application
 /// 
 /// Displays navigation options and user information
 class ModernSidebar extends StatelessWidget {

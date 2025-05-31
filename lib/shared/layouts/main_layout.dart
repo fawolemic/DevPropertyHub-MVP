@@ -195,8 +195,8 @@ class MainLayout extends StatelessWidget {
           // Navigation items
           _buildDrawerItem(
             context,
-            icon: Icons.dashboard,
-            title: 'Dashboard',
+            icon: Icons.business,
+            title: 'Developments',
             isSelected: currentIndex == 0,
             onTap: () => context.go('/developments'),
           ),
@@ -373,8 +373,8 @@ class MainLayout extends StatelessWidget {
               children: [
                 _buildSideNavItem(
                   context,
-                  icon: Icons.dashboard,
-                  title: 'Dashboard',
+                  icon: Icons.business,
+                  title: 'Developments',
                   isSelected: currentIndex == 0,
                   onTap: () => context.go('/developments'),
                 ),
@@ -489,12 +489,9 @@ class MainLayout extends StatelessWidget {
             context.go('/developments');
             break;
           case 1:
-            context.go('/developments');
-            break;
-          case 2:
             context.go('/leads');
             break;
-          case 3:
+          case 2:
             if (authProvider.isAdmin) {
               context.go('/settings');
             }
@@ -502,11 +499,6 @@ class MainLayout extends StatelessWidget {
         }
       },
       destinations: [
-        const NavigationDestination(
-          icon: Icon(Icons.dashboard_outlined),
-          selectedIcon: Icon(Icons.dashboard),
-          label: 'Dashboard',
-        ),
         const NavigationDestination(
           icon: Icon(Icons.business_outlined),
           selectedIcon: Icon(Icons.business),

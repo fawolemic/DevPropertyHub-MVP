@@ -12,13 +12,12 @@ import '../../features/auth/screens/additional_setup/developer/subscription_sele
 import '../../features/auth/screens/additional_setup/developer/payment_screen.dart';
 import '../../features/auth/screens/additional_setup/agent/approval_status_screen.dart';
 import '../../features/testing/direct_test_page.dart';
-import '../../features/dashboard/screens/dashboard_screen.dart';
-import '../../features/dashboard/screens/modern_dashboard_screen.dart';
+// Dashboard screens have been removed - all redirected to developments
 import '../../features/developments/screens/modern_developments_screen.dart';
 import '../../features/developments/screens/add_project/add_project_wizard.dart';
 import '../../features/leads/screens/modern_leads_screen.dart';
 import '../../features/settings/screens/modern_settings_screen.dart';
-import '../../features/developments/screens/developments_screen.dart';
+// Removed import for deleted developments_screen.dart
 import '../../features/home/screens/home_screen.dart';
 import '../../features/leads/screens/leads_screen.dart';
 import '../../features/settings/screens/settings_screen.dart';
@@ -42,8 +41,6 @@ class AppRouter {
         
         // Define route types
         final isLoginRoute = state.location == '/login';
-        // No longer need to check for dashboard route as it redirects to developments
-        // final isDashboardRoute = state.location == '/dashboard';
         final isRegistrationRoute = state.location.startsWith('/register') || 
                                    state.location == '/unified-register' ||
                                    state.location.startsWith('/email-verification') ||
@@ -107,16 +104,9 @@ class AppRouter {
           builder: (context, state) => const DirectTestPage(),
         ),
         
-        // DEPRECATED: Old dashboard routes have been removed
-        // All dashboard routes now redirect to the developments dashboard
+        // All dashboard routes redirect to the developments dashboard
         GoRoute(
           path: '/dashboard',
-          redirect: (_, __) => '/developments',
-        ),
-        // Legacy dashboard route - redirects to developments dashboard
-        // This ensures any bookmarked or hardcoded links to the old dashboard are redirected
-        GoRoute(
-          path: '/legacy-dashboard',
           redirect: (_, __) => '/developments',
         ),
         
@@ -298,7 +288,7 @@ class AppRouter {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => context.go('/developments'),
-                child: const Text('Go to Dashboard'),
+                child: const Text('Go to Developments'),
               ),
             ],
           ),
