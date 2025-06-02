@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A modern property framework card widget for the dashboard
+// NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
+/// A modern property framework card widget for use in property and developments screens.
 /// 
 /// Displays property development information with completion status
 class PropertyFrameworkCard extends StatelessWidget {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A modern lead card widget for the dashboard
+// NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
+/// A modern lead card widget for use in developments and leads screens.
 /// 
 /// Displays information about a lead with priority indicators
 class LeadCard extends StatelessWidget {

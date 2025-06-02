@@ -402,7 +402,7 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
             children: [
               Text('Unit Types Step', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 20),
-              const Text('This step allows you to define different types of units in your project.'),
+              const Text('This step allows you to11 define different types of units in your project.'),
             ],
           ),
         );
@@ -414,7 +414,7 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
             children: [
               Text('Media Step', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 20),
-              const Text('This step allows you to upload images and other media for your project.'),
+              const Text('This step allows you to22 upload images and other media for your project.'),
             ],
           ),
         );
@@ -426,7 +426,7 @@ class _AddProjectWizardState extends State<AddProjectWizard> {
             children: [
               Text('Payment Plans Step', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 20),
-              const Text('This step allows you to define payment plans for your project.'),
+              const Text('This step allows you to33 define payment plans for your project.'),
             ],
           ),
         );

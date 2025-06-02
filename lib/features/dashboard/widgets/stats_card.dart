@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// A modern stats card widget for the dashboard
+// NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
+/// A modern stats card widget for use in developments and analytics screens.
 /// 
 /// Displays a key metric with title, value, subtitle, and trend indicator
 class StatsCard extends StatelessWidget {
