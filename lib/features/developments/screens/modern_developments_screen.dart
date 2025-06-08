@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/widgets/app_sidebar.dart';
 
 class ModernDevelopmentsScreen extends StatefulWidget {
   const ModernDevelopmentsScreen({Key? key}) : super(key: key);
@@ -78,103 +79,11 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      drawer: !isDesktop && _sidebarOpen
-          ? Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
-                    ),
-                    child: const Text(
-                      'DevPropertyHub',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.business),
-                    title: const Text('Developments'),
-                    selected: true,
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Stay on developments screen
-                      // No navigation needed as we're already on the developments screen
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.business),
-                    title: const Text('Developments'),
-                    selected: true,
-                    selectedTileColor: theme.colorScheme.primary.withOpacity(0.1),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/developments');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.people),
-                    title: const Text('Leads'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/leads');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Settings'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/settings');
-                    },
-                  ),
-                ],
-              ),
-            )
-          : null,
+      drawer: const Drawer(child: AppSidebar()),
       body: Row(
         children: [
           // Sidebar for desktop
-          if (isDesktop)
-            Container(
-              width: 250,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  // Logo
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    height: 64,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.business,
-                          color: theme.colorScheme.primary,
-                          size: 24,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'DevPropertyHub',
-                          style: TextStyle(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Navigation items
-                  _buildNavItem(context, 'Developments', Icons.business, '/developments', isActive: true),
-                  _buildNavItem(context, 'Leads', Icons.people, '/leads'),
-                  _buildNavItem(context, 'Settings', Icons.settings, '/settings'),
-                ],
-              ),
-            ),
-          
+          if (isDesktop) const AppSidebar(),
           // Main content
           Expanded(
             child: Column(

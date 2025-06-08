@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/bandwidth_provider.dart';
 import '../../../core/utils/responsive_utils.dart';
-import '../../dashboard/widgets/modern_sidebar.dart';
+import '../../../core/widgets/app_sidebar.dart';
 
 class ModernSettingsScreen extends StatefulWidget {
   const ModernSettingsScreen({Key? key}) : super(key: key);
@@ -15,9 +15,6 @@ class ModernSettingsScreen extends StatefulWidget {
 }
 
 class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
-  bool _sidebarOpen = false;
-  String _activeSection = 'settings';
-  
   // Settings state
   bool _emailNotifications = true;
   bool _pushNotifications = true;
@@ -25,39 +22,6 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
   bool _lowBandwidthMode = false;
   String _language = 'English';
   
-  // Handle section changes with actual navigation
-  void _handleSectionChange(String section) {
-    setState(() {
-      _activeSection = section;
-    });
-    
-    // Map section to route using GoRouter
-    switch (section) {
-      case 'overview':
-        context.go('/developments');
-        break;
-      case 'properties':
-        context.go('/developments');
-        break;
-      case 'leads':
-        context.go('/leads');
-        break;
-      case 'analytics':
-        context.go('/developments');
-        debugPrint('Analytics section selected - route not implemented yet');
-        break;
-      case 'documents':
-        context.go('/developments');
-        debugPrint('Documents section selected - route not implemented yet');
-        break;
-      case 'settings':
-        context.go('/settings');
-        break;
-      default:
-        context.go('/developments');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -84,25 +48,11 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
     final userRole = authProvider.userRole.toString().split('.').last;
     
     return Scaffold(
+      drawer: const Drawer(child: AppSidebar()),
       backgroundColor: Colors.grey.shade50,
       body: Row(
         children: [
-          // Sidebar - only visible on desktop or when opened on mobile
-          if (isDesktop || _sidebarOpen)
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: 256,
-              child: ModernSidebar(
-                activeSection: _activeSection,
-                onSectionChanged: _handleSectionChange,
-                isMobile: !isDesktop,
-                onClose: isDesktop ? null : () {
-                  setState(() {
-                    _sidebarOpen = false;
-                  });
-                },
-              ),
-            ),
+          if (isDesktop) const AppSidebar(),
           
           // Main content
           Expanded(
@@ -132,9 +82,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                         IconButton(
                           icon: const Icon(Icons.menu),
                           onPressed: () {
-                            setState(() {
-                              _sidebarOpen = true;
-                            });
+                            Scaffold.of(context).openDrawer();
                           },
                           color: Colors.grey.shade700,
                         ),

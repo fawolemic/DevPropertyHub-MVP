@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/widgets/app_sidebar.dart';
 
 class ModernLeadsScreen extends StatefulWidget {
   const ModernLeadsScreen({Key? key}) : super(key: key);
@@ -12,9 +13,6 @@ class ModernLeadsScreen extends StatefulWidget {
 }
 
 class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
-  bool _sidebarOpen = false;
-  String _currentSection = 'all';
-
   // Sample data for leads
   final List<Map<String, dynamic>> _leads = [
     {
@@ -87,7 +85,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
 
   void _handleSectionChange(String section) {
     setState(() {
-      _currentSection = section;
+      // _currentSection = section;
     });
   }
 
@@ -100,100 +98,11 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      drawer: !isDesktop && _sidebarOpen
-          ? Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
-                    ),
-                    child: const Text(
-                      'DevPropertyHub',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.business),
-                    title: const Text('Developments'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/developments');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.business),
-                    title: const Text('Developments'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/developments');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.people),
-                    title: const Text('Leads'),
-                    selected: true,
-                    selectedTileColor: theme.colorScheme.primary.withOpacity(0.1),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/leads');
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Settings'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      context.go('/settings');
-                    },
-                  ),
-                ],
-              ),
-            )
-          : null,
+      drawer: const Drawer(child: AppSidebar()),
       body: Row(
         children: [
           // Sidebar for desktop
-          if (isDesktop)
-            Container(
-              width: 250,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  // Logo
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    height: 64,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.business,
-                          color: theme.colorScheme.primary,
-                          size: 24,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'DevPropertyHub',
-                          style: TextStyle(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Navigation items
-                  _buildNavItem(context, 'Developments', Icons.business, '/developments'),
-                  _buildNavItem(context, 'Leads', Icons.people, '/leads', isActive: true),
-                  _buildNavItem(context, 'Settings', Icons.settings, '/settings'),
-                ],
-              ),
-            ),
+          if (isDesktop) const AppSidebar(),
           
           // Main content
           Expanded(
@@ -236,9 +145,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                               child: IconButton(
                                 icon: const Icon(Icons.menu, size: 18),
                                 onPressed: () {
-                                  setState(() {
-                                    _sidebarOpen = true;
-                                  });
+                                  // setState(() {
+                                  //   _sidebarOpen = true;
+                                  // });
                                 },
                                 color: Colors.grey.shade700,
                                 padding: EdgeInsets.zero,
