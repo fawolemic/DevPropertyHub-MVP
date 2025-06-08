@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
-import 'add_project/add_project_wizard.dart';
 
 class ModernDevelopmentsScreen extends StatefulWidget {
   const ModernDevelopmentsScreen({Key? key}) : super(key: key);
@@ -294,7 +293,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Top section with filters and add button
+                        // Top section with filters
                         Row(
                           children: [
                             Expanded(
@@ -305,29 +304,6 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ),
                               ),
                             ),
-                            if (isDesktop)
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.add),
-                                label: const Text('Add Development'),
-                                onPressed: () {
-                                  // Use GoRouter for navigation - better for web
-                                  context.go('/developments/add');
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.primary,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                ),
-                              )
-                            else
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {
-                                  // Use GoRouter for navigation - better for web
-                                  context.go('/developments/add');
-                                },
-                                color: theme.colorScheme.primary,
-                              ),
                           ],
                         ),
                         

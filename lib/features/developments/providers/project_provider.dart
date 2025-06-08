@@ -16,12 +16,6 @@ class ProjectProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   
-  // Current step in the wizard
-  int _currentStep = 0;
-  
-  // Track completed steps
-  final Set<int> _completedSteps = {};
-  
   ProjectProvider({required ProjectService projectService}) 
     : _projectService = projectService;
   
@@ -33,8 +27,6 @@ class ProjectProvider extends ChangeNotifier {
   List<PaymentPlan> get paymentPlans => _paymentPlans;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  int get currentStep => _currentStep;
-  Set<int> get completedSteps => _completedSteps;
   
   // Initialize a new project
   void initNewProject(String developerId) {
@@ -52,8 +44,6 @@ class ProjectProvider extends ChangeNotifier {
     _unitTypes = [];
     _media = [];
     _paymentPlans = [];
-    _currentStep = 0;
-    _completedSteps.clear();
     _error = null;
     notifyListeners();
   }
@@ -150,9 +140,6 @@ class ProjectProvider extends ChangeNotifier {
       projectType: projectType,
     );
     
-    // Mark step as completed
-    _completedSteps.add(0);
-    
     notifyListeners();
   }
   
@@ -169,9 +156,6 @@ class ProjectProvider extends ChangeNotifier {
       totalPhases: totalPhases,
       estimatedCompletionDate: estimatedCompletionDate,
     );
-    
-    // Mark step as completed
-    _completedSteps.add(1);
     
     notifyListeners();
   }
@@ -271,56 +255,6 @@ class ProjectProvider extends ChangeNotifier {
     notifyListeners();
   }
   
-  // Move to next step in the wizard
-  void nextStep() {
-    if (_currentStep < 6 && canMoveToNextStep()) {
-      // Mark current step as completed
-      _completedSteps.add(_currentStep);
-      _currentStep++;
-      notifyListeners();
-    }
-  }
-  
-  void previousStep() {
-    if (_currentStep > 0) {
-      _currentStep--;
-      notifyListeners();
-    }
-  }
-  
-  void goToStep(int step) {
-    // Only allow navigation to completed steps or the current step + 1
-    if (step >= 0 && step <= 6 && (_completedSteps.contains(step) || step == _currentStep || step == _currentStep + 1)) {
-      _currentStep = step;
-      notifyListeners();
-    }
-  }
-  
-  // Check if we can move to the next step
-  bool canMoveToNextStep() {
-    switch (_currentStep) {
-      case 0: // Basic Info
-        return _currentProject != null && 
-               _currentProject!.name.isNotEmpty && 
-               _currentProject!.locationState.isNotEmpty;
-      case 1: // Project Details
-        return _currentProject != null && 
-               _currentProject!.totalPhases > 0;
-      case 2: // Phases
-        return _phases.isNotEmpty;
-      case 3: // Unit Types
-        return _unitTypes.isNotEmpty;
-      case 4: // Media
-        return _media.isNotEmpty;
-      case 5: // Payment Plans
-        return _paymentPlans.isNotEmpty;
-      case 6: // Review
-        return true;
-      default:
-        return false;
-    }
-  }
-  
   // Save the entire project
   Future<bool> saveProject() async {
     if (_currentProject == null) return false;
@@ -417,7 +351,6 @@ class ProjectProvider extends ChangeNotifier {
     _unitTypes = [];
     _media = [];
     _paymentPlans = [];
-    _currentStep = 0;
     _error = null;
     notifyListeners();
   }
