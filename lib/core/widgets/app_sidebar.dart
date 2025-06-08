@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'logout_user_button.dart';
 
 class AppSidebar extends StatelessWidget {
   const AppSidebar({Key? key}) : super(key: key);
@@ -47,6 +48,9 @@ class AppSidebar extends StatelessWidget {
           navItem('Analytics', Icons.bar_chart, '/analytics'),
           navItem('Documents', Icons.description, '/documents'),
           navItem('Settings', Icons.settings, '/settings'),
+          const Divider(),
+          const Spacer(),
+          const LogoutUserButton(),
         ],
       ),
     );
