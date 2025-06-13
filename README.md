@@ -232,3 +232,10 @@ class HomeScreen extends StatelessWidget {
   }
 }
 ```
+
+## Developments Page CTA
+
+The `/developments` screen now features a prominent “Add Development Project” CTA button at the top of the list. This button:
+- Uses `ElevatedButton.icon` with an add icon and the label “Add Development Project”.
+- Is visible on all screen sizes (desktop and mobile) and positioned for high visibility.
+- Navigates to the Add Development wizard via `GoRouter` at `/developments/add`.

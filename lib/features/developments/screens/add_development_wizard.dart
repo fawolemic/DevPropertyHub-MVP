@@ -35,7 +35,7 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   List<PlatformFile> _mediaFiles = [];
 
   // Nigerian states and LGAs map
-  const Map<String, List<String>> _stateLgaMap = {
+  final Map<String, List<String>> _stateLgaMap = {
     'Lagos': ['Ikeja', 'Surulere', 'Epe', 'Eti-Osa'],
     'Abuja FCT': ['Abuja Municipal', 'Gwagwalada', 'Bwari', 'Kuje'],
     'Rivers': ['Port Harcourt', 'Obio-Akpor', 'Okrika', 'Bonny'],
@@ -189,6 +189,10 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Development')),
       body: Stepper(
+        type: StepperType.horizontal,
+        onStepTapped: (step) {
+          if (step <= _currentStep) setState(() => _currentStep = step);
+        },
         currentStep: _currentStep,
         onStepContinue: _onContinue,
         onStepCancel: _onCancel,
@@ -223,37 +227,49 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 8),
-                  // State picker
-                  DropdownButtonFormField<String>(
-                    value: _selectedState,
-                    decoration: const InputDecoration(labelText: 'State *'),
-                    items: _stateLgaMap.keys
-                        .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                        .toList(),
-                    onChanged: (v) => setState(() {
-                      _selectedState = v;
-                      _selectedLga = null;
-                    }),
-                    validator: (v) => v == null ? 'Required' : null,
-                  ),
-                  const SizedBox(height: 8),
-                  // LGA picker
-                  if (_selectedState != null)
-                    DropdownButtonFormField<String>(
-                      value: _selectedLga,
-                      decoration: const InputDecoration(labelText: 'LGA *'),
-                      items: _stateLgaMap[_selectedState]!
-                          .map((l) => DropdownMenuItem(value: l, child: Text(l)))
-                          .toList(),
-                      onChanged: (v) => setState(() => _selectedLga = v),
-                      validator: (v) => v == null ? 'Required' : null,
+                  Card(
+                    color: Colors.grey[50],
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // State picker
+                          DropdownButtonFormField<String>(
+                            value: _selectedState,
+                            decoration: const InputDecoration(labelText: 'State *'),
+                            items: _stateLgaMap.keys
+                                .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                                .toList(),
+                            onChanged: (v) => setState(() {
+                              _selectedState = v;
+                              _selectedLga = null;
+                            }),
+                            validator: (v) => v == null ? 'Required' : null,
+                          ),
+                          const SizedBox(height: 8),
+                          // LGA picker
+                          if (_selectedState != null)
+                            DropdownButtonFormField<String>(
+                              value: _selectedLga,
+                              decoration: const InputDecoration(labelText: 'LGA *'),
+                              items: _stateLgaMap[_selectedState]!
+                                  .map((l) => DropdownMenuItem(value: l, child: Text(l)))
+                                  .toList(),
+                              onChanged: (v) => setState(() => _selectedLga = v),
+                              validator: (v) => v == null ? 'Required' : null,
+                            ),
+                          const SizedBox(height: 8),
+                          // Specific address input
+                          TextFormField(
+                            controller: _addressController,
+                            decoration: const InputDecoration(labelText: 'Specific Address *'),
+                            validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                          ),
+                        ],
+                      ),
                     ),
-                  const SizedBox(height: 8),
-                  // Specific address input
-                  TextFormField(
-                    controller: _addressController,
-                    decoration: const InputDecoration(labelText: 'Specific Address *'),
-                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
@@ -268,26 +284,38 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     onChanged: (v) => setState(() => _devType = v!),
                   ),
                   const SizedBox(height: 8),
-                  SwitchListTile(
-                    title: const Text('Multi-phase project?'),
-                    value: _isMultiPhase,
-                    onChanged: (v) => setState(() => _isMultiPhase = v),
-                  ),
-                  if (_isMultiPhase) ...[
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _phasesController,
-                      decoration: const InputDecoration(
-                        labelText: 'Phase Names * (comma-separated)',
+                  Card(
+                    color: Colors.grey[50],
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SwitchListTile(
+                            title: const Text('Multi-phase project?'),
+                            value: _isMultiPhase,
+                            onChanged: (v) => setState(() => _isMultiPhase = v),
+                          ),
+                          if (_isMultiPhase) ...[
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _phasesController,
+                              decoration: const InputDecoration(
+                                labelText: 'Phase Names * (comma-separated)',
+                              ),
+                              validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                          SwitchListTile(
+                            title: const Text('Off-plan selling'),
+                            value: _offPlan,
+                            onChanged: (v) => setState(() => _offPlan = v),
+                          ),
+                        ],
                       ),
-                      validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
                     ),
-                  ],
-                  const SizedBox(height: 8),
-                  SwitchListTile(
-                    title: const Text('Off-plan selling'),
-                    value: _offPlan,
-                    onChanged: (v) => setState(() => _offPlan = v),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
@@ -295,18 +323,30 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     decoration: const InputDecoration(labelText: 'Identifier (optional)'),
                   ),
                   const SizedBox(height: 8),
-                  Text('Project Brochure (optional)', style: Theme.of(context).textTheme.subtitle1),
-                  const SizedBox(height: 4),
-                  ElevatedButton(onPressed: _pickBrochure, child: Text(_brochurePath != null ? 'Change Brochure' : 'Upload Brochure')),
-                  if (_brochurePath != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(_brochurePath!.split('/').last, style: const TextStyle(fontSize: 12)),
+                  Card(
+                    color: Colors.grey[50],
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Project Brochure (optional)', style: Theme.of(context).textTheme.subtitle1),
+                          const SizedBox(height: 4),
+                          ElevatedButton(onPressed: _pickBrochure, child: Text(_brochurePath != null ? 'Change Brochure' : 'Upload Brochure')),
+                          if (_brochurePath != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(_brochurePath!.split('/').last, style: const TextStyle(fontSize: 12)),
+                            ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Developer: ${auth.currentUser?.firstName ?? ''}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Developer: ${auth.currentUser?.firstName ?? ''}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

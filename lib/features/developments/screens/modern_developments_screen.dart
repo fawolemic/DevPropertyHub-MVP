@@ -218,23 +218,17 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ),
                               ),
                             ),
-                            if (isDesktop)
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.add),
-                                label: const Text('Add Project'),
-                                onPressed: () => context.go('/developments/add'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.primary,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                ),
-                              )
-                            else
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () => context.go('/developments/add'),
-                                color: theme.colorScheme.primary,
+                            // Prominent Add CTA
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add Development Project'),
+                              onPressed: () => context.go('/developments/add'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               ),
+                            ),
                             if (_hasDraft) ...[
                               const SizedBox(width: 8),
                               if (isDesktop)
