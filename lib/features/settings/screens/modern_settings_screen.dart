@@ -79,12 +79,12 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                     children: [
                       // Menu button (mobile only)
                       if (!isDesktop)
-                        IconButton(
-                          icon: const Icon(Icons.menu),
-                          onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                          color: Colors.grey.shade700,
+                        Builder(
+                          builder: (ctx) => IconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () => Scaffold.of(ctx).openDrawer(),
+                            color: Colors.grey.shade700,
+                          ),
                         ),
                       
                       // Page title

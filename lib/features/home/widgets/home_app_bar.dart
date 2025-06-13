@@ -27,12 +27,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       // Add hamburger menu for mobile
       leading: MediaQuery.of(context).size.width <= 800
-        ? IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              // Show mobile navigation drawer
-              Scaffold.of(context).openDrawer();
-            },
+        ? Builder(
+            builder: (ctx) => IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => Scaffold.of(ctx).openDrawer(),
+            ),
           )
         : null,
       actions: [

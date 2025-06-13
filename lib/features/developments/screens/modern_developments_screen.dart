@@ -119,12 +119,14 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                           if (!isDesktop)
                             SizedBox(
                               width: 32, // Even smaller fixed width
-                              child: IconButton(
-                                icon: const Icon(Icons.menu, size: 18),
-                                onPressed: () => Scaffold.of(context).openDrawer(),
-                                color: Colors.grey.shade700,
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
+                              child: Builder(
+                                builder: (ctx) => IconButton(
+                                  icon: const Icon(Icons.menu, size: 18),
+                                  onPressed: () => Scaffold.of(ctx).openDrawer(),
+                                  color: Colors.grey.shade700,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                ),
                               ),
                             )
                           else
