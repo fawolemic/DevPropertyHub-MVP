@@ -13,9 +13,6 @@ class ModernDevelopmentsScreen extends StatefulWidget {
 }
 
 class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
-  bool _sidebarOpen = false;
-  String _currentSection = 'all';
-
   // Sample data for developments
   final List<Map<String, dynamic>> _developments = [
     {
@@ -66,7 +63,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
 
   void _handleSectionChange(String section) {
     setState(() {
-      _currentSection = section;
+      // _currentSection = section;
     });
   }
 
@@ -124,11 +121,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               width: 32, // Even smaller fixed width
                               child: IconButton(
                                 icon: const Icon(Icons.menu, size: 18),
-                                onPressed: () {
-                                  setState(() {
-                                    _sidebarOpen = true;
-                                  });
-                                },
+                                onPressed: () => Scaffold.of(context).openDrawer(),
                                 color: Colors.grey.shade700,
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
