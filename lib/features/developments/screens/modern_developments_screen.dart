@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/widgets/app_sidebar.dart';
+import '../../../core/services/add_development_draft_service.dart';
 
 class ModernDevelopmentsScreen extends StatefulWidget {
   const ModernDevelopmentsScreen({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class ModernDevelopmentsScreen extends StatefulWidget {
 }
 
 class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
+  bool _hasDraft = false;
+
   // Sample data for developments
   final List<Map<String, dynamic>> _developments = [
     {
@@ -65,6 +68,13 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
     setState(() {
       // _currentSection = section;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Check for saved draft
+    AddDevelopmentDraftService.hasDraft().then((has) => setState(() => _hasDraft = has));
   }
 
   @override
@@ -197,7 +207,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Top section with filters
+                        // Top section with filters and Add/Resume CTA
                         Row(
                           children: [
                             Expanded(
@@ -208,6 +218,43 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ),
                               ),
                             ),
+                            if (isDesktop)
+                              ElevatedButton.icon(
+                                icon: const Icon(Icons.add),
+                                label: const Text('Add Project'),
+                                onPressed: () => context.go('/developments/add'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.colorScheme.primary,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                ),
+                              )
+                            else
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () => context.go('/developments/add'),
+                                color: theme.colorScheme.primary,
+                              ),
+                            if (_hasDraft) ...[
+                              const SizedBox(width: 8),
+                              if (isDesktop)
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.edit),
+                                  label: const Text('Resume Draft'),
+                                  onPressed: () => context.go('/developments/add'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: theme.colorScheme.secondary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  ),
+                                )
+                              else
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () => context.go('/developments/add'),
+                                  color: theme.colorScheme.secondary,
+                                ),
+                            ],
                           ],
                         ),
                         

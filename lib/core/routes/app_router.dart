@@ -14,6 +14,7 @@ import '../../features/auth/screens/additional_setup/agent/approval_status_scree
 import '../../features/testing/direct_test_page.dart';
 // Dashboard screens have been removed - all redirected to developments
 import '../../features/developments/screens/modern_developments_screen.dart';
+import '../../features/developments/screens/add_development_wizard.dart';
 import '../../features/leads/screens/modern_leads_screen.dart';
 import '../../features/settings/screens/modern_settings_screen.dart';
 // Removed import for deleted developments_screen.dart
@@ -113,6 +114,10 @@ class AppRouter {
         GoRoute(
           path: '/developments',
           builder: (context, state) => const ModernDevelopmentsScreen(),
+        ),
+        GoRoute(
+          path: '/developments/add',
+          builder: (context, state) => const AddDevelopmentWizard(),
         ),
         
         // Leads route
