@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/services/add_development_draft_service.dart';
 
@@ -26,7 +27,19 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   final TextEditingController _phasesController = TextEditingController();
   bool _offPlan = false;
   final TextEditingController _identifierController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+  // Autocomplete controllers and suggestion lists
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _lgaController = TextEditingController();
+  List<String> _addressSuggestions = [];
+  final List<String> _devTypesList = ['Residential condos', 'Estates', 'Commercial malls', 'Mixed-use', 'Land for sale'];
+  final Map<String, IconData> _devTypeIcons = {
+    'Residential condos': Icons.location_city,
+    'Estates': Icons.home,
+    'Commercial malls': Icons.store,
+    'Mixed-use': Icons.apartment,
+    'Land for sale': Icons.terrain,
+  }; // end field declarations
+
   final TextEditingController _newPhaseController = TextEditingController();
   String? _brochurePath;
   String? _selectedState;
@@ -69,6 +82,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     _phasesController.dispose();
     _identifierController.dispose();
     _addressController.dispose();
+    _stateController.dispose();
+    _lgaController.dispose();
     _newPhaseController.dispose();
     _unitNameController.dispose();
     _bedroomsController.dispose();
@@ -226,53 +241,38 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     decoration: const InputDecoration(labelText: 'Project Name *'),
                     validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
                   ),
-                  const SizedBox(height: 8),
-                  Card(
-                    color: Colors.grey[50],
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // State picker
-                          DropdownButtonFormField<String>(
-                            value: _selectedState,
-                            decoration: const InputDecoration(labelText: 'State *'),
-                            items: _stateLgaMap.keys
-                                .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                                .toList(),
-                            onChanged: (v) => setState(() {
-                              _selectedState = v;
-                              _selectedLga = null;
-                            }),
-                            validator: (v) => v == null ? 'Required' : null,
-                          ),
-                          const SizedBox(height: 8),
-                          // LGA picker
-                          if (_selectedState != null)
-                            DropdownButtonFormField<String>(
-                              value: _selectedLga,
-                              decoration: const InputDecoration(labelText: 'LGA *'),
-                              items: _stateLgaMap[_selectedState]!
-                                  .map((l) => DropdownMenuItem(value: l, child: Text(l)))
-                                  .toList(),
-                              onChanged: (v) => setState(() => _selectedLga = v),
-                              validator: (v) => v == null ? 'Required' : null,
+                  TextFormField(
+                    controller: _stateController,
+                    decoration: const InputDecoration(labelText: 'State *'),
+                  ),
+                  TextFormField(
+                    controller: _lgaController,
+                    decoration: const InputDecoration(labelText: 'LGA *'),
+                      children: _devTypesList.map((type) {
+                        final selected = _devType == type;
+                        return GestureDetector(
+                          onTap: () => setState(() => _devType = type),
+                          child: Card(
+                            color: selected ? Theme.of(context).primaryColor : Colors.white,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: selected ? Theme.of(context).primaryColor : Colors.grey),
                             ),
-                          const SizedBox(height: 8),
-                          // Specific address input
-                          TextFormField(
-                            controller: _addressController,
-                            decoration: const InputDecoration(labelText: 'Specific Address *'),
-                            validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(_devTypeIcons[type], size: 24, color: selected ? Colors.white : Colors.black),
+                                  const SizedBox(height: 4),
+                                  Text(type, style: TextStyle(color: selected ? Colors.white : Colors.black)),
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
+                        );
+                      }).toList(),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
                     value: _devType,
                     decoration: const InputDecoration(labelText: 'Development Type *'),
                     items: const [
