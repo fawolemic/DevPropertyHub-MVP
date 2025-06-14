@@ -59,6 +59,10 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   bool _isMultiPhase = false;
   String _devType = 'Residential condos';
 
+  // Loading state trackers for UX feedback
+  bool _savingDraft = false;
+  bool _processingNext = false;
+
   // Unit Types Step
   final TextEditingController _unitNameController = TextEditingController();
   final TextEditingController _bedroomsController = TextEditingController();
@@ -100,6 +104,9 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   }
 
   void _onContinue() {
+    if (_processingNext) return;
+    setState(() => _processingNext = true);
+    try {
     if (_currentStep == 0) {
       if (_formKey.currentState?.validate() ?? false) setState(() => _currentStep++);
     } else if (_currentStep == 1) {
@@ -118,6 +125,9 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     } else {
       setState(() => _currentStep++);
     }
+  } finally {
+    if (mounted) setState(() => _processingNext = false);
+  }
   }
 
   void _onCancel() {
@@ -175,6 +185,9 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   }
 
   Future<void> _saveDraft() async {
+    if (_savingDraft) return;
+    setState(() => _savingDraft = true);
+    try {
     final draft = {
       'name': _nameController.text,
       'state': _selectedState,
@@ -197,13 +210,25 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     };
     await AddDevelopmentDraftService.saveDraft(draft);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Draft saved')));
+  } finally {
+    if (mounted) setState(() => _savingDraft = false);
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Scaffold(
       appBar: AppBar(title: const Text('Add Development')),
+      floatingActionButton: isMobile
+          ? FloatingActionButton(
+              onPressed: _savingDraft ? null : _saveDraft,
+              child: _savingDraft
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Icon(Icons.save),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Stepper(
         type: StepperType.horizontal,
         onStepTapped: (step) {
@@ -213,8 +238,21 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
         onStepContinue: _onContinue,
         onStepCancel: _onCancel,
         controlsBuilder: (context, details) {
+          // Determine device width for mobile layout adjustments
+          final isMobile = MediaQuery.of(context).size.width < 600;
+
           return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // Save Draft (shown in controls on tablet/desktop only)
+              if (!isMobile)
+                TextButton(
+                  onPressed: _savingDraft ? null : _saveDraft,
+                  child: _savingDraft
+                      ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('Save Draft'),
+                ),
+              const Spacer(),
               ElevatedButton(
                 onPressed: details.onStepContinue,
                 child: Text(_currentStep == 6 ? 'Submit' : 'Next'),
@@ -223,7 +261,7 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
               if (_currentStep > 0)
                 TextButton(onPressed: details.onStepCancel, child: const Text('Back')),
               const Spacer(),
-              TextButton(onPressed: _saveDraft, child: const Text('Save Draft')),
+              // removed old Save Draft button,
             ],
           );
         },
