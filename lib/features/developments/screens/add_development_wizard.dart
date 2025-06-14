@@ -30,6 +30,7 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   // Autocomplete controllers and suggestion lists
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _lgaController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   List<String> _addressSuggestions = [];
   final List<String> _devTypesList = ['Residential condos', 'Estates', 'Commercial malls', 'Mixed-use', 'Land for sale'];
   final Map<String, IconData> _devTypeIcons = {
@@ -241,47 +242,83 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     decoration: const InputDecoration(labelText: 'Project Name *'),
                     validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
                   ),
-                  TextFormField(
-                    controller: _stateController,
-                    decoration: const InputDecoration(labelText: 'State *'),
+                  // State (autocomplete)
+                  TypeAheadFormField<String>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                      controller: _stateController,
+                      decoration: const InputDecoration(labelText: 'State *'),
+                    ),
+                    suggestionsCallback: (pattern) => _stateLgaMap.keys
+                        .where((s) => s.toLowerCase().contains(pattern.toLowerCase()))
+                        .toList(),
+                    itemBuilder: (context, suggestion) => ListTile(title: Text(suggestion)),
+                    onSuggestionSelected: (suggestion) {
+                      setState(() {
+                        _stateController.text = suggestion;
+                        _selectedState = suggestion;
+                        _selectedLga = null;
+                        _lgaController.clear();
+                      });
+                    },
+                    validator: (value) => _selectedState == null ? 'Required' : null,
                   ),
+                  const SizedBox(height: 8),
+                  // LGA (autocomplete)
+                  TypeAheadFormField<String>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                      controller: _lgaController,
+                      decoration: const InputDecoration(labelText: 'LGA *'),
+                    ),
+                    suggestionsCallback: (pattern) {
+                      if (_selectedState == null) return [];
+                      return _stateLgaMap[_selectedState]!
+                          .where((l) => l.toLowerCase().contains(pattern.toLowerCase()))
+                          .toList();
+                    },
+                    itemBuilder: (context, suggestion) => ListTile(title: Text(suggestion)),
+                    onSuggestionSelected: (suggestion) {
+                      setState(() {
+                        _lgaController.text = suggestion;
+                        _selectedLga = suggestion;
+                      });
+                    },
+                    validator: (value) => _selectedLga == null ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 8),
+                  // Specific Address
                   TextFormField(
-                    controller: _lgaController,
-                    decoration: const InputDecoration(labelText: 'LGA *'),
-                      children: _devTypesList.map((type) {
-                        final selected = _devType == type;
-                        return GestureDetector(
-                          onTap: () => setState(() => _devType = type),
-                          child: Card(
-                            color: selected ? Theme.of(context).primaryColor : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: selected ? Theme.of(context).primaryColor : Colors.grey),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(_devTypeIcons[type], size: 24, color: selected ? Colors.white : Colors.black),
-                                  const SizedBox(height: 4),
-                                  Text(type, style: TextStyle(color: selected ? Colors.white : Colors.black)),
-                                ],
-                              ),
+                    controller: _addressController,
+                    decoration: const InputDecoration(labelText: 'Specific Address *'),
+                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                  ),
+                  const SizedBox(height: 12),
+                  // Development Type selector
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _devTypesList.map((type) {
+                      final selected = _devType == type;
+                      return GestureDetector(
+                        onTap: () => setState(() => _devType = type),
+                        child: Card(
+                          color: selected ? Theme.of(context).primaryColor : Colors.white,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: selected ? Theme.of(context).primaryColor : Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(_devTypeIcons[type], size: 24, color: selected ? Colors.white : Colors.black),
+                                const SizedBox(height: 4),
+                                Text(type, style: TextStyle(color: selected ? Colors.white : Colors.black)),
+                              ],
                             ),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                    value: _devType,
-                    decoration: const InputDecoration(labelText: 'Development Type *'),
-                    items: const [
-                      DropdownMenuItem(value: 'Residential condos', child: Text('Residential condos')),
-                      DropdownMenuItem(value: 'Estates', child: Text('Estates')),
-                      DropdownMenuItem(value: 'Commercial malls', child: Text('Commercial malls')),
-                      DropdownMenuItem(value: 'Mixed-use', child: Text('Mixed-use')),
-                    ],
-                    onChanged: (v) => setState(() => _devType = v!),
+                        ),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 8),
                   Card(
