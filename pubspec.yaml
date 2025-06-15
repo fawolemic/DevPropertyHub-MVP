@@ -56,12 +56,6 @@ dev_dependencies:
 # Override dependencies to resolve conflicts
 dependency_overrides:
   intl: ^0.18.1
-  file_picker:
-    git:
-      url: https://github.com/miguelpruivo/flutter_file_picker.git
-      ref: master
-    platforms:
-      windows: null
 
 flutter:
   uses-material-design: true
