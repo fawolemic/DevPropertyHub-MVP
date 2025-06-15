@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
 /// A modern quick action button widget for use in various screens.
-/// 
+///
 /// Displays a large button with icon and label for common actions
 class QuickActionButton extends StatelessWidget {
   final IconData icon;

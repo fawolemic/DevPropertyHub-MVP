@@ -13,7 +13,7 @@ class Step2PreferencesScreen extends StatefulWidget {
 
 class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Property type preferences
   final List<String> _availablePropertyTypes = [
     'Apartment',
@@ -25,7 +25,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
     'Mixed-Use',
   ];
   List<String> _selectedPropertyTypes = [];
-  
+
   // Location preferences
   final List<String> _availableLocations = [
     'Lagos - Mainland',
@@ -40,7 +40,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
     'Kaduna',
   ];
   List<String> _selectedLocations = [];
-  
+
   // Budget range
   String _budgetRange = 'NGN 10M - 30M';
   final List<String> _availableBudgetRanges = [
@@ -51,48 +51,55 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
     'NGN 50M - 100M',
     'Above NGN 100M',
   ];
-  
+
   // Additional preferences
   bool _interestedInMortgage = false;
   bool _interestedInInvestmentProperties = false;
-  
+
   @override
   void initState() {
     super.initState();
     _loadSavedData();
   }
-  
+
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step2Data;
-    
+
     if (savedData.isNotEmpty) {
       setState(() {
-        _selectedPropertyTypes = List<String>.from(savedData['propertyTypes'] ?? []);
-        _selectedLocations = List<String>.from(savedData['preferredLocations'] ?? []);
+        _selectedPropertyTypes =
+            List<String>.from(savedData['propertyTypes'] ?? []);
+        _selectedLocations =
+            List<String>.from(savedData['preferredLocations'] ?? []);
         _budgetRange = savedData['budgetRange'] ?? 'NGN 10M - 30M';
         _interestedInMortgage = savedData['interestedInMortgage'] ?? false;
-        _interestedInInvestmentProperties = savedData['interestedInInvestmentProperties'] ?? false;
+        _interestedInInvestmentProperties =
+            savedData['interestedInInvestmentProperties'] ?? false;
       });
     }
   }
-  
+
   void _submitStep() {
     if (_formKey.currentState!.validate()) {
       if (_selectedPropertyTypes.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select at least one property type')),
+          const SnackBar(
+              content: Text('Please select at least one property type')),
         );
         return;
       }
-      
+
       if (_selectedLocations.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select at least one preferred location')),
+          const SnackBar(
+              content: Text('Please select at least one preferred location')),
         );
         return;
       }
-      
+
       final data = {
         'propertyTypes': _selectedPropertyTypes,
         'preferredLocations': _selectedLocations,
@@ -100,9 +107,11 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
         'interestedInMortgage': _interestedInMortgage,
         'interestedInInvestmentProperties': _interestedInInvestmentProperties,
       };
-      
-      final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
-      
+
+      final registrationProvider =
+          provider_package.Provider.of<BuyerRegistrationProvider>(context,
+              listen: false);
+
       if (registrationProvider.nextStep(data)) {
         // This was the last step, submit registration
         registrationProvider.submitRegistration();
@@ -113,10 +122,12 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -126,8 +137,9 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -149,7 +161,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Property Types Section
                     Text(
                       'Property Types',
@@ -165,13 +177,14 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Property type chips
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: _availablePropertyTypes.map((propertyType) {
-                        final isSelected = _selectedPropertyTypes.contains(propertyType);
+                        final isSelected =
+                            _selectedPropertyTypes.contains(propertyType);
                         return FilterChip(
                           label: Text(propertyType),
                           selected: isSelected,
@@ -188,7 +201,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       }).toList(),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Location Preferences Section
                     Text(
                       'Preferred Locations',
@@ -204,13 +217,14 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Location chips
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: _availableLocations.map((location) {
-                        final isSelected = _selectedLocations.contains(location);
+                        final isSelected =
+                            _selectedLocations.contains(location);
                         return FilterChip(
                           label: Text(location),
                           selected: isSelected,
@@ -227,7 +241,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       }).toList(),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Budget Range Section
                     Text(
                       'Budget Range',
@@ -236,7 +250,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Budget range dropdown
                     DropdownButtonFormField<String>(
                       value: _budgetRange,
@@ -244,7 +258,8 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
                       ),
                       items: _availableBudgetRanges.map((range) {
                         return DropdownMenuItem(
@@ -261,7 +276,7 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Additional Preferences Section
                     Text(
                       'Additional Preferences',
@@ -270,11 +285,12 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    
+
                     // Mortgage Interest
                     CheckboxListTile(
                       title: const Text('Interested in mortgage options'),
-                      subtitle: const Text('I would like information about financing and mortgage options'),
+                      subtitle: const Text(
+                          'I would like information about financing and mortgage options'),
                       value: _interestedInMortgage,
                       onChanged: (value) {
                         setState(() {
@@ -285,11 +301,12 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       controlAffinity: ListTileControlAffinity.leading,
                       dense: true,
                     ),
-                    
+
                     // Investment Properties
                     CheckboxListTile(
                       title: const Text('Looking for investment properties'),
-                      subtitle: const Text('I\'m interested in properties for investment purposes'),
+                      subtitle: const Text(
+                          'I\'m interested in properties for investment purposes'),
                       value: _interestedInInvestmentProperties,
                       onChanged: (value) {
                         setState(() {
@@ -301,10 +318,10 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                       dense: true,
                     ),
                     const SizedBox(height: 32),
-                    
+
                     const Divider(),
                     const SizedBox(height: 24),
-                    
+
                     // Navigation buttons
                     Row(
                       children: [
@@ -316,16 +333,19 @@ class _Step2PreferencesScreenState extends State<Step2PreferencesScreen> {
                                   registrationProvider.previousStep();
                                 },
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                           ),
                           child: const Text('Back'),
                         ),
                         const SizedBox(width: 16),
-                        
+
                         // Submit button
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: registrationProvider.isLoading ? null : _submitStep,
+                            onPressed: registrationProvider.isLoading
+                                ? null
+                                : _submitStep,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                             ),

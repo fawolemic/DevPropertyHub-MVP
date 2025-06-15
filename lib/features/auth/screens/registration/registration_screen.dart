@@ -26,7 +26,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     // Initialize the registration provider to step 1
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+      final registrationProvider =
+          provider_package.Provider.of<RegistrationProvider>(context,
+              listen: false);
       if (registrationProvider.currentStep != 1) {
         registrationProvider.resetRegistration();
       }
@@ -41,8 +43,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _goToStep(int step) {
     if (step <= 0 || step > 3) return;
-    
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     if (registrationProvider.goToStep(step)) {
       _pageController.animateToPage(
         step - 1,
@@ -55,10 +59,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context);
+
     // Listen for changes to registration step
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
@@ -94,9 +100,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           // Stepper indicator
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: _buildStepIndicator(registrationProvider.currentStep, isLowBandwidth, theme),
+            child: _buildStepIndicator(
+                registrationProvider.currentStep, isLowBandwidth, theme),
           ),
-          
+
           // Error message if any
           if (registrationProvider.errorMessage != null)
             Padding(
@@ -116,7 +123,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ),
-          
+
           // Page content
           Expanded(
             child: PageView(
@@ -134,13 +141,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget _buildStepIndicator(int currentStep, bool isLowBandwidth, ThemeData theme) {
+  Widget _buildStepIndicator(
+      int currentStep, bool isLowBandwidth, ThemeData theme) {
     return Row(
       children: List.generate(3, (index) {
         final stepNumber = index + 1;
         final isActive = stepNumber == currentStep;
         final isCompleted = stepNumber < currentStep;
-        
+
         return Expanded(
           child: Column(
             children: [
@@ -180,9 +188,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                 ),
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               // Step label
               Text(
                 _getStepLabel(stepNumber),

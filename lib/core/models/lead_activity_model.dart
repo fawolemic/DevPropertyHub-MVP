@@ -76,7 +76,8 @@ class LeadActivityModel extends BaseModel {
       'scheduled_at': scheduledAt?.toIso8601String(),
       'completed_at': completedAt?.toIso8601String(),
       'created_by': createdById,
-      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
+      'updated_at':
+          DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -88,11 +89,11 @@ class LeadActivityModel extends BaseModel {
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : DateTime.now(),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       leadId: map['lead_id'] ?? '',
-      activityType: stringToActivityType(map['activity_type'] ?? 'call'), // Provide default value
+      activityType: stringToActivityType(
+          map['activity_type'] ?? 'call'), // Provide default value
       description: map['description'] ?? '',
       scheduledAt: map['scheduled_at'] != null
           ? DateTime.parse(map['scheduled_at'])

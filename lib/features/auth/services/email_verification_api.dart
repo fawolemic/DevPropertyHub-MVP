@@ -5,7 +5,7 @@ class EmailVerificationApi {
   final Dio _dio;
   final bool _useMockForTesting;
 
-  EmailVerificationApi({Dio? dio, bool useMockForTesting = true}) 
+  EmailVerificationApi({Dio? dio, bool useMockForTesting = true})
       : _dio = dio ?? Dio(),
         _useMockForTesting = useMockForTesting;
 
@@ -22,7 +22,7 @@ class EmailVerificationApi {
       debugPrint('Mock verification failed for $email with code $code');
       return false;
     }
-    
+
     // Real API implementation for production
     try {
       final response = await _dio.post(

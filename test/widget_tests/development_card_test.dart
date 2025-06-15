@@ -9,7 +9,8 @@ class MockFunction extends Mock {
 }
 
 void main() {
-  testWidgets('DevelopmentCard displays correctly with all parameters', (WidgetTester tester) async {
+  testWidgets('DevelopmentCard displays correctly with all parameters',
+      (WidgetTester tester) async {
     // Build the widget
     await tester.pumpWidget(
       MaterialApp(
@@ -35,12 +36,13 @@ void main() {
     expect(find.text('Test Development'), findsOneWidget);
     expect(find.text('Test Location'), findsOneWidget);
     expect(find.text('24 Units'), findsAtLeastNWidgets(1));
-    
+
     // Status should be displayed
     expect(find.text('active'), findsOneWidget);
   });
 
-  testWidgets('DevelopmentCard handles minimal parameters correctly', (WidgetTester tester) async {
+  testWidgets('DevelopmentCard handles minimal parameters correctly',
+      (WidgetTester tester) async {
     // Build the widget with minimal required parameters
     await tester.pumpWidget(
       MaterialApp(
@@ -62,15 +64,16 @@ void main() {
 
     // Verify the name is displayed
     expect(find.text('Minimal Test'), findsOneWidget);
-    
+
     // Verify location is displayed
     expect(find.text('Unknown'), findsOneWidget);
   });
 
-  testWidgets('DevelopmentCard onTap callback works', (WidgetTester tester) async {
+  testWidgets('DevelopmentCard onTap callback works',
+      (WidgetTester tester) async {
     // Track if callback was called
     bool callbackCalled = false;
-    
+
     // Build the widget with a callback
     await tester.pumpWidget(
       MaterialApp(
@@ -94,10 +97,10 @@ void main() {
 
     // Initially the callback hasn't been called
     expect(callbackCalled, false);
-    
+
     // Tap on the card
     await tester.tap(find.byType(DevelopmentCard));
-    
+
     // Verify callback was called
     expect(callbackCalled, true);
   });

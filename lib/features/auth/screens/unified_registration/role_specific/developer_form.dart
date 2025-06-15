@@ -14,13 +14,13 @@ class DeveloperForm extends StatefulWidget {
 
 class _DeveloperFormState extends State<DeveloperForm> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _companyNameController = TextEditingController();
   final _businessAddressController = TextEditingController();
   final _rcNumberController = TextEditingController();
   final _yearsInBusinessController = TextEditingController();
   final _contactPersonController = TextEditingController();
-  
+
   // Track the CAC certificate file path
   String? _cacCertificatePath;
 
@@ -41,9 +41,11 @@ class _DeveloperFormState extends State<DeveloperForm> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step3Data;
-    
+
     if (savedData.isNotEmpty) {
       _companyNameController.text = savedData['companyName'] ?? '';
       _businessAddressController.text = savedData['businessAddress'] ?? '';
@@ -55,15 +57,17 @@ class _DeveloperFormState extends State<DeveloperForm> {
       });
     }
   }
-  
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Skip CAC certificate validation entirely - make it optional
       // Force set hasUploadedCertificate to true regardless of actual upload status
-      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+      final registrationProvider =
+          provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+              listen: false);
       // Use the setCacCertificateUploaded method instead of accessing private field
       registrationProvider.setCacCertificateUploaded("dummy_path");
-      
+
       final data = {
         'companyName': _companyNameController.text.trim(),
         'businessAddress': _businessAddressController.text.trim(),
@@ -72,7 +76,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
         'contactPerson': _contactPersonController.text.trim(),
         'hasUploadedCertificate': true, // Force this to true
       };
-      
+
       if (registrationProvider.nextStep(data)) {
         // If this is the final step, submit registration
         registrationProvider.submitRegistration();
@@ -83,10 +87,12 @@ class _DeveloperFormState extends State<DeveloperForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -108,7 +114,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Business Address
           TextFormField(
             controller: _businessAddressController,
@@ -126,7 +132,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // RC Number
           TextFormField(
             controller: _rcNumberController,
@@ -134,7 +140,8 @@ class _DeveloperFormState extends State<DeveloperForm> {
               labelText: 'RC Number',
               hintText: 'Enter your CAC registration number',
               prefixIcon: const Icon(Icons.badge),
-              helperText: 'Your Corporate Affairs Commission registration number',
+              helperText:
+                  'Your Corporate Affairs Commission registration number',
               helperStyle: TextStyle(
                 color: theme.colorScheme.onSurface.withOpacity(0.6),
               ),
@@ -151,7 +158,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Years in Business
           TextFormField(
             controller: _yearsInBusinessController,
@@ -173,7 +180,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Contact Person (Optional)
           TextFormField(
             controller: _contactPersonController,
@@ -184,7 +191,7 @@ class _DeveloperFormState extends State<DeveloperForm> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // CAC Certificate Upload using our enhanced component
           DocumentUploader(
             label: 'CAC Certificate',
@@ -192,16 +199,19 @@ class _DeveloperFormState extends State<DeveloperForm> {
             isRequired: true,
             maxSizeInMB: 10,
             onFileSelected: (filePath) {
-  setState(() {
-    _cacCertificatePath = filePath;
-  });
-  // Always update the provider state via the new setter
-  final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-  registrationProvider.setCacCertificateUploaded(filePath);
-},
+              setState(() {
+                _cacCertificatePath = filePath;
+              });
+              // Always update the provider state via the new setter
+              final registrationProvider =
+                  provider_package.Provider.of<UnifiedRegistrationProvider>(
+                      context,
+                      listen: false);
+              registrationProvider.setCacCertificateUploaded(filePath);
+            },
           ),
           const SizedBox(height: 32),
-          
+
           // Navigation buttons
           Row(
             children: [
@@ -213,16 +223,18 @@ class _DeveloperFormState extends State<DeveloperForm> {
                         registrationProvider.previousStep();
                       },
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 ),
                 child: const Text('Back'),
               ),
               const SizedBox(width: 16),
-              
+
               // Continue button
               Expanded(
                 child: ElevatedButton(
-                  onPressed: registrationProvider.isLoading ? null : _submitForm,
+                  onPressed:
+                      registrationProvider.isLoading ? null : _submitForm,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),

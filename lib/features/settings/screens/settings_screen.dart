@@ -16,7 +16,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final bandwidthProvider = Provider.of<BandwidthProvider>(context);
-    
+
     return MainLayout(
       title: 'Settings',
       currentIndex: 3,
@@ -56,18 +56,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const Divider(),
                     ListTile(
                       title: const Text('Role'),
-                      subtitle: Text('Current role: ${_formatRole(authProvider.userRole.toString().split('.').last)}'),
+                      subtitle: Text(
+                          'Current role: ${_formatRole(authProvider.userRole.toString().split('.').last)}'),
                       leading: const Icon(Icons.security),
-                      trailing: authProvider.isAdmin 
+                      trailing: authProvider.isAdmin
                           ? const Icon(Icons.chevron_right)
                           : null,
-                      onTap: authProvider.isAdmin ? () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Role management coming soon!'),
-                          ),
-                        );
-                      } : null,
+                      onTap: authProvider.isAdmin
+                          ? () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Role management coming soon!'),
+                                ),
+                              );
+                            }
+                          : null,
                     ),
                   ],
                 ),
@@ -91,11 +94,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     SwitchListTile(
                       title: const Text('Low Bandwidth Mode'),
-                      subtitle: Text(
-                        bandwidthProvider.isLowBandwidth 
-                            ? 'Enabled - Optimized for slower connections' 
-                            : 'Disabled - Using full bandwidth'
-                      ),
+                      subtitle: Text(bandwidthProvider.isLowBandwidth
+                          ? 'Enabled - Optimized for slower connections'
+                          : 'Disabled - Using full bandwidth'),
                       value: bandwidthProvider.isLowBandwidth,
                       onChanged: (value) {
                         bandwidthProvider.setLowBandwidth(value);
@@ -172,7 +173,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('System configuration coming soon!'),
+                              content:
+                                  Text('System configuration coming soon!'),
                             ),
                           );
                         },
@@ -200,7 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
-  
+
   String _formatRole(String role) {
     switch (role) {
       case 'admin':

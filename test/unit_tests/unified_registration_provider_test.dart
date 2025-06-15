@@ -39,10 +39,10 @@ void main() {
       // Set some data first
       registrationProvider.setUserType(UserType.developer);
       registrationProvider.nextStep({'userType': 'developer'});
-      
+
       // Reset
       registrationProvider.reset();
-      
+
       // Verify state is reset
       expect(registrationProvider.currentStep, 0);
       expect(registrationProvider.userType, null);
@@ -66,7 +66,8 @@ void main() {
         registrationProvider.setUserType(UserType.agent);
         final result = registrationProvider.nextStep({'userType': 'agent'});
         expect(result, false);
-        expect(registrationProvider.errorMessage, 'Please enter a valid invitation code');
+        expect(registrationProvider.errorMessage,
+            'Please enter a valid invitation code');
         expect(registrationProvider.currentStep, 0);
       });
 
@@ -88,10 +89,8 @@ void main() {
 
       test('succeeds with valid agent data', () {
         registrationProvider.setUserType(UserType.agent);
-        final result = registrationProvider.nextStep({
-          'userType': 'agent',
-          'invitationCode': 'ABC123'
-        });
+        final result = registrationProvider
+            .nextStep({'userType': 'agent', 'invitationCode': 'ABC123'});
         expect(result, true);
         expect(registrationProvider.errorMessage, null);
         expect(registrationProvider.currentStep, 1);
@@ -108,7 +107,8 @@ void main() {
       test('fails with missing required fields', () {
         final result = registrationProvider.nextStep({});
         expect(result, false);
-        expect(registrationProvider.errorMessage, 'Please fill in all required fields');
+        expect(registrationProvider.errorMessage,
+            'Please fill in all required fields');
         expect(registrationProvider.currentStep, 1);
       });
 
@@ -136,7 +136,8 @@ void main() {
           'acceptTerms': false
         });
         expect(result, false);
-        expect(registrationProvider.errorMessage, 'You must accept the terms and conditions');
+        expect(registrationProvider.errorMessage,
+            'You must accept the terms and conditions');
         expect(registrationProvider.currentStep, 1);
       });
 
@@ -154,7 +155,7 @@ void main() {
         expect(registrationProvider.currentStep, 2);
       });
     });
-    
+
     group('Step 3 validation', () {
       group('Developer validation', () {
         setUp(() {
@@ -174,7 +175,8 @@ void main() {
         test('fails with missing required fields', () {
           final result = registrationProvider.nextStep({});
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please fill in all required fields');
+          expect(registrationProvider.errorMessage,
+              'Please fill in all required fields');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -187,7 +189,8 @@ void main() {
             'hasUploadedCertificate': false
           });
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please upload your CAC certificate');
+          expect(registrationProvider.errorMessage,
+              'Please upload your CAC certificate');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -226,7 +229,8 @@ void main() {
             'budgetRange': 'NGN 10M - 30M'
           });
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please select at least one property type');
+          expect(registrationProvider.errorMessage,
+              'Please select at least one property type');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -236,7 +240,8 @@ void main() {
             'budgetRange': 'NGN 10M - 30M'
           });
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please select at least one preferred location');
+          expect(registrationProvider.errorMessage,
+              'Please select at least one preferred location');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -258,10 +263,8 @@ void main() {
         setUp(() {
           // Setup for agent step 3 tests
           registrationProvider.setUserType(UserType.agent);
-          registrationProvider.nextStep({
-            'userType': 'agent',
-            'invitationCode': 'ABC123'
-          });
+          registrationProvider
+              .nextStep({'userType': 'agent', 'invitationCode': 'ABC123'});
           registrationProvider.nextStep({
             'fullName': 'Test User',
             'email': 'test@example.com',
@@ -275,7 +278,8 @@ void main() {
         test('fails with missing required fields', () {
           final result = registrationProvider.nextStep({});
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please fill in all required fields');
+          expect(registrationProvider.errorMessage,
+              'Please fill in all required fields');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -286,7 +290,8 @@ void main() {
             'yearsOfExperience': '3'
           });
           expect(result, false);
-          expect(registrationProvider.errorMessage, 'Please select at least one specialization area');
+          expect(registrationProvider.errorMessage,
+              'Please select at least one specialization area');
           expect(registrationProvider.currentStep, 2);
         });
 
@@ -310,7 +315,7 @@ void main() {
       registrationProvider.setUserType(UserType.developer);
       registrationProvider.nextStep({'userType': 'developer'});
       expect(registrationProvider.currentStep, 1);
-      
+
       // Then go back to step 0
       registrationProvider.previousStep();
       expect(registrationProvider.currentStep, 0);

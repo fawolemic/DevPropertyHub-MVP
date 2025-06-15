@@ -21,13 +21,14 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
   bool _darkMode = false;
   bool _lowBandwidthMode = false;
   String _language = 'English';
-  
+
   @override
   void initState() {
     super.initState();
     // Initialize settings from providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final bandwidthProvider = Provider.of<BandwidthProvider>(context, listen: false);
+      final bandwidthProvider =
+          Provider.of<BandwidthProvider>(context, listen: false);
       setState(() {
         _lowBandwidthMode = bandwidthProvider.isLowBandwidth;
       });
@@ -42,18 +43,18 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
     final isMobile = ResponsiveUtils.isMobile(context);
     final isTablet = ResponsiveUtils.isTablet(context);
     final isDesktop = ResponsiveUtils.isDesktop(context);
-    
+
     // Get user info
     final userName = authProvider.userName ?? 'Admin User';
     final userRole = authProvider.userRole.toString().split('.').last;
-    
+
     return Scaffold(
       drawer: const Drawer(child: AppSidebar()),
       backgroundColor: Colors.grey.shade50,
       body: Row(
         children: [
           if (isDesktop) const AppSidebar(),
-          
+
           // Main content
           Expanded(
             child: Column(
@@ -86,7 +87,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                             color: Colors.grey.shade700,
                           ),
                         ),
-                      
+
                       // Page title
                       Expanded(
                         child: Text(
@@ -97,7 +98,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                           ),
                         ),
                       ),
-                      
+
                       // Notification bell
                       Stack(
                         children: [
@@ -120,7 +121,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                           ),
                         ],
                       ),
-                      
+
                       // User profile
                       const SizedBox(width: 8),
                       Row(
@@ -156,7 +157,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                     ],
                   ),
                 ),
-                
+
                 // Main content
                 Expanded(
                   child: SingleChildScrollView(
@@ -168,11 +169,14 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                         Card(
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
+                            borderRadius: BorderRadius.circular(
+                                ResponsiveUtils.getResponsiveBorderRadius(
+                                    context)),
                             side: BorderSide(color: Colors.grey.shade200),
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 16 : 24),
+                            padding: EdgeInsets.all(
+                                ResponsiveUtils.isMobile(context) ? 16 : 24),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -183,168 +187,228 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                
+
                                 ResponsiveUtils.isMobile(context)
-                                  ? Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        // Profile picture
-                                        CircleAvatar(
-                                          radius: 40,
-                                          backgroundColor: theme.colorScheme.primary,
-                                          child: Text(
-                                            userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
-                                            style: const TextStyle(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          // Profile picture
+                                          CircleAvatar(
+                                            radius: 40,
+                                            backgroundColor:
+                                                theme.colorScheme.primary,
+                                            child: Text(
+                                              userName.isNotEmpty
+                                                  ? userName[0].toUpperCase()
+                                                  : 'U',
+                                              style: const TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 12),
-                                        OutlinedButton(
-                                          onPressed: () {
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Change photo feature coming soon')),
-                                            );
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
+                                          const SizedBox(height: 12),
+                                          OutlinedButton(
+                                            onPressed: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Change photo feature coming soon')),
+                                              );
+                                            },
+                                            style: OutlinedButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
                                             ),
+                                            child: const Text('Change Photo'),
                                           ),
-                                          child: const Text('Change Photo'),
-                                        ),
-                                        const SizedBox(height: 24),
-                                        
-                                        // Profile details
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // Name field
-                                            TextFormField(
-                                              initialValue: userName,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Full Name',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                            
-                                            // Email field
-                                            TextFormField(
-                                              initialValue: 'user@example.com',
-                                              decoration: const InputDecoration(
-                                                labelText: 'Email Address',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  : Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        // Profile picture
-                                        Column(
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 40,
-                                              backgroundColor: theme.colorScheme.primary,
-                                              child: Text(
-                                                userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
-                                                style: const TextStyle(
-                                                  fontSize: 32,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            OutlinedButton(
-                                              onPressed: () {
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  const SnackBar(content: Text('Change photo feature coming soon')),
-                                                );
-                                              },
-                                              style: OutlinedButton.styleFrom(
-                                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              child: const Text('Change Photo'),
-                                            ),
-                                          ],
-                                        ),
-                                        
-                                        const SizedBox(width: 32),
-                                        
-                                        // Profile details
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          const SizedBox(height: 24),
+
+                                          // Profile details
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                          // Name field
-                                          TextFormField(
-                                            initialValue: userName,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Full Name',
-                                              border: OutlineInputBorder(),
-                                            ),
+                                              // Name field
+                                              TextFormField(
+                                                initialValue: userName,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Full Name',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 16),
+
+                                              // Email field
+                                              TextFormField(
+                                                initialValue:
+                                                    'user@example.com',
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Email Address',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(height: 16),
-                                          
-                                          // Email field
-                                          TextFormField(
-                                            initialValue: 'user@example.com',
-                                            decoration: const InputDecoration(
-                                              labelText: 'Email Address',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 16),
-                                          
-                                          // Phone field
-                                          TextFormField(
-                                            initialValue: '+1 234 567 8900',
-                                            decoration: const InputDecoration(
-                                              labelText: 'Phone Number',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 16),
-                                          
-                                          // Role display
-                                          Container(
-                                            padding: const EdgeInsets.all(16),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.grey.shade300),
-                                              borderRadius: BorderRadius.circular(4),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  'Account Type:',
-                                                  style: TextStyle(
-                                                    color: Colors.grey.shade600,
+                                        ],
+                                      )
+                                    : Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Profile picture
+                                          Column(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 40,
+                                                backgroundColor:
+                                                    theme.colorScheme.primary,
+                                                child: Text(
+                                                  userName.isNotEmpty
+                                                      ? userName[0]
+                                                          .toUpperCase()
+                                                      : 'U',
+                                                  style: const TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
-                                                const SizedBox(width: 8),
-                                                Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                  decoration: BoxDecoration(
-                                                    color: theme.colorScheme.primary.withOpacity(0.1),
-                                                    borderRadius: BorderRadius.circular(4),
+                                              ),
+                                              const SizedBox(height: 12),
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Change photo feature coming soon')),
+                                                  );
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
                                                   ),
-                                                  child: Text(
-                                                    '${userRole.substring(0, 1).toUpperCase()}${userRole.substring(1)} Developer',
-                                                    style: TextStyle(
-                                                      color: theme.colorScheme.primary,
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
+                                                ),
+                                                child:
+                                                    const Text('Change Photo'),
+                                              ),
+                                            ],
+                                          ),
+
+                                          const SizedBox(width: 32),
+
+                                          // Profile details
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // Name field
+                                                TextFormField(
+                                                  initialValue: userName,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Full Name',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
+
+                                                // Email field
+                                                TextFormField(
+                                                  initialValue:
+                                                      'user@example.com',
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Email Address',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
+
+                                                // Phone field
+                                                TextFormField(
+                                                  initialValue:
+                                                      '+1 234 567 8900',
+                                                  decoration:
+                                                      const InputDecoration(
+                                                    labelText: 'Phone Number',
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 16),
+
+                                                // Role display
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.all(16),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors
+                                                            .grey.shade300),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        'Account Type:',
+                                                        style: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade600,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary
+                                                              .withOpacity(0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        child: Text(
+                                                          '${userRole.substring(0, 1).toUpperCase()}${userRole.substring(1)} Developer',
+                                                          style: TextStyle(
+                                                            color: theme
+                                                                .colorScheme
+                                                                .primary,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -352,23 +416,23 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                
+
                                 const SizedBox(height: 24),
-                                
+
                                 // Save button
                                 ElevatedButton(
                                   onPressed: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Profile updated successfully')),
+                                      const SnackBar(
+                                          content: Text(
+                                              'Profile updated successfully')),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: theme.colorScheme.primary,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -379,9 +443,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Notification settings
                         Card(
                           elevation: 0,
@@ -401,11 +465,12 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                
+
                                 // Email notifications
                                 SwitchListTile(
                                   title: const Text('Email Notifications'),
-                                  subtitle: const Text('Receive updates and alerts via email'),
+                                  subtitle: const Text(
+                                      'Receive updates and alerts via email'),
                                   value: _emailNotifications,
                                   onChanged: (value) {
                                     setState(() {
@@ -417,13 +482,14 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                     color: theme.colorScheme.primary,
                                   ),
                                 ),
-                                
+
                                 const Divider(),
-                                
+
                                 // Push notifications
                                 SwitchListTile(
                                   title: const Text('Push Notifications'),
-                                  subtitle: const Text('Receive real-time alerts on your device'),
+                                  subtitle: const Text(
+                                      'Receive real-time alerts on your device'),
                                   value: _pushNotifications,
                                   onChanged: (value) {
                                     setState(() {
@@ -439,9 +505,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // App settings
                         Card(
                           elevation: 0,
@@ -461,18 +527,21 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                
+
                                 // Dark mode
                                 SwitchListTile(
                                   title: const Text('Dark Mode'),
-                                  subtitle: const Text('Switch between light and dark themes'),
+                                  subtitle: const Text(
+                                      'Switch between light and dark themes'),
                                   value: _darkMode,
                                   onChanged: (value) {
                                     setState(() {
                                       _darkMode = value;
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Dark mode will be available in a future update')),
+                                      const SnackBar(
+                                          content: Text(
+                                              'Dark mode will be available in a future update')),
                                     );
                                   },
                                   secondary: Icon(
@@ -480,13 +549,14 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                     color: theme.colorScheme.primary,
                                   ),
                                 ),
-                                
+
                                 const Divider(),
-                                
+
                                 // Low bandwidth mode
                                 SwitchListTile(
                                   title: const Text('Low Bandwidth Mode'),
-                                  subtitle: const Text('Reduce data usage and improve performance'),
+                                  subtitle: const Text(
+                                      'Reduce data usage and improve performance'),
                                   value: _lowBandwidthMode,
                                   onChanged: (value) {
                                     setState(() {
@@ -494,7 +564,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                     });
                                     bandwidthProvider.setLowBandwidth(value);
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Low bandwidth mode ${value ? 'enabled' : 'disabled'}')),
+                                      SnackBar(
+                                          content: Text(
+                                              'Low bandwidth mode ${value ? 'enabled' : 'disabled'}')),
                                     );
                                   },
                                   secondary: Icon(
@@ -502,9 +574,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                     color: theme.colorScheme.primary,
                                   ),
                                 ),
-                                
+
                                 const Divider(),
-                                
+
                                 // Language
                                 ListTile(
                                   title: const Text('Language'),
@@ -513,7 +585,8 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                     Icons.language,
                                     color: theme.colorScheme.primary,
                                   ),
-                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                  trailing: const Icon(Icons.arrow_forward_ios,
+                                      size: 16),
                                   onTap: () {
                                     _showLanguageSelector(context);
                                   },
@@ -522,9 +595,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Security settings
                         Card(
                           elevation: 0,
@@ -544,45 +617,53 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 24),
-                                
+
                                 // Change password
                                 ListTile(
                                   title: const Text('Change Password'),
-                                  subtitle: const Text('Update your account password'),
+                                  subtitle: const Text(
+                                      'Update your account password'),
                                   leading: Icon(
                                     Icons.lock,
                                     color: theme.colorScheme.primary,
                                   ),
-                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                  trailing: const Icon(Icons.arrow_forward_ios,
+                                      size: 16),
                                   onTap: () {
                                     _showChangePasswordDialog(context);
                                   },
                                 ),
-                                
+
                                 const Divider(),
-                                
+
                                 // Two-factor authentication
                                 ListTile(
-                                  title: const Text('Two-Factor Authentication'),
-                                  subtitle: const Text('Add an extra layer of security'),
+                                  title:
+                                      const Text('Two-Factor Authentication'),
+                                  subtitle: const Text(
+                                      'Add an extra layer of security'),
                                   leading: Icon(
                                     Icons.security,
                                     color: theme.colorScheme.primary,
                                   ),
-                                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                  trailing: const Icon(Icons.arrow_forward_ios,
+                                      size: 16),
                                   onTap: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Two-factor authentication coming soon')),
+                                      const SnackBar(
+                                          content: Text(
+                                              'Two-factor authentication coming soon')),
                                     );
                                   },
                                 ),
-                                
+
                                 const Divider(),
-                                
+
                                 // Logout from all devices
                                 ListTile(
                                   title: const Text('Logout from All Devices'),
-                                  subtitle: const Text('Secure your account by logging out everywhere'),
+                                  subtitle: const Text(
+                                      'Secure your account by logging out everywhere'),
                                   leading: Icon(
                                     Icons.logout,
                                     color: theme.colorScheme.primary,
@@ -595,9 +676,9 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                             ),
                           ),
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Danger zone
                         Card(
                           elevation: 0,
@@ -618,16 +699,16 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                
+
                                 Text(
                                   'Actions in this section can have permanent consequences.',
                                   style: TextStyle(
                                     color: Colors.grey.shade700,
                                   ),
                                 ),
-                                
+
                                 const SizedBox(height: 24),
-                                
+
                                 // Delete account
                                 OutlinedButton.icon(
                                   onPressed: () {
@@ -637,8 +718,10 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                                   label: const Text('Delete Account'),
                                   style: OutlinedButton.styleFrom(
                                     foregroundColor: Colors.red.shade700,
-                                    side: BorderSide(color: Colors.red.shade700),
-                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                    side:
+                                        BorderSide(color: Colors.red.shade700),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -659,10 +742,10 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
       ),
     );
   }
-  
+
   void _showLanguageSelector(BuildContext context) {
     final languages = ['English', 'Spanish', 'French', 'German', 'Chinese'];
-    
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -701,7 +784,8 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                         });
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Language changed to $_language')),
+                          SnackBar(
+                              content: Text('Language changed to $_language')),
                         );
                       },
                     );
@@ -714,13 +798,13 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
       },
     );
   }
-  
+
   void _showChangePasswordDialog(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     String currentPassword = '';
     String newPassword = '';
     String confirmPassword = '';
-    
+
     showDialog(
       context: context,
       builder: (context) {
@@ -802,7 +886,8 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
                 if (formKey.currentState!.validate()) {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Password changed successfully')),
+                    const SnackBar(
+                        content: Text('Password changed successfully')),
                   );
                 }
               },
@@ -813,7 +898,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
       },
     );
   }
-  
+
   void _showLogoutConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -848,7 +933,7 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
       },
     );
   }
-  
+
   void _showDeleteAccountConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -869,11 +954,13 @@ class _ModernSettingsScreenState extends State<ModernSettingsScreen> {
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Account deletion request submitted')),
+                  const SnackBar(
+                      content: Text('Account deletion request submitted')),
                 );
                 // In a real app, you would handle the account deletion here
                 Future.delayed(const Duration(seconds: 2), () {
-                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                  final authProvider =
+                      Provider.of<AuthProvider>(context, listen: false);
                   authProvider.signOut();
                   context.go('/login');
                 });

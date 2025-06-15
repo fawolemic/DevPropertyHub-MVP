@@ -17,39 +17,39 @@ class SupabaseProvider extends ChangeNotifier {
   final PropertyService _propertyService = PropertyService();
   final DevelopmentService _developmentService = DevelopmentService();
   final DatabaseService _databaseService = DatabaseService();
-  
+
   // User state
   UserModel? _currentUser;
   bool _isLoading = false;
   String? _errorMessage;
-  
+
   // Getters
   UserModel? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _currentUser != null;
-  
+
   // Service getters
   AuthService get authService => _authService;
   LeadService get leadService => _leadService;
   PropertyService get propertyService => _propertyService;
   DevelopmentService get developmentService => _developmentService;
   DatabaseService get databaseService => _databaseService;
-  
+
   /// Initialize the provider
   Future<void> initialize() async {
     _setLoading(true);
     try {
       // Initialize database if needed
       await _databaseService.initializeDatabase();
-      
+
       // Get current user if authenticated
       await _loadCurrentUser();
-      
+
       // Listen for auth state changes
       SupabaseConfig.auth.onAuthStateChange.listen((data) {
         final AuthChangeEvent event = data.event;
-        
+
         if (event == AuthChangeEvent.signedIn) {
           _loadCurrentUser();
         } else if (event == AuthChangeEvent.signedOut) {
@@ -63,7 +63,7 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Load the current user from Supabase
   Future<void> _loadCurrentUser() async {
     try {
@@ -74,18 +74,18 @@ class SupabaseProvider extends ChangeNotifier {
       _setError('Failed to load user: $e');
     }
   }
-  
+
   /// Sign in with email and password
   Future<bool> signIn(String email, String password) async {
     _setLoading(true);
     _clearError();
-    
+
     try {
       final user = await _authService.signIn(
         email: email,
         password: password,
       );
-      
+
       _currentUser = user;
       notifyListeners();
       return true;
@@ -96,18 +96,19 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Sign up a new user
-  Future<bool> signUp(String email, String password, String fullName, UserRole role) async {
+  Future<bool> signUp(
+      String email, String password, String fullName, UserRole role) async {
     _setLoading(true);
     _clearError();
-    
+
     try {
       // Split the full name into first and last name
       final nameParts = fullName.split(' ');
       final firstName = nameParts.first;
       final lastName = nameParts.length > 1 ? nameParts.last : null;
-      
+
       final user = await _authService.signUp(
         email: email,
         password: password,
@@ -115,7 +116,7 @@ class SupabaseProvider extends ChangeNotifier {
         lastName: lastName,
         role: role,
       );
-      
+
       _currentUser = user;
       notifyListeners();
       return true;
@@ -126,12 +127,12 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Sign out the current user
   Future<void> signOut() async {
     _setLoading(true);
     _clearError();
-    
+
     try {
       await _authService.signOut();
       _currentUser = null;
@@ -142,27 +143,27 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Update user profile
   Future<bool> updateProfile({String? fullName, String? photoUrl}) async {
     if (_currentUser == null) return false;
-    
+
     _setLoading(true);
     _clearError();
-    
+
     try {
       // Split fullName into firstName and lastName for the service
       final nameParts = fullName?.split(' ') ?? [];
       final firstName = nameParts.isNotEmpty ? nameParts.first : null;
       final lastName = nameParts.length > 1 ? nameParts.last : null;
-      
+
       final updatedUser = await _authService.updateUserProfile(
         userId: _currentUser!.id,
         firstName: firstName,
         lastName: lastName,
         // Remove photoUrl parameter if it's not accepted
       );
-      
+
       _currentUser = updatedUser;
       notifyListeners();
       return true;
@@ -173,12 +174,12 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   /// Reset password
   Future<bool> resetPassword(String email) async {
     _setLoading(true);
     _clearError();
-    
+
     try {
       await _authService.resetPassword(email);
       return true;
@@ -189,18 +190,18 @@ class SupabaseProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
-  
+
   // Helper methods
   void _setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
-  
+
   void _setError(String error) {
     _errorMessage = error;
     notifyListeners();
   }
-  
+
   void _clearError() {
     _errorMessage = null;
     notifyListeners();

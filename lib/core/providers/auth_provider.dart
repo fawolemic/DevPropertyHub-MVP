@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum UserRole {
-  admin,    // Full access, user management, company settings
+  admin, // Full access, user management, company settings
   standard, // Manages assigned/created developments & leads
-  viewer    // Read-only access to data
+  viewer // Read-only access to data
 }
 
 enum UserType {
   developer, // Property developers (primary users)
-  buyer     // Property buyers/investors (secondary users)
+  buyer // Property buyers/investors (secondary users)
 }
 
 // Simple user model for the current user
@@ -21,7 +21,7 @@ class User {
   final String? email;
   final UserType userType;
   final UserRole role;
-  
+
   User({
     required this.id,
     this.firstName,
@@ -30,7 +30,7 @@ class User {
     required this.userType,
     required this.role,
   });
-  
+
   String get fullName => '$firstName $lastName';
 }
 
@@ -49,9 +49,9 @@ class AuthProvider with ChangeNotifier {
   String? _phone;
   String? _verificationStatus;
   List<String> _permissions = [];
-  
+
   final _storage = const FlutterSecureStorage();
-  
+
   // Basic auth getters
   bool get isLoggedIn => _isLoggedIn;
   UserRole get userRole => _userRole;
@@ -65,35 +65,41 @@ class AuthProvider with ChangeNotifier {
   String? get phone => _phone;
   String? get verificationStatus => _verificationStatus;
   List<String> get permissions => _permissions;
-  bool get isTokenExpired => _tokenExpiry != null ? DateTime.now().isAfter(_tokenExpiry!) : true;
-  
+  bool get isTokenExpired =>
+      _tokenExpiry != null ? DateTime.now().isAfter(_tokenExpiry!) : true;
+
   // Current user getter
-  User? get currentUser => _isLoggedIn && _userId != null ? User(
-    id: _userId!,
-    firstName: _userName?.split(' ').first,
-    lastName: _userName != null && _userName!.split(' ').length > 1 ? _userName!.split(' ').last : null,
-    email: _userEmail,
-    userType: _userType,
-    role: _userRole,
-  ) : null;
-  
+  User? get currentUser => _isLoggedIn && _userId != null
+      ? User(
+          id: _userId!,
+          firstName: _userName?.split(' ').first,
+          lastName: _userName != null && _userName!.split(' ').length > 1
+              ? _userName!.split(' ').last
+              : null,
+          email: _userEmail,
+          userType: _userType,
+          role: _userRole,
+        )
+      : null;
+
   // Role-based permission checks
   bool get isAdmin => _userRole == UserRole.admin;
   bool get isStandard => _userRole == UserRole.standard;
   bool get isViewer => _userRole == UserRole.viewer;
-  
+
   // User type checks
   bool get isDeveloper => _userType == UserType.developer;
   bool get isBuyer => _userType == UserType.buyer;
-  
+
   // Permission checks
-  bool get canEdit => _userRole == UserRole.admin || _userRole == UserRole.standard;
+  bool get canEdit =>
+      _userRole == UserRole.admin || _userRole == UserRole.standard;
   bool get hasAdminPermissions => _userRole == UserRole.admin;
   bool get isVerified => _verificationStatus == 'verified';
-  
+
   // Specific permission checks
   bool hasPermission(String permission) => _permissions.contains(permission);
-  
+
   // Initialize auth state from storage
   Future<void> initAuth() async {
     try {
@@ -111,7 +117,7 @@ class AuthProvider with ChangeNotifier {
       final phone = await _storage.read(key: 'phone');
       final verificationStatus = await _storage.read(key: 'verificationStatus');
       final permissionsJson = await _storage.read(key: 'permissions');
-      
+
       _isLoggedIn = isLoggedInStr == 'true';
       _userName = userName;
       _userEmail = userEmail;
@@ -122,23 +128,24 @@ class AuthProvider with ChangeNotifier {
       _companyId = companyId;
       _phone = phone;
       _verificationStatus = verificationStatus;
-      
+
       // Parse token expiry
       if (tokenExpiryStr != null) {
         _tokenExpiry = DateTime.parse(tokenExpiryStr);
       }
-      
+
       // Parse permissions
       if (permissionsJson != null) {
         final List<dynamic> permissionsList = jsonDecode(permissionsJson);
         _permissions = permissionsList.cast<String>();
       }
-      
+
       // Set user type based on stored value
       if (userTypeStr != null) {
-        _userType = userTypeStr == 'developer' ? UserType.developer : UserType.buyer;
+        _userType =
+            userTypeStr == 'developer' ? UserType.developer : UserType.buyer;
       }
-      
+
       // Set user role based on stored value
       if (roleStr != null) {
         switch (roleStr) {
@@ -155,7 +162,7 @@ class AuthProvider with ChangeNotifier {
             _userRole = UserRole.viewer;
         }
       }
-      
+
       // Check if token is expired and try to refresh
       if (_isLoggedIn && isTokenExpired && _refreshToken != null) {
         await refreshAuthToken();
@@ -164,10 +171,10 @@ class AuthProvider with ChangeNotifier {
       // Reset auth state if there's an error
       _resetAuthState();
     }
-    
+
     notifyListeners();
   }
-  
+
   void _resetAuthState() {
     _isLoggedIn = false;
     _userRole = UserRole.viewer;
@@ -184,18 +191,19 @@ class AuthProvider with ChangeNotifier {
     _verificationStatus = null;
     _permissions = [];
   }
-  
+
   // Sign in with email and password
-  Future<bool> signIn(String email, String password, {String userType = 'developer'}) async {
+  Future<bool> signIn(String email, String password,
+      {String userType = 'developer'}) async {
     // In a real app, this would validate credentials with a backend and receive JWT
     // For the demo, we'll simulate successful authentication with JWT structure
-    
+
     // Simulate network delay
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // Generate a token expiration time (1 hour from now)
     final expiresAt = DateTime.now().add(const Duration(hours: 1));
-    
+
     // Demo credentials for different roles with JWT structure
     if (email == 'admin@example.com' && password == 'password') {
       final jwt = {
@@ -213,7 +221,13 @@ class AuthProvider with ChangeNotifier {
           'verificationStatus': 'verified',
           'subscription': 'enterprise',
           'role': 'admin',
-          'permissions': ['create_projects', 'manage_leads', 'analytics_access', 'user_management', 'admin_panel']
+          'permissions': [
+            'create_projects',
+            'manage_leads',
+            'analytics_access',
+            'user_management',
+            'admin_panel'
+          ]
         }
       };
       await _setUserDataFromJwt(jwt);
@@ -279,29 +293,30 @@ class AuthProvider with ChangeNotifier {
       await _setUserDataFromJwt(jwt);
       return true;
     }
-    
+
     return false;
   }
-  
+
   // Set user data from JWT response
   Future<void> _setUserDataFromJwt(Map<String, dynamic> jwt) async {
     final user = jwt['user'];
     final String roleStr = user['role'];
     final String userTypeStr = user['userType'];
-    
+
     // Set token data
     _authToken = jwt['accessToken'];
     _refreshToken = jwt['refreshToken'];
     _tokenExpiry = DateTime.parse(jwt['expires']);
-    
+
     // Set user data
     _isLoggedIn = true;
     _userId = user['id'];
     _userEmail = user['email'];
-    
+
     // Set user type
-    _userType = userTypeStr == 'developer' ? UserType.developer : UserType.buyer;
-    
+    _userType =
+        userTypeStr == 'developer' ? UserType.developer : UserType.buyer;
+
     // Set user-type specific data
     if (_userType == UserType.developer) {
       _userName = user['contactPerson'];
@@ -310,15 +325,15 @@ class AuthProvider with ChangeNotifier {
     } else {
       _userName = '${user['firstName']} ${user['lastName']}';
     }
-    
+
     _phone = user['phone'];
     _verificationStatus = user['verificationStatus'];
-    
+
     // Set permissions
     if (user['permissions'] != null) {
       _permissions = List<String>.from(user['permissions']);
     }
-    
+
     // Set user role
     switch (roleStr) {
       case 'admin':
@@ -333,7 +348,7 @@ class AuthProvider with ChangeNotifier {
       default:
         _userRole = UserRole.viewer;
     }
-    
+
     // Store auth data securely
     await _storage.write(key: 'isLoggedIn', value: 'true');
     await _storage.write(key: 'userId', value: _userId);
@@ -343,51 +358,54 @@ class AuthProvider with ChangeNotifier {
     await _storage.write(key: 'userType', value: userTypeStr);
     await _storage.write(key: 'authToken', value: _authToken);
     await _storage.write(key: 'refreshToken', value: _refreshToken);
-    await _storage.write(key: 'tokenExpiry', value: _tokenExpiry!.toIso8601String());
-    
+    await _storage.write(
+        key: 'tokenExpiry', value: _tokenExpiry!.toIso8601String());
+
     if (_phone != null) {
       await _storage.write(key: 'phone', value: _phone);
     }
-    
+
     if (_verificationStatus != null) {
-      await _storage.write(key: 'verificationStatus', value: _verificationStatus);
+      await _storage.write(
+          key: 'verificationStatus', value: _verificationStatus);
     }
-    
+
     if (_companyName != null) {
       await _storage.write(key: 'companyName', value: _companyName);
     }
-    
+
     if (_companyId != null) {
       await _storage.write(key: 'companyId', value: _companyId);
     }
-    
+
     if (_permissions.isNotEmpty) {
       await _storage.write(key: 'permissions', value: jsonEncode(_permissions));
     }
-    
+
     notifyListeners();
   }
-  
+
   // Token refresh mechanism
   Future<bool> refreshAuthToken() async {
     try {
       // In a real app, this would call an API endpoint with the refresh token
       // For demo purposes, we'll simulate a successful refresh
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       if (_refreshToken == null) return false;
-      
+
       // Generate new token expiration time (1 hour from now)
       final expiresAt = DateTime.now().add(const Duration(hours: 1));
-      
+
       // Simulate refreshed token
       _authToken = 'refreshed-${_authToken?.split('-').last ?? 'token'}';
       _tokenExpiry = expiresAt;
-      
+
       // Update storage
       await _storage.write(key: 'authToken', value: _authToken);
-      await _storage.write(key: 'tokenExpiry', value: _tokenExpiry!.toIso8601String());
-      
+      await _storage.write(
+          key: 'tokenExpiry', value: _tokenExpiry!.toIso8601String());
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -400,27 +418,28 @@ class AuthProvider with ChangeNotifier {
   // Check if the token needs to be refreshed before making an API call
   Future<String?> getValidToken() async {
     if (!_isLoggedIn) return null;
-    
+
     // Check if token is expired or about to expire (within 5 minutes)
-    final isAboutToExpire = _tokenExpiry != null && 
-        DateTime.now().isAfter(_tokenExpiry!.subtract(const Duration(minutes: 5)));
-    
+    final isAboutToExpire = _tokenExpiry != null &&
+        DateTime.now()
+            .isAfter(_tokenExpiry!.subtract(const Duration(minutes: 5)));
+
     if (isAboutToExpire) {
       final refreshed = await refreshAuthToken();
       if (!refreshed) return null;
     }
-    
+
     return _authToken;
   }
-  
+
   // Sign out
   Future<void> signOut() async {
     // In a real app, this would also invalidate the refresh token on the server
     _resetAuthState();
-    
+
     // Clear secure storage
     await _storage.deleteAll();
-    
+
     notifyListeners();
   }
 }

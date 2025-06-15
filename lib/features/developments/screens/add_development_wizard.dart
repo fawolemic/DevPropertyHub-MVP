@@ -23,7 +23,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _unitsController = TextEditingController();
-  final TextEditingController _completionDateController = TextEditingController();
+  final TextEditingController _completionDateController =
+      TextEditingController();
   final TextEditingController _phasesController = TextEditingController();
   bool _offPlan = false;
   final TextEditingController _identifierController = TextEditingController();
@@ -32,7 +33,13 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
   final TextEditingController _lgaController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   List<String> _addressSuggestions = [];
-  final List<String> _devTypesList = ['Residential condos', 'Estates', 'Commercial malls', 'Mixed-use', 'Land for sale'];
+  final List<String> _devTypesList = [
+    'Residential condos',
+    'Estates',
+    'Commercial malls',
+    'Mixed-use',
+    'Land for sale'
+  ];
   final Map<String, IconData> _devTypeIcons = {
     'Residential condos': Icons.location_city,
     'Estates': Icons.home,
@@ -107,29 +114,34 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     if (_processingNext) return;
     setState(() => _processingNext = true);
     try {
-    if (_currentStep == 0) {
-      if (_formKey.currentState?.validate() ?? false) setState(() => _currentStep++);
-    } else if (_currentStep == 1) {
-      if (_detailsFormKey.currentState?.validate() ?? false) setState(() => _currentStep++);
-    } else if (_currentStep == 2 || _currentStep == 4) {
-      setState(() => _currentStep++);
-    } else if (_currentStep == 3) {
-      if (_unitTypeFormKey.currentState?.validate() ?? false) setState(() => _currentStep++);
-    } else if (_currentStep == 5) {
-      if (_paymentFormKey.currentState?.validate() ?? false) setState(() => _currentStep++);
-    } else if (_currentStep == 6) {
-      // Final submission
-      AddDevelopmentDraftService.clearDraft();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Project submitted')));
-      GoRouter.of(context).go('/developments');
-    } else {
-      setState(() => _currentStep++);
-      // Small delay so spinner stays visible for at least one frame
-      await Future.delayed(const Duration(milliseconds: 300));
+      if (_currentStep == 0) {
+        if (_formKey.currentState?.validate() ?? false)
+          setState(() => _currentStep++);
+      } else if (_currentStep == 1) {
+        if (_detailsFormKey.currentState?.validate() ?? false)
+          setState(() => _currentStep++);
+      } else if (_currentStep == 2 || _currentStep == 4) {
+        setState(() => _currentStep++);
+      } else if (_currentStep == 3) {
+        if (_unitTypeFormKey.currentState?.validate() ?? false)
+          setState(() => _currentStep++);
+      } else if (_currentStep == 5) {
+        if (_paymentFormKey.currentState?.validate() ?? false)
+          setState(() => _currentStep++);
+      } else if (_currentStep == 6) {
+        // Final submission
+        AddDevelopmentDraftService.clearDraft();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Project submitted')));
+        GoRouter.of(context).go('/developments');
+      } else {
+        setState(() => _currentStep++);
+        // Small delay so spinner stays visible for at least one frame
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
+    } finally {
+      if (mounted) setState(() => _processingNext = false);
     }
-  } finally {
-    if (mounted) setState(() => _processingNext = false);
-  }
   }
 
   void _onCancel() {
@@ -161,12 +173,16 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
           _brochurePath = draft['brochurePath'] as String?;
           _phaseNames = draft['phaseNames'] ?? [];
           _unitTypes = draft['unitTypes'] ?? [];
-          _mediaFiles = (draft['mediaFiles'] as List<dynamic>?)?.map((m) => PlatformFile(
-                name: m['name'],
-                path: m['path'],
-                size: m['size'] as int,
-              )).toList() ?? [];
-          _paymentPlans = List<Map<String, dynamic>>.from(draft['paymentPlans'] as List<dynamic>? ?? []);
+          _mediaFiles = (draft['mediaFiles'] as List<dynamic>?)
+                  ?.map((m) => PlatformFile(
+                        name: m['name'],
+                        path: m['path'],
+                        size: m['size'] as int,
+                      ))
+                  .toList() ??
+              [];
+          _paymentPlans = List<Map<String, dynamic>>.from(
+              draft['paymentPlans'] as List<dynamic>? ?? []);
         });
       }
     });
@@ -190,33 +206,36 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     if (_savingDraft) return;
     setState(() => _savingDraft = true);
     try {
-    final draft = {
-      'name': _nameController.text,
-      'state': _selectedState,
-      'lga': _selectedLga,
-      'address': _addressController.text,
-      'devType': _devType,
-      'isMultiPhase': _isMultiPhase,
-      'phases': _phasesController.text,
-      'offPlan': _offPlan,
-      'identifier': _identifierController.text,
-      'brochurePath': _brochurePath,
-      'phaseNames': _phaseNames,
-      'unitTypes': _unitTypes,
-      'mediaFiles': _mediaFiles.map((f) => {
-        'name': f.name,
-        'path': f.path,
-        'size': f.size,
-      }).toList(),
-      'paymentPlans': _paymentPlans,
-    };
-    await AddDevelopmentDraftService.saveDraft(draft);
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Draft saved'), duration: Duration(seconds: 2)),
+      final draft = {
+        'name': _nameController.text,
+        'state': _selectedState,
+        'lga': _selectedLga,
+        'address': _addressController.text,
+        'devType': _devType,
+        'isMultiPhase': _isMultiPhase,
+        'phases': _phasesController.text,
+        'offPlan': _offPlan,
+        'identifier': _identifierController.text,
+        'brochurePath': _brochurePath,
+        'phaseNames': _phaseNames,
+        'unitTypes': _unitTypes,
+        'mediaFiles': _mediaFiles
+            .map((f) => {
+                  'name': f.name,
+                  'path': f.path,
+                  'size': f.size,
+                })
+            .toList(),
+        'paymentPlans': _paymentPlans,
+      };
+      await AddDevelopmentDraftService.saveDraft(draft);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Draft saved'), duration: Duration(seconds: 2)),
       );
-  } finally {
-    if (mounted) setState(() => _savingDraft = false);
-  }
+    } finally {
+      if (mounted) setState(() => _savingDraft = false);
+    }
   }
 
   @override
@@ -254,19 +273,27 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                 TextButton(
                   onPressed: _savingDraft ? null : _saveDraft,
                   child: _savingDraft
-                      ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2))
                       : const Text('Save Draft'),
                 ),
               const Spacer(),
               ElevatedButton(
                 onPressed: _processingNext ? null : details.onStepContinue,
                 child: _processingNext
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
                     : Text(_currentStep == 6 ? 'Submit' : 'Next'),
               ),
               const SizedBox(width: 8),
               if (_currentStep > 0)
-                TextButton(onPressed: details.onStepCancel, child: const Text('Back')),
+                TextButton(
+                    onPressed: details.onStepCancel, child: const Text('Back')),
               const Spacer(),
               // removed old Save Draft button,
             ],
@@ -284,8 +311,10 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                 children: [
                   TextFormField(
                     controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Project Name *'),
-                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                    decoration:
+                        const InputDecoration(labelText: 'Project Name *'),
+                    validator: (v) =>
+                        (v == null || v.isEmpty) ? 'Required' : null,
                   ),
                   // State (autocomplete)
                   TypeAheadFormField<String>(
@@ -294,9 +323,11 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                       decoration: const InputDecoration(labelText: 'State *'),
                     ),
                     suggestionsCallback: (pattern) => _stateLgaMap.keys
-                        .where((s) => s.toLowerCase().contains(pattern.toLowerCase()))
+                        .where((s) =>
+                            s.toLowerCase().contains(pattern.toLowerCase()))
                         .toList(),
-                    itemBuilder: (context, suggestion) => ListTile(title: Text(suggestion)),
+                    itemBuilder: (context, suggestion) =>
+                        ListTile(title: Text(suggestion)),
                     onSuggestionSelected: (suggestion) {
                       setState(() {
                         _stateController.text = suggestion;
@@ -305,7 +336,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                         _lgaController.clear();
                       });
                     },
-                    validator: (value) => _selectedState == null ? 'Required' : null,
+                    validator: (value) =>
+                        _selectedState == null ? 'Required' : null,
                   ),
                   const SizedBox(height: 8),
                   // LGA (autocomplete)
@@ -317,24 +349,29 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     suggestionsCallback: (pattern) {
                       if (_selectedState == null) return [];
                       return _stateLgaMap[_selectedState]!
-                          .where((l) => l.toLowerCase().contains(pattern.toLowerCase()))
+                          .where((l) =>
+                              l.toLowerCase().contains(pattern.toLowerCase()))
                           .toList();
                     },
-                    itemBuilder: (context, suggestion) => ListTile(title: Text(suggestion)),
+                    itemBuilder: (context, suggestion) =>
+                        ListTile(title: Text(suggestion)),
                     onSuggestionSelected: (suggestion) {
                       setState(() {
                         _lgaController.text = suggestion;
                         _selectedLga = suggestion;
                       });
                     },
-                    validator: (value) => _selectedLga == null ? 'Required' : null,
+                    validator: (value) =>
+                        _selectedLga == null ? 'Required' : null,
                   ),
                   const SizedBox(height: 8),
                   // Specific Address
                   TextFormField(
                     controller: _addressController,
-                    decoration: const InputDecoration(labelText: 'Specific Address *'),
-                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                    decoration:
+                        const InputDecoration(labelText: 'Specific Address *'),
+                    validator: (v) =>
+                        (v == null || v.isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   // Development Type selector
@@ -346,18 +383,30 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                       return GestureDetector(
                         onTap: () => setState(() => _devType = type),
                         child: Card(
-                          color: selected ? Theme.of(context).primaryColor : Colors.white,
+                          color: selected
+                              ? Theme.of(context).primaryColor
+                              : Colors.white,
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(color: selected ? Theme.of(context).primaryColor : Colors.grey),
+                            side: BorderSide(
+                                color: selected
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.grey),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(_devTypeIcons[type], size: 24, color: selected ? Colors.white : Colors.black),
+                                Icon(_devTypeIcons[type],
+                                    size: 24,
+                                    color:
+                                        selected ? Colors.white : Colors.black),
                                 const SizedBox(height: 4),
-                                Text(type, style: TextStyle(color: selected ? Colors.white : Colors.black)),
+                                Text(type,
+                                    style: TextStyle(
+                                        color: selected
+                                            ? Colors.white
+                                            : Colors.black)),
                               ],
                             ),
                           ),
@@ -386,7 +435,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                               decoration: const InputDecoration(
                                 labelText: 'Phase Names * (comma-separated)',
                               ),
-                              validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                              validator: (v) =>
+                                  (v == null || v.isEmpty) ? 'Required' : null,
                             ),
                           ],
                           const SizedBox(height: 8),
@@ -402,7 +452,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _identifierController,
-                    decoration: const InputDecoration(labelText: 'Identifier (optional)'),
+                    decoration: const InputDecoration(
+                        labelText: 'Identifier (optional)'),
                   ),
                   const SizedBox(height: 8),
                   Card(
@@ -413,13 +464,19 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Project Brochure (optional)', style: Theme.of(context).textTheme.subtitle1),
+                          Text('Project Brochure (optional)',
+                              style: Theme.of(context).textTheme.subtitle1),
                           const SizedBox(height: 4),
-                          ElevatedButton(onPressed: _pickBrochure, child: Text(_brochurePath != null ? 'Change Brochure' : 'Upload Brochure')),
+                          ElevatedButton(
+                              onPressed: _pickBrochure,
+                              child: Text(_brochurePath != null
+                                  ? 'Change Brochure'
+                                  : 'Upload Brochure')),
                           if (_brochurePath != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
-                              child: Text(_brochurePath!.split('/').last, style: const TextStyle(fontSize: 12)),
+                              child: Text(_brochurePath!.split('/').last,
+                                  style: const TextStyle(fontSize: 12)),
                             ),
                           const SizedBox(height: 16),
                           Text(
@@ -445,24 +502,29 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                 children: [
                   TextFormField(
                     controller: _unitsController,
-                    decoration: const InputDecoration(labelText: 'Total Units *'),
+                    decoration:
+                        const InputDecoration(labelText: 'Total Units *'),
                     keyboardType: TextInputType.number,
-                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                    validator: (v) =>
+                        (v == null || v.isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _completionDateController,
-                    decoration: const InputDecoration(labelText: 'Estimated Completion Date'),
+                    decoration: const InputDecoration(
+                        labelText: 'Estimated Completion Date'),
                     readOnly: true,
                     onTap: () async {
                       DateTime? date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 3650)),
+                        lastDate:
+                            DateTime.now().add(const Duration(days: 3650)),
                       );
                       if (date != null) {
-                        _completionDateController.text = DateFormat('yyyy-MM-dd').format(date);
+                        _completionDateController.text =
+                            DateFormat('yyyy-MM-dd').format(date);
                       }
                     },
                   ),
@@ -501,7 +563,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     children: _phaseNames
                         .map((name) => Chip(
                               label: Text(name),
-                              onDeleted: () => setState(() => _phaseNames.remove(name)),
+                              onDeleted: () =>
+                                  setState(() => _phaseNames.remove(name)),
                             ))
                         .toList(),
                   ),
@@ -523,36 +586,44 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     children: [
                       TextFormField(
                         controller: _unitNameController,
-                        decoration: const InputDecoration(labelText: 'Unit Type Name *'),
-                        validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                        decoration: const InputDecoration(
+                            labelText: 'Unit Type Name *'),
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Required' : null,
                       ),
                       TextFormField(
                         controller: _bedroomsController,
-                        decoration: const InputDecoration(labelText: 'Bedrooms'),
+                        decoration:
+                            const InputDecoration(labelText: 'Bedrooms'),
                         keyboardType: TextInputType.number,
                       ),
                       TextFormField(
                         controller: _bathroomsController,
-                        decoration: const InputDecoration(labelText: 'Bathrooms'),
+                        decoration:
+                            const InputDecoration(labelText: 'Bathrooms'),
                         keyboardType: TextInputType.number,
                       ),
                       TextFormField(
                         controller: _sqftController,
-                        decoration: const InputDecoration(labelText: 'Square Footage'),
+                        decoration:
+                            const InputDecoration(labelText: 'Square Footage'),
                         keyboardType: TextInputType.number,
                       ),
                       TextFormField(
                         controller: _unitCountController,
-                        decoration: const InputDecoration(labelText: 'Number of Units *'),
+                        decoration: const InputDecoration(
+                            labelText: 'Number of Units *'),
                         keyboardType: TextInputType.number,
-                        validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Required' : null,
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: TextFormField(
                               controller: _priceMinController,
-                              decoration: const InputDecoration(labelText: 'Price Min'),
+                              decoration:
+                                  const InputDecoration(labelText: 'Price Min'),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -560,7 +631,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                           Expanded(
                             child: TextFormField(
                               controller: _priceMaxController,
-                              decoration: const InputDecoration(labelText: 'Price Max'),
+                              decoration:
+                                  const InputDecoration(labelText: 'Price Max'),
                               keyboardType: TextInputType.number,
                             ),
                           ),
@@ -569,16 +641,24 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                       const SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
-                          if (_unitTypeFormKey.currentState?.validate() ?? false) {
+                          if (_unitTypeFormKey.currentState?.validate() ??
+                              false) {
                             setState(() {
                               _unitTypes.add({
                                 'name': _unitNameController.text,
-                                'bedrooms': int.tryParse(_bedroomsController.text) ?? 0,
-                                'bathrooms': int.tryParse(_bathroomsController.text) ?? 0,
+                                'bedrooms':
+                                    int.tryParse(_bedroomsController.text) ?? 0,
+                                'bathrooms':
+                                    int.tryParse(_bathroomsController.text) ??
+                                        0,
                                 'sqft': int.tryParse(_sqftController.text) ?? 0,
                                 'units': int.parse(_unitCountController.text),
-                                'priceMin': double.tryParse(_priceMinController.text) ?? 0,
-                                'priceMax': double.tryParse(_priceMaxController.text) ?? 0,
+                                'priceMin':
+                                    double.tryParse(_priceMinController.text) ??
+                                        0,
+                                'priceMax':
+                                    double.tryParse(_priceMaxController.text) ??
+                                        0,
                               });
                               _unitNameController.clear();
                               _bedroomsController.clear();
@@ -601,16 +681,20 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                   const Text('No unit types added')
                 else
                   Column(
-                    children: _unitTypes.map((ut) => Card(
-                          child: ListTile(
-                            title: Text(ut['name']),
-                            subtitle: Text('${ut['units']} units, ${ut['bedrooms']}BR/${ut['bathrooms']}BA'),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => setState(() => _unitTypes.remove(ut)),
-                            ),
-                          ),
-                        )).toList(),
+                    children: _unitTypes
+                        .map((ut) => Card(
+                              child: ListTile(
+                                title: Text(ut['name']),
+                                subtitle: Text(
+                                    '${ut['units']} units, ${ut['bedrooms']}BR/${ut['bathrooms']}BA'),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () =>
+                                      setState(() => _unitTypes.remove(ut)),
+                                ),
+                              ),
+                            ))
+                        .toList(),
                   ),
               ],
             ),
@@ -632,7 +716,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                   children: _mediaFiles
                       .map((f) => Chip(
                             label: Text(f.name),
-                            onDeleted: () => setState(() => _mediaFiles.remove(f)),
+                            onDeleted: () =>
+                                setState(() => _mediaFiles.remove(f)),
                           ))
                       .toList(),
                 ),
@@ -652,32 +737,42 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                     children: [
                       TextFormField(
                         controller: _downPaymentController,
-                        decoration: const InputDecoration(labelText: 'Down Payment (%) *'),
+                        decoration: const InputDecoration(
+                            labelText: 'Down Payment (%) *'),
                         keyboardType: TextInputType.number,
-                        validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Required' : null,
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _installmentsController,
-                        decoration: const InputDecoration(labelText: 'Installments *'),
+                        decoration:
+                            const InputDecoration(labelText: 'Installments *'),
                         keyboardType: TextInputType.number,
-                        validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Required' : null,
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _interestRateController,
-                        decoration: const InputDecoration(labelText: 'Interest Rate (%)'),
+                        decoration: const InputDecoration(
+                            labelText: 'Interest Rate (%)'),
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
-                          if (_paymentFormKey.currentState?.validate() ?? false) {
+                          if (_paymentFormKey.currentState?.validate() ??
+                              false) {
                             setState(() {
                               _paymentPlans.add({
-                                'downPayment': double.parse(_downPaymentController.text),
-                                'installments': int.parse(_installmentsController.text),
-                                'interestRate': double.tryParse(_interestRateController.text) ?? 0.0,
+                                'downPayment':
+                                    double.parse(_downPaymentController.text),
+                                'installments':
+                                    int.parse(_installmentsController.text),
+                                'interestRate': double.tryParse(
+                                        _interestRateController.text) ??
+                                    0.0,
                               });
                               _downPaymentController.clear();
                               _installmentsController.clear();
@@ -695,16 +790,21 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                   const Text('No payment plans added')
                 else
                   Column(
-                    children: _paymentPlans.map((plan) => Card(
-                          child: ListTile(
-                            title: Text('${plan['downPayment']}% DP, ${plan['installments']} installments'),
-                            subtitle: Text('Interest: ${plan['interestRate']}%'),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () => setState(() => _paymentPlans.remove(plan)),
-                            ),
-                          ),
-                        )).toList(),
+                    children: _paymentPlans
+                        .map((plan) => Card(
+                              child: ListTile(
+                                title: Text(
+                                    '${plan['downPayment']}% DP, ${plan['installments']} installments'),
+                                subtitle:
+                                    Text('Interest: ${plan['interestRate']}%'),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () => setState(
+                                      () => _paymentPlans.remove(plan)),
+                                ),
+                              ),
+                            ))
+                        .toList(),
                   ),
               ],
             ),
@@ -718,20 +818,28 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Project Name: ${_nameController.text}'),
-                  Text('Location: ${_selectedState}, ${_selectedLga}, ${_addressController.text}'),
+                  Text(
+                      'Location: ${_selectedState}, ${_selectedLga}, ${_addressController.text}'),
                   Text('Development Type: $_devType'),
-                  Text('Phases: ${_isMultiPhase ? _phaseNames.join(', ') : 'Single phase'}'),
+                  Text(
+                      'Phases: ${_isMultiPhase ? _phaseNames.join(', ') : 'Single phase'}'),
                   Text('Total Units: ${_unitsController.text}'),
-                  Text('Estimated Completion: ${_completionDateController.text}'),
+                  Text(
+                      'Estimated Completion: ${_completionDateController.text}'),
                   const SizedBox(height: 8),
                   const Text('Unit Types:'),
-                  ..._unitTypes.map((ut) => Text('${ut['name']} (${ut['units']} units)')).toList(),
+                  ..._unitTypes
+                      .map((ut) => Text('${ut['name']} (${ut['units']} units)'))
+                      .toList(),
                   const SizedBox(height: 8),
                   const Text('Media Files:'),
                   ..._mediaFiles.map((f) => Text(f.name)).toList(),
                   const SizedBox(height: 8),
                   const Text('Payment Plans:'),
-                  ..._paymentPlans.map((plan) => Text('${plan['downPayment']}% DP, ${plan['installments']}x at ${plan['interestRate']}%')).toList(),
+                  ..._paymentPlans
+                      .map((plan) => Text(
+                          '${plan['downPayment']}% DP, ${plan['installments']}x at ${plan['interestRate']}%'))
+                      .toList(),
                 ],
               ),
             ),

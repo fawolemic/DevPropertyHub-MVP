@@ -24,20 +24,25 @@ class RegistrationTestPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Reset the provider to ensure we start at step 0
-                final provider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+                final provider =
+                    provider_package.Provider.of<UnifiedRegistrationProvider>(
+                        context,
+                        listen: false);
                 provider.reset();
-                
+
                 // Navigate to the unified registration screen
                 context.go('/unified-register');
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
               child: const Text('Start Unified Registration'),
             ),
             const SizedBox(height: 16),
             // Direct step navigation for testing
-            const Text('Direct Step Navigation (For Testing):', 
+            const Text(
+              'Direct Step Navigation (For Testing):',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -57,11 +62,13 @@ class RegistrationTestPage extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildStepButton(BuildContext context, String label, int step) {
     return OutlinedButton(
       onPressed: () {
-        final provider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+        final provider =
+            provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+                listen: false);
         // Directly set the step for testing
         if (step == 0) {
           provider.reset();

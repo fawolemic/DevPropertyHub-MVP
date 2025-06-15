@@ -4,42 +4,38 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum NetworkQuality {
-  unknown,
-  poor,
-  moderate,
-  good
-}
+enum NetworkQuality { unknown, poor, moderate, good }
 
 class BandwidthProvider with ChangeNotifier {
   bool _isLowBandwidth = false;
   NetworkQuality _networkQuality = NetworkQuality.unknown;
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
-  
+
   bool get isLowBandwidth => _isLowBandwidth;
   NetworkQuality get networkQuality => _networkQuality;
-  
+
   // Initialize bandwidth detection
   Future<void> init() async {
     // First, try to load saved preference
     final prefs = await SharedPreferences.getInstance();
     _isLowBandwidth = prefs.getBool('isLowBandwidth') ?? false;
-    
+
     // If running on web, set up JavaScript interop for better detection
     if (kIsWeb) {
       _setupWebBandwidthDetection();
     }
-    
+
     // Listen for connectivity changes
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectivity);
-    
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectivity);
+
     // Do initial check
     _checkConnectivity();
-    
+
     notifyListeners();
   }
-  
+
   // Set up JavaScript interop for web bandwidth detection
   void _setupWebBandwidthDetection() {
     if (kIsWeb) {
@@ -55,7 +51,7 @@ class BandwidthProvider with ChangeNotifier {
       }
     }
   }
-  
+
   // Simulate bandwidth check on web
   void _simulateWebBandwidthCheck() {
     // In a real app, this would use JavaScript to detect actual bandwidth
@@ -73,7 +69,7 @@ class BandwidthProvider with ChangeNotifier {
         break;
     }
   }
-  
+
   // Check current connectivity status
   Future<void> _checkConnectivity() async {
     ConnectivityResult result;
@@ -84,7 +80,7 @@ class BandwidthProvider with ChangeNotifier {
     }
     return _updateConnectivity(result);
   }
-  
+
   // Update connectivity status
   Future<void> _updateConnectivity(ConnectivityResult result) async {
     if (result == ConnectivityResult.none) {
@@ -92,32 +88,32 @@ class BandwidthProvider with ChangeNotifier {
     } else if (result == ConnectivityResult.mobile) {
       // Mobile connections might be slower, check further if possible
       _updateNetworkQuality(NetworkQuality.moderate);
-    } else if (result == ConnectivityResult.wifi || 
-               result == ConnectivityResult.ethernet) {
+    } else if (result == ConnectivityResult.wifi ||
+        result == ConnectivityResult.ethernet) {
       _updateNetworkQuality(NetworkQuality.good);
     } else {
       _updateNetworkQuality(NetworkQuality.unknown);
     }
   }
-  
+
   // Update network quality and low bandwidth flag
   void _updateNetworkQuality(NetworkQuality quality) async {
     _networkQuality = quality;
-    
+
     // Update low bandwidth mode based on network quality
     final newLowBandwidthState = quality == NetworkQuality.poor;
-    
+
     if (_isLowBandwidth != newLowBandwidthState) {
       _isLowBandwidth = newLowBandwidthState;
-      
+
       // Save preference
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLowBandwidth', _isLowBandwidth);
-      
+
       notifyListeners();
     }
   }
-  
+
   // Manually toggle low bandwidth mode (for testing or user preference)
   void toggleLowBandwidthMode() async {
     _isLowBandwidth = !_isLowBandwidth;
@@ -125,7 +121,7 @@ class BandwidthProvider with ChangeNotifier {
     await prefs.setBool('isLowBandwidth', _isLowBandwidth);
     notifyListeners();
   }
-  
+
   // Set low bandwidth mode to a specific value
   void setLowBandwidth(bool value) async {
     if (_isLowBandwidth != value) {
@@ -135,20 +131,20 @@ class BandwidthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   // Force set low bandwidth mode
   Future<void> setLowBandwidthMode(bool value) async {
     if (_isLowBandwidth != value) {
       _isLowBandwidth = value;
-      
+
       // Save preference
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLowBandwidth', _isLowBandwidth);
-      
+
       notifyListeners();
     }
   }
-  
+
   @override
   void dispose() {
     _connectivitySubscription?.cancel();

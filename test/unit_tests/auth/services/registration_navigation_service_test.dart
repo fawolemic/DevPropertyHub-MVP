@@ -9,41 +9,43 @@ import 'package:devpropertyhub/features/auth/services/registration_navigation_se
 void main() {
   group('RegistrationNavigationService', () {
     late MockNavigatorObserver mockObserver;
-    
+
     setUp(() {
       mockObserver = MockNavigatorObserver();
     });
-    
-    testWidgets('navigates to email verification for all user types', (WidgetTester tester) async {
+
+    testWidgets('navigates to email verification for all user types',
+        (WidgetTester tester) async {
       // Test developer flow
       await _testEmailVerificationNavigation(
-        tester, 
-        mockObserver, 
+        tester,
+        mockObserver,
         UserTypes.developer,
         'dev@test.com',
         'Dev User',
       );
-      
+
       // Test buyer flow
       await _testEmailVerificationNavigation(
-        tester, 
-        mockObserver, 
+        tester,
+        mockObserver,
         UserTypes.buyer,
         'buyer@test.com',
         'Buyer User',
       );
-      
+
       // Test agent flow
       await _testEmailVerificationNavigation(
-        tester, 
-        mockObserver, 
+        tester,
+        mockObserver,
         UserTypes.agent,
         'agent@test.com',
         'Agent User',
       );
     });
-    
-    testWidgets('navigates directly to subscription selection for developers', (WidgetTester tester) async {
+
+    testWidgets('navigates directly to subscription selection for developers',
+        (WidgetTester tester) async {
       // Build our test widget
       await tester.pumpWidget(
         MaterialApp(
@@ -54,7 +56,8 @@ void main() {
                 body: Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      RegistrationNavigationService.navigateToSubscriptionSelection(
+                      RegistrationNavigationService
+                          .navigateToSubscriptionSelection(
                         context: context,
                       );
                     },
@@ -66,17 +69,18 @@ void main() {
           ),
         ),
       );
-      
+
       // Tap the navigate button
       await tester.tap(find.text('Navigate'));
       await tester.pumpAndSettle();
-      
+
       // Verify that we navigated to SubscriptionSelectionScreen
       verify(mockObserver.didPush(any, any));
       expect(find.byType(SubscriptionSelectionScreen), findsOneWidget);
     });
-    
-    testWidgets('navigates directly to approval status for agents', (WidgetTester tester) async {
+
+    testWidgets('navigates directly to approval status for agents',
+        (WidgetTester tester) async {
       // Build our test widget
       await tester.pumpWidget(
         MaterialApp(
@@ -100,11 +104,11 @@ void main() {
           ),
         ),
       );
-      
+
       // Tap the navigate button
       await tester.tap(find.text('Navigate'));
       await tester.pumpAndSettle();
-      
+
       // Verify that we navigated to ApprovalStatusScreen
       verify(mockObserver.didPush(any, any));
       expect(find.byType(ApprovalStatusScreen), findsOneWidget);
@@ -131,7 +135,8 @@ Future<void> _testEmailVerificationNavigation(
             body: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  RegistrationNavigationService.navigateToPostRegistrationScreen(
+                  RegistrationNavigationService
+                      .navigateToPostRegistrationScreen(
                     context: context,
                     userType: userType,
                     email: email,
@@ -146,11 +151,11 @@ Future<void> _testEmailVerificationNavigation(
       ),
     ),
   );
-  
+
   // Tap the navigate button
   await tester.tap(find.text('Navigate'));
   await tester.pumpAndSettle();
-  
+
   // Verify that we navigated to EmailVerificationScreen
   verify(mockObserver.didPush(any, any));
   expect(find.byType(EmailVerificationScreen), findsOneWidget);

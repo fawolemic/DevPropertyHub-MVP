@@ -16,13 +16,13 @@ class Step2BasicInfoScreen extends StatefulWidget {
 
 class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptTerms = false;
@@ -44,9 +44,11 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step2Data;
-    
+
     if (savedData.isNotEmpty) {
       _fullNameController.text = savedData['fullName'] ?? '';
       _emailController.text = savedData['email'] ?? '';
@@ -58,7 +60,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
       });
     }
   }
-  
+
   void _submitStep() {
     if (_formKey.currentState!.validate()) {
       // Check if passwords match
@@ -68,25 +70,27 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
         );
         return;
       }
-      
+
       // Check if terms are accepted
       if (!_acceptTerms) {
         setState(() {}); // Refresh to show error text in terms checkbox
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You must accept the terms and conditions')),
+          const SnackBar(
+              content: Text('You must accept the terms and conditions')),
         );
         return;
       }
-      
+
       // Check password strength as a final validation
-      final passwordStrength = PasswordValidator.calculateStrength(_passwordController.text);
+      final passwordStrength =
+          PasswordValidator.calculateStrength(_passwordController.text);
       if (passwordStrength < 3) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please create a stronger password')),
         );
         return;
       }
-      
+
       final data = {
         'fullName': _fullNameController.text.trim(),
         'email': _emailController.text.trim(),
@@ -95,8 +99,10 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
         'confirmPassword': _confirmPasswordController.text,
         'acceptTerms': _acceptTerms,
       };
-      
-      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+
+      final registrationProvider =
+          provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+              listen: false);
       registrationProvider.nextStep(data);
     }
   }
@@ -104,10 +110,12 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     String userTypeLabel = '';
     switch (registrationProvider.userType) {
       case UserType.developer:
@@ -122,7 +130,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
       default:
         userTypeLabel = '';
     }
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -132,8 +140,9 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -149,15 +158,15 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      userTypeLabel.isNotEmpty 
-                          ? 'Complete your $userTypeLabel account details' 
+                      userTypeLabel.isNotEmpty
+                          ? 'Complete your $userTypeLabel account details'
                           : 'Complete your account details',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Full Name
                     TextFormField(
                       controller: _fullNameController,
@@ -180,7 +189,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Email
                     TextFormField(
                       controller: _emailController,
@@ -198,14 +207,15 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
-                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(value)) {
+                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
+                            .hasMatch(value)) {
                           return 'Please enter a valid email address';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Phone
                     TextFormField(
                       controller: _phoneController,
@@ -231,7 +241,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Password
                     TextFormField(
                       controller: _passwordController,
@@ -241,7 +251,9 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
@@ -266,14 +278,15 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                     // Password strength indicator
                     if (_passwordController.text.isNotEmpty)
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 12.0, right: 12.0),
+                        padding: const EdgeInsets.only(
+                            top: 8.0, left: 12.0, right: 12.0),
                         child: PasswordStrengthIndicator(
                           password: _passwordController.text,
                         ),
                       ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     // Confirm Password
                     TextFormField(
                       controller: _confirmPasswordController,
@@ -283,11 +296,14 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -307,7 +323,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Terms and conditions checkbox
                     TermsAndConditionsCheckbox(
                       value: _acceptTerms,
@@ -316,10 +332,12 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                           _acceptTerms = value ?? false;
                         });
                       },
-                      errorText: !_acceptTerms ? 'You must accept the terms and conditions to continue' : null,
+                      errorText: !_acceptTerms
+                          ? 'You must accept the terms and conditions to continue'
+                          : null,
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Navigation buttons
                     Row(
                       children: [
@@ -331,16 +349,19 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                                   registrationProvider.previousStep();
                                 },
                           style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                           ),
                           child: const Text('Back'),
                         ),
                         const SizedBox(width: 16),
-                        
+
                         // Continue button
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: registrationProvider.isLoading ? null : _submitStep,
+                            onPressed: registrationProvider.isLoading
+                                ? null
+                                : _submitStep,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                             ),
@@ -355,7 +376,7 @@ class _Step2BasicInfoScreenState extends State<Step2BasicInfoScreen> {
                         ),
                       ],
                     ),
-                    
+
                     if (registrationProvider.errorMessage != null) ...[
                       const SizedBox(height: 16),
                       Text(

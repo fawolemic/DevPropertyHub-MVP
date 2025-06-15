@@ -1,8 +1,8 @@
 /// Home Widgets Library
-/// 
+///
 /// This library exports all widget components used in the home feature.
 /// Import this file to access all home-related widgets in a single import.
-/// 
+///
 /// SEARCH TAGS: #home #widgets #components #exports
 library home_widgets;
 

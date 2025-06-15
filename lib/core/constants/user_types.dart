@@ -8,7 +8,7 @@ class UserTypes {
   static const String developer = 'developer';
   static const String buyer = 'buyer';
   static const String agent = 'agent';
-  
+
   // Prevent instantiation
   UserTypes._();
 }

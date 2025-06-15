@@ -3,11 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// CTASection
-/// 
+///
 /// Call-to-action section displayed on the home page.
 /// Contains: Background with gradient, headline, and prominent "Get Started" button.
 /// Uses direct URL link to unified registration HTML page.
-/// 
+///
 /// SEARCH TAGS: #cta #call-to-action #get-started #registration
 class CTASection extends StatelessWidget {
   const CTASection({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class CTASection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       padding: const EdgeInsets.all(32),

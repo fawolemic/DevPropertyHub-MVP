@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../models/stat_item.dart';
 
 /// StatsSection
-/// 
+///
 /// Displays key statistics and metrics about the platform.
 /// Contains: Animated counters with labels in a responsive grid layout.
-/// 
+///
 /// SEARCH TAGS: #stats #metrics #counters #platform-statistics
 class StatsSection extends StatelessWidget {
   final List<StatItem> stats;
@@ -19,10 +19,11 @@ class StatsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Responsive layout adjustments
-    final int crossAxisCount = screenWidth > 1100 ? 4 : (screenWidth > 700 ? 2 : 1);
-    
+    final int crossAxisCount =
+        screenWidth > 1100 ? 4 : (screenWidth > 700 ? 2 : 1);
+
     return Container(
       color: theme.colorScheme.primaryContainer.withOpacity(0.1),
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),

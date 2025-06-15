@@ -6,14 +6,14 @@ import '../../../../../core/providers/auth_provider.dart';
 import '../../../../../core/utils/responsive_utils.dart';
 
 /// PaymentScreen
-/// 
+///
 /// Screen for processing payments for subscription plans.
 /// Handles payment method selection, card details, and checkout.
-/// 
+///
 /// SEARCH TAGS: #payment #checkout #subscription #billing
 class PaymentScreen extends StatefulWidget {
   final String selectedPlan;
-  
+
   const PaymentScreen({
     Key? key,
     required this.selectedPlan,
@@ -30,7 +30,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   final _expiryDateController = TextEditingController();
   final _cvvController = TextEditingController();
   bool _isProcessing = false;
-  
+
   // Get plan details based on the selected plan ID
   Map<String, dynamic> get _planDetails {
     final Map<String, Map<String, dynamic>> plans = {
@@ -50,11 +50,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         'amount': 250000,
       },
     };
-    
+
     // Ensure we return a non-nullable Map by providing a default
     return plans[widget.selectedPlan] ?? plans['premium']!;
   }
-  
+
   @override
   void dispose() {
     _cardNumberController.dispose();
@@ -67,7 +67,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payment'),
@@ -84,10 +84,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 // Order summary
                 Card(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ResponsiveUtils.getResponsiveBorderRadius(context)),
+                    borderRadius: BorderRadius.circular(
+                        ResponsiveUtils.getResponsiveBorderRadius(context)),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12 : 16),
+                    padding: EdgeInsets.all(
+                        ResponsiveUtils.isMobile(context) ? 12 : 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -136,9 +138,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Payment method selection
                 Text(
                   'Payment Method',
@@ -147,7 +149,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Card details form
                 TextFormField(
                   controller: _cardNumberController,
@@ -165,7 +167,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 TextFormField(
                   controller: _cardHolderController,
                   decoration: const InputDecoration(
@@ -181,7 +183,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 Row(
                   children: [
                     Expanded(
@@ -221,9 +223,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Payment button
                 SizedBox(
                   width: double.infinity,
@@ -247,9 +249,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         : Text('Pay ${_planDetails['price']}'),
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Cancel button
                 Center(
                   child: TextButton(
@@ -271,20 +273,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
-  
+
   void _processPayment() {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isProcessing = true;
       });
-      
+
       // Simulate payment processing
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
           setState(() {
             _isProcessing = false;
           });
-          
+
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -292,7 +294,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               behavior: SnackBarBehavior.floating,
             ),
           );
-          
+
           // Navigate to dashboard
           GoRouter.of(context).go('/developments');
         }

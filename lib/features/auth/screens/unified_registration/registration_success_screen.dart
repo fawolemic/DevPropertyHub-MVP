@@ -3,10 +3,10 @@ import 'package:devpropertyhub/core/constants/user_types.dart';
 import 'package:devpropertyhub/features/auth/services/registration_navigation_service.dart';
 
 /// RegistrationSuccessScreen
-/// 
+///
 /// A unified screen shown after successful registration that provides appropriate
 /// next steps based on the user type (developer, buyer, or agent).
-/// 
+///
 /// SEARCH TAGS: #registration #success #onboarding
 class RegistrationSuccessScreen extends StatelessWidget {
   final String userType;
@@ -25,7 +25,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -48,7 +48,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                
+
                 // Success title
                 Text(
                   _getSuccessTitle(),
@@ -58,7 +58,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Success message
                 Text(
                   'Welcome to DevPropertyHub, $fullName! Your account has been created successfully.',
@@ -66,7 +66,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Next steps card
                 Card(
                   elevation: 2,
@@ -85,7 +85,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // List of next steps
                         ..._buildNextSteps(context),
                       ],
@@ -93,7 +93,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Primary action button
                 SizedBox(
                   width: double.infinity,
@@ -108,7 +108,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
                     child: Text(_getPrimaryActionText()),
                   ),
                 ),
-                
+
                 if (_getSecondaryActionText() != null) ...[
                   const SizedBox(height: 16),
                   // Secondary action button
@@ -133,7 +133,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getSuccessTitle() {
     switch (userType) {
       case UserTypes.developer:
@@ -146,11 +146,11 @@ class RegistrationSuccessScreen extends StatelessWidget {
         return 'Registration Complete';
     }
   }
-  
+
   List<Widget> _buildNextSteps(BuildContext context) {
     final theme = Theme.of(context);
     final List<Map<String, dynamic>> steps = [];
-    
+
     // Add steps based on user type
     if (userType == UserTypes.developer) {
       steps.addAll([
@@ -161,7 +161,8 @@ class RegistrationSuccessScreen extends StatelessWidget {
         },
         {
           'title': 'Choose a Subscription',
-          'description': 'Select a subscription plan for your developer account.',
+          'description':
+              'Select a subscription plan for your developer account.',
           'icon': Icons.card_membership,
         },
       ]);
@@ -182,17 +183,19 @@ class RegistrationSuccessScreen extends StatelessWidget {
       steps.addAll([
         {
           'title': 'Verification',
-          'description': 'Verify your email address to begin the approval process.',
+          'description':
+              'Verify your email address to begin the approval process.',
           'icon': Icons.mail_outline,
         },
         {
           'title': 'Application Review',
-          'description': 'Our team will review your application within 2-3 business days.',
+          'description':
+              'Our team will review your application within 2-3 business days.',
           'icon': Icons.rate_review,
         },
       ]);
     }
-    
+
     return steps.map((step) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
@@ -235,7 +238,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
       );
     }).toList();
   }
-  
+
   String _getPrimaryActionText() {
     switch (userType) {
       case UserTypes.developer:
@@ -248,7 +251,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
         return 'Continue';
     }
   }
-  
+
   String? _getSecondaryActionText() {
     switch (userType) {
       case UserTypes.developer:
@@ -261,7 +264,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
         return null;
     }
   }
-  
+
   void _handlePrimaryAction(BuildContext context) {
     // For all user types, primary action is email verification
     RegistrationNavigationService.navigateToPostRegistrationScreen(
@@ -271,7 +274,7 @@ class RegistrationSuccessScreen extends StatelessWidget {
       fullName: fullName,
     );
   }
-  
+
   void _handleSecondaryAction(BuildContext context) {
     switch (userType) {
       case UserTypes.developer:
@@ -283,8 +286,8 @@ class RegistrationSuccessScreen extends StatelessWidget {
       case UserTypes.buyer:
         // Navigate to home/dashboard
         Navigator.pushNamedAndRemoveUntil(
-          context, 
-          '/home', 
+          context,
+          '/home',
           (route) => false,
         );
         break;

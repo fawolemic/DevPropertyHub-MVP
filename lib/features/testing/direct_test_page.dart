@@ -36,7 +36,8 @@ class DirectTestPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
               ),
-              onPressed: () => launchUrl(Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html')),
+              onPressed: () => launchUrl(Uri.parse(
+                  'https://devpropertyhub-mvp.netlify.app/unified-register.html')),
               child: const Text('Go to Unified Registration'),
             ),
             const SizedBox(height: 20),

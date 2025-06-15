@@ -1,8 +1,8 @@
 /// Auth Widgets Library
-/// 
+///
 /// This library exports all widget components used in the authentication feature.
 /// Import this file to access all auth-related widgets in a single import.
-/// 
+///
 /// SEARCH TAGS: #auth #widgets #components #exports
 library auth_widgets;
 

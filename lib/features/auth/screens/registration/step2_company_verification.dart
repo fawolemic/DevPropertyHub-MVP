@@ -8,16 +8,18 @@ class Step2CompanyVerificationScreen extends StatefulWidget {
   const Step2CompanyVerificationScreen({Key? key}) : super(key: key);
 
   @override
-  State<Step2CompanyVerificationScreen> createState() => _Step2CompanyVerificationScreenState();
+  State<Step2CompanyVerificationScreen> createState() =>
+      _Step2CompanyVerificationScreenState();
 }
 
-class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificationScreen> {
+class _Step2CompanyVerificationScreenState
+    extends State<Step2CompanyVerificationScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _rcNumberController = TextEditingController();
   final _businessAddressController = TextEditingController();
   final _yearsInBusinessController = TextEditingController();
-  
+
   String? _selectedFile;
   bool _agreedToTerms = false;
 
@@ -36,13 +38,16 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step2Data;
-    
+
     if (savedData.isNotEmpty) {
       _rcNumberController.text = savedData['rcNumber'] ?? '';
       _businessAddressController.text = savedData['businessAddress'] ?? '';
-      _yearsInBusinessController.text = savedData['yearsInBusiness']?.toString() ?? '';
+      _yearsInBusinessController.text =
+          savedData['yearsInBusiness']?.toString() ?? '';
       _selectedFile = savedData['cacCertificateFileName'];
       _agreedToTerms = savedData['agreedToTerms'] ?? false;
     }
@@ -52,7 +57,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    
+
     if (_selectedFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -62,7 +67,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
       );
       return;
     }
-    
+
     if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -76,13 +81,17 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
     final data = {
       'rcNumber': _rcNumberController.text.trim(),
       'businessAddress': _businessAddressController.text.trim(),
-      'yearsInBusiness': int.tryParse(_yearsInBusinessController.text.trim()) ?? 0,
-      'cacCertificate': 'mock_file_upload',  // In a real app, this would be the file
+      'yearsInBusiness':
+          int.tryParse(_yearsInBusinessController.text.trim()) ?? 0,
+      'cacCertificate':
+          'mock_file_upload', // In a real app, this would be the file
       'cacCertificateFileName': _selectedFile,
       'agreedToTerms': _agreedToTerms,
     };
 
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     await registrationProvider.submitStep2(data);
   }
 
@@ -90,9 +99,10 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
     // In a real app, this would use a file picker plugin
     // For the demo, we'll just simulate file selection
     setState(() {
-      _selectedFile = 'CAC_Certificate_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      _selectedFile =
+          'CAC_Certificate_${DateTime.now().millisecondsSinceEpoch}.pdf';
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('File selected: $_selectedFile'),
@@ -104,9 +114,11 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -117,8 +129,9 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -140,7 +153,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // RC Number field
                     TextFormField(
                       controller: _rcNumberController,
@@ -161,7 +174,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Business Address field
                     TextFormField(
                       controller: _businessAddressController,
@@ -179,7 +192,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Years in Business field
                     TextFormField(
                       controller: _yearsInBusinessController,
@@ -204,7 +217,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // CAC Certificate upload
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -226,11 +239,12 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                           Text(
                             'Upload a scanned copy of your CAC certificate (PDF, JPG, or PNG)',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
                             ),
                           ),
                           const SizedBox(height: 16),
-                          
+
                           // File selection area
                           InkWell(
                             onTap: _selectFile,
@@ -241,7 +255,8 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color: _selectedFile == null
-                                      ? theme.colorScheme.outline.withOpacity(0.5)
+                                      ? theme.colorScheme.outline
+                                          .withOpacity(0.5)
                                       : theme.colorScheme.primary,
                                   width: 1.5,
                                 ),
@@ -262,17 +277,23 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                                     child: _selectedFile == null
                                         ? Text(
                                             'Click to upload your CAC certificate',
-                                            style: theme.textTheme.bodyMedium?.copyWith(
-                                              color: theme.colorScheme.onSurfaceVariant,
+                                            style: theme.textTheme.bodyMedium
+                                                ?.copyWith(
+                                              color: theme
+                                                  .colorScheme.onSurfaceVariant,
                                             ),
                                           )
                                         : Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 _selectedFile!,
-                                                style: theme.textTheme.bodyMedium?.copyWith(
-                                                  color: theme.colorScheme.primary,
+                                                style: theme
+                                                    .textTheme.bodyMedium
+                                                    ?.copyWith(
+                                                  color:
+                                                      theme.colorScheme.primary,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 maxLines: 1,
@@ -280,8 +301,10 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                                               ),
                                               Text(
                                                 'Click to change file',
-                                                style: theme.textTheme.bodySmall?.copyWith(
-                                                  color: theme.colorScheme.onSurfaceVariant,
+                                                style: theme.textTheme.bodySmall
+                                                    ?.copyWith(
+                                                  color: theme.colorScheme
+                                                      .onSurfaceVariant,
                                                 ),
                                               ),
                                             ],
@@ -295,7 +318,7 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Terms and Conditions
                     CheckboxListTile(
                       title: Text(
@@ -307,7 +330,8 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                           // Show terms in a real app
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Terms and Conditions would open here'),
+                              content:
+                                  Text('Terms and Conditions would open here'),
                             ),
                           );
                         },
@@ -334,13 +358,16 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Navigation buttons
                     Row(
                       children: [
                         OutlinedButton(
                           onPressed: () {
-                            final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+                            final registrationProvider =
+                                provider_package.Provider.of<
+                                        RegistrationProvider>(context,
+                                    listen: false);
                             registrationProvider.goToStep(1);
                           },
                           child: const Text('Back'),
@@ -348,8 +375,8 @@ class _Step2CompanyVerificationScreenState extends State<Step2CompanyVerificatio
                         const SizedBox(width: 16),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: registrationProvider.isLoading 
-                                ? null 
+                            onPressed: registrationProvider.isLoading
+                                ? null
                                 : _submitStep2,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 16),

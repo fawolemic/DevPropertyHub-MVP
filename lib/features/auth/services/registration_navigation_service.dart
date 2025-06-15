@@ -79,7 +79,8 @@ class RegistrationNavigationService {
     required String agentName,
   }) {
     // Use GoRouter for navigation
-    GoRouter.of(context).go('/approval-status', extra: {'agentName': agentName});
+    GoRouter.of(context)
+        .go('/approval-status', extra: {'agentName': agentName});
   }
 
   /// Navigate directly to subscription selection for developers

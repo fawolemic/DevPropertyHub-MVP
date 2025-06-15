@@ -6,49 +6,50 @@ import 'package:devpropertyhub/core/services/auth_service.dart';
 import 'package:devpropertyhub/core/models/user_model.dart';
 
 // Generate mocks for the dependencies
-@GenerateMocks([SupabaseClient, GoTrueClient, User, Session, UserResponse, AuthResponse])
+@GenerateMocks(
+    [SupabaseClient, GoTrueClient, User, Session, UserResponse, AuthResponse])
 import 'auth_service_test.mocks.dart';
 
 void main() {
   late AuthService authService;
   late MockSupabaseClient mockClient;
   late MockGoTrueClient mockAuth;
-  
+
   setUp(() {
     mockClient = MockSupabaseClient();
     mockAuth = MockGoTrueClient();
-    
+
     // Initialize the auth service with mocks
     authService = AuthService();
-    
+
     // Use reflection or dependency injection to set the mocked dependencies
     // For now, we'll test the methods independently
   });
-  
+
   group('AuthService Tests', () {
     test('signUp creates user correctly', () async {
       // Setup mock user response
       final mockUser = MockUser();
       when(mockUser.id).thenReturn('user-123');
-      
+
       final mockUserResponse = MockUserResponse();
       when(mockUserResponse.user).thenReturn(mockUser);
-      
+
       final mockAuthResponse = MockAuthResponse();
       when(mockAuthResponse.user).thenReturn(mockUser);
       when(mockAuthResponse.session).thenReturn(MockSession());
-      
+
       // Setup auth mock
       when(mockAuth.signUp(
         email: 'test@example.com',
         password: 'password123',
         data: any,
       )).thenAnswer((_) async => mockAuthResponse);
-      
+
       // Setup database mock
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
       when(mockClient.from('users').insert(any)).thenAnswer((_) async => null);
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.signUp(
@@ -61,25 +62,26 @@ void main() {
         returnsNormally,
       );
     });
-    
+
     test('signIn authenticates user correctly', () async {
       // Setup mock user response
       final mockUser = MockUser();
       when(mockUser.id).thenReturn('user-123');
-      
+
       final mockAuthResponse = MockAuthResponse();
       when(mockAuthResponse.user).thenReturn(mockUser);
       when(mockAuthResponse.session).thenReturn(MockSession());
-      
+
       // Setup auth mock
       when(mockAuth.signInWithPassword(
         email: 'test@example.com',
         password: 'password123',
       )).thenAnswer((_) async => mockAuthResponse);
-      
+
       // Setup database mock for user data retrieval
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
-      when(mockClient.from('users').select()).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').select())
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123'))
           .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123').single())
@@ -91,7 +93,7 @@ void main() {
                 'user_type': 'developer',
                 'created_at': DateTime.now().toIso8601String(),
               });
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.signIn(
@@ -101,16 +103,17 @@ void main() {
         returnsNormally,
       );
     });
-    
+
     test('getCurrentUser returns user data', () async {
       // Setup mock current user
       final mockUser = MockUser();
       when(mockUser.id).thenReturn('user-123');
       when(mockAuth.currentUser).thenReturn(mockUser);
-      
+
       // Setup database mock for user data retrieval
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
-      when(mockClient.from('users').select()).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').select())
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123'))
           .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123').single())
@@ -122,18 +125,19 @@ void main() {
                 'user_type': 'developer',
                 'created_at': DateTime.now().toIso8601String(),
               });
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.getCurrentUser(),
         returnsNormally,
       );
     });
-    
+
     test('updateUserProfile updates user data', () async {
       // Setup database mock for user data retrieval
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
-      when(mockClient.from('users').select()).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').select())
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123'))
           .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select().eq('id', 'user-123').single())
@@ -145,12 +149,13 @@ void main() {
                 'user_type': 'developer',
                 'created_at': DateTime.now().toIso8601String(),
               });
-      
+
       // Setup database mock for user data update
-      when(mockClient.from('users').update(any)).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').update(any))
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').update(any).eq('id', 'user-123'))
           .thenAnswer((_) async => null);
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.updateUserProfile(
@@ -161,36 +166,46 @@ void main() {
         returnsNormally,
       );
     });
-    
+
     test('hasRole checks user role correctly', () async {
       // Setup database mock for user data retrieval
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
-      when(mockClient.from('users').select('user_type')).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').select('user_type'))
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select('user_type').eq('id', 'user-123'))
           .thenReturn(MockPostgrestFilterBuilder());
-      when(mockClient.from('users').select('user_type').eq('id', 'user-123').single())
+      when(mockClient
+              .from('users')
+              .select('user_type')
+              .eq('id', 'user-123')
+              .single())
           .thenAnswer((_) async => {
                 'user_type': 'developer',
               });
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.hasRole('user-123', UserRole.developer),
         returnsNormally,
       );
     });
-    
+
     test('hasPermission checks permissions correctly', () async {
       // Setup database mock for user data retrieval
       when(mockClient.from('users')).thenReturn(MockPostgrestBuilder());
-      when(mockClient.from('users').select('user_type')).thenReturn(MockPostgrestFilterBuilder());
+      when(mockClient.from('users').select('user_type'))
+          .thenReturn(MockPostgrestFilterBuilder());
       when(mockClient.from('users').select('user_type').eq('id', 'user-123'))
           .thenReturn(MockPostgrestFilterBuilder());
-      when(mockClient.from('users').select('user_type').eq('id', 'user-123').single())
+      when(mockClient
+              .from('users')
+              .select('user_type')
+              .eq('id', 'user-123')
+              .single())
           .thenAnswer((_) async => {
                 'user_type': 'developer',
               });
-      
+
       // For now, we'll just test the method signature and error handling
       expect(
         () => authService.hasPermission('user-123', 'properties', 'create'),

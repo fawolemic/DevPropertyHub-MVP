@@ -9,18 +9,19 @@ class Step1PersonalInfoScreen extends StatefulWidget {
   const Step1PersonalInfoScreen({Key? key}) : super(key: key);
 
   @override
-  State<Step1PersonalInfoScreen> createState() => _Step1PersonalInfoScreenState();
+  State<Step1PersonalInfoScreen> createState() =>
+      _Step1PersonalInfoScreenState();
 }
 
 class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _phoneController = TextEditingController();
-  
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -41,9 +42,11 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step1Data;
-    
+
     if (savedData.isNotEmpty) {
       _fullNameController.text = savedData['fullName'] ?? '';
       _emailController.text = savedData['email'] ?? '';
@@ -52,7 +55,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
       _phoneController.text = savedData['phone'] ?? '';
     }
   }
-  
+
   void _submitStep() {
     if (_formKey.currentState!.validate()) {
       // Check if passwords match
@@ -62,15 +65,17 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
         );
         return;
       }
-      
+
       final data = {
         'fullName': _fullNameController.text.trim(),
         'email': _emailController.text.trim(),
         'password': _passwordController.text,
         'phone': _phoneController.text.trim(),
       };
-      
-      final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
+
+      final registrationProvider =
+          provider_package.Provider.of<BuyerRegistrationProvider>(context,
+              listen: false);
       registrationProvider.nextStep(data);
     }
   }
@@ -78,10 +83,12 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -91,8 +98,9 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -114,7 +122,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Full Name
                     TextFormField(
                       controller: _fullNameController,
@@ -137,7 +145,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Email
                     TextFormField(
                       controller: _emailController,
@@ -155,14 +163,15 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
-                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(value)) {
+                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
+                            .hasMatch(value)) {
                           return 'Please enter a valid email address';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Phone
                     TextFormField(
                       controller: _phoneController,
@@ -188,7 +197,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Password
                     TextFormField(
                       controller: _passwordController,
@@ -198,7 +207,9 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
@@ -223,7 +234,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Confirm Password
                     TextFormField(
                       controller: _confirmPasswordController,
@@ -233,11 +244,14 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -257,10 +271,10 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     const Divider(),
                     const SizedBox(height: 24),
-                    
+
                     // Privacy policy acceptance
                     Row(
                       children: [
@@ -274,19 +288,21 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                           child: Text(
                             'By continuing, you agree to our Terms of Service and Privacy Policy',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
                             ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Continue button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: registrationProvider.isLoading ? null : _submitStep,
+                        onPressed:
+                            registrationProvider.isLoading ? null : _submitStep,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
@@ -300,7 +316,7 @@ class _Step1PersonalInfoScreenState extends State<Step1PersonalInfoScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Login link
                     Center(
                       child: TextButton(

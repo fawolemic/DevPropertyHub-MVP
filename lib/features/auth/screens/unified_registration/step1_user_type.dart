@@ -14,7 +14,7 @@ class Step1UserTypeScreen extends StatefulWidget {
 class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
   final _agentInvitationController = TextEditingController();
   bool _showAgentInvitation = false;
-  
+
   @override
   void dispose() {
     _agentInvitationController.dispose();
@@ -22,23 +22,26 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
   }
 
   void _submitStep() {
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+            listen: false);
+
     // If agent is selected but invitation code is empty, show validation error
-    if (registrationProvider.userType == UserType.agent && 
-        (_agentInvitationController.text.isEmpty || _agentInvitationController.text.trim().isEmpty)) {
+    if (registrationProvider.userType == UserType.agent &&
+        (_agentInvitationController.text.isEmpty ||
+            _agentInvitationController.text.trim().isEmpty)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter an invitation code')),
       );
       return;
     }
-    
+
     // If agent is selected, store invitation code
     if (registrationProvider.userType == UserType.agent) {
       final data = {
         'invitationCode': _agentInvitationController.text.trim(),
       };
-      
+
       // In MVP, we just store the code without validation
       registrationProvider.nextStep(data);
     } else {
@@ -50,10 +53,12 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -63,8 +68,9 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -84,14 +90,15 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Developer option
                   _buildRoleCard(
                     context,
                     icon: Icons.business,
                     title: 'Developer',
                     description: 'List and manage properties',
-                    isSelected: registrationProvider.userType == UserType.developer,
+                    isSelected:
+                        registrationProvider.userType == UserType.developer,
                     onTap: () {
                       setState(() {
                         _showAgentInvitation = false;
@@ -100,7 +107,7 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Buyer option
                   _buildRoleCard(
                     context,
@@ -116,7 +123,7 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Agent option
                   _buildRoleCard(
                     context,
@@ -131,7 +138,7 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                       });
                     },
                   ),
-                  
+
                   // Agent invitation code field
                   if (_showAgentInvitation) ...[
                     const SizedBox(height: 16),
@@ -147,14 +154,15 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                       ),
                     ),
                   ],
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Continue button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: registrationProvider.userType == null || registrationProvider.isLoading
+                      onPressed: registrationProvider.userType == null ||
+                              registrationProvider.isLoading
                           ? null
                           : _submitStep,
                       style: ElevatedButton.styleFrom(
@@ -169,7 +177,7 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
                           : const Text('Continue'),
                     ),
                   ),
-                  
+
                   if (registrationProvider.errorMessage != null) ...[
                     const SizedBox(height: 16),
                     Text(
@@ -186,8 +194,9 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
       ),
     );
   }
-  
-  Widget _buildRoleCard(BuildContext context, {
+
+  Widget _buildRoleCard(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String description,
@@ -195,7 +204,7 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -204,7 +213,9 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withOpacity(0.3),
+            color: isSelected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline.withOpacity(0.3),
             width: isSelected ? 2 : 1,
           ),
           color: isSelected ? theme.colorScheme.primary.withOpacity(0.1) : null,
@@ -215,15 +226,21 @@ class _Step1UserTypeScreenState extends State<Step1UserTypeScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: isSelected ? theme.colorScheme.primary.withOpacity(0.2) : theme.colorScheme.surface,
+                color: isSelected
+                    ? theme.colorScheme.primary.withOpacity(0.2)
+                    : theme.colorScheme.surface,
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withOpacity(0.3),
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outline.withOpacity(0.3),
                 ),
               ),
               child: Icon(
                 icon,
-                color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withOpacity(0.7),
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
             const SizedBox(width: 16),

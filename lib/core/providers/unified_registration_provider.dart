@@ -12,7 +12,7 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   // Current step in the registration process
   int _currentStep = 0;
   int get currentStep => _currentStep;
-  
+
   // Maximum number of steps in the registration process
   final int _totalSteps = 3;
   int get totalSteps => _totalSteps;
@@ -24,7 +24,7 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   // Loading state
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  
+
   // Error message
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -33,7 +33,7 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   final Map<String, dynamic> _step1Data = {}; // User Type Selection
   final Map<String, dynamic> _step2Data = {}; // Basic Information
   final Map<String, dynamic> _step3Data = {}; // Role-Specific Information
-  
+
   // Getters for step data
   Map<String, dynamic> get step1Data => Map.unmodifiable(_step1Data);
   Map<String, dynamic> get step2Data => Map.unmodifiable(_step2Data);
@@ -49,7 +49,7 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   // Move to next step, returning true if successful and can proceed
   bool nextStep(Map<String, dynamic> currentStepData) {
     _errorMessage = null;
-    
+
     // Validate current step data
     bool isValid = false;
     switch (_currentStep) {
@@ -99,7 +99,7 @@ class UnifiedRegistrationProvider with ChangeNotifier {
     _step3Data.clear();
     notifyListeners();
   }
-  
+
   // Validation methods
   bool validateStep1Data() {
     // Check if user type is selected
@@ -107,44 +107,52 @@ class UnifiedRegistrationProvider with ChangeNotifier {
       _errorMessage = 'Please select a user type';
       return false;
     }
-    
+
     // For agent, validate invitation code
-    if (_userType == UserType.agent && 
+    if (_userType == UserType.agent &&
         (!_step1Data.containsKey('invitationCode') ||
-         _step1Data['invitationCode'].toString().trim().isEmpty)) {
+            _step1Data['invitationCode'].toString().trim().isEmpty)) {
       _errorMessage = 'Please enter a valid invitation code';
       return false;
     }
-    
+
     return true;
   }
-  
+
   bool validateStep2Data() {
     // Check required fields
-    final requiredFields = ['fullName', 'email', 'phone', 'password', 'confirmPassword'];
-    
+    final requiredFields = [
+      'fullName',
+      'email',
+      'phone',
+      'password',
+      'confirmPassword'
+    ];
+
     for (final field in requiredFields) {
-      if (!_step2Data.containsKey(field) || _step2Data[field].toString().trim().isEmpty) {
+      if (!_step2Data.containsKey(field) ||
+          _step2Data[field].toString().trim().isEmpty) {
         _errorMessage = 'Please fill in all required fields';
         return false;
       }
     }
-    
+
     // Check passwords match
     if (_step2Data['password'] != _step2Data['confirmPassword']) {
       _errorMessage = 'Passwords do not match';
       return false;
     }
-    
+
     // Check terms accepted
-    if (!_step2Data.containsKey('acceptTerms') || _step2Data['acceptTerms'] != true) {
+    if (!_step2Data.containsKey('acceptTerms') ||
+        _step2Data['acceptTerms'] != true) {
       _errorMessage = 'You must accept the terms and conditions';
       return false;
     }
-    
+
     return true;
   }
-  
+
   bool validateStep3Data() {
     // Different validation based on user type
     switch (_userType) {
@@ -159,96 +167,110 @@ class UnifiedRegistrationProvider with ChangeNotifier {
         return false;
     }
   }
-  
+
   bool validateDeveloperData() {
     // Check required fields for developers
-    final requiredFields = ['companyName', 'businessAddress', 'rcNumber', 'yearsInBusiness'];
-    
+    final requiredFields = [
+      'companyName',
+      'businessAddress',
+      'rcNumber',
+      'yearsInBusiness'
+    ];
+
     for (final field in requiredFields) {
-      if (!_step3Data.containsKey(field) || _step3Data[field].toString().trim().isEmpty) {
+      if (!_step3Data.containsKey(field) ||
+          _step3Data[field].toString().trim().isEmpty) {
         _errorMessage = 'Please fill in all required fields';
         return false;
       }
     }
-    
+
     // CAC certificate upload is now optional
     // Log the state for debugging purposes
     bool hasUploadedCertificate = _step3Data['hasUploadedCertificate'] == true;
-    bool hasCacPath = _step3Data.containsKey('cacCertificatePath') && 
-                     _step3Data['cacCertificatePath'] != null && 
-                     _step3Data['cacCertificatePath'].toString().isNotEmpty;
-    
-    debugPrint('CAC certificate state: hasUploadedCertificate=$hasUploadedCertificate, hasCacPath=$hasCacPath');
+    bool hasCacPath = _step3Data.containsKey('cacCertificatePath') &&
+        _step3Data['cacCertificatePath'] != null &&
+        _step3Data['cacCertificatePath'].toString().isNotEmpty;
+
+    debugPrint(
+        'CAC certificate state: hasUploadedCertificate=$hasUploadedCertificate, hasCacPath=$hasCacPath');
     debugPrint('Current step3Data: $_step3Data');
-    
+
     // Always return true since this is now optional
     return true;
   }
-  
+
   bool validateBuyerData() {
     // Check required fields for buyers
-    if (!_step3Data.containsKey('propertyTypes') || 
+    if (!_step3Data.containsKey('propertyTypes') ||
         (_step3Data['propertyTypes'] as List<dynamic>).isEmpty) {
       _errorMessage = 'Please select at least one property type';
       return false;
     }
-    
-    if (!_step3Data.containsKey('preferredLocations') || 
+
+    if (!_step3Data.containsKey('preferredLocations') ||
         (_step3Data['preferredLocations'] as List<dynamic>).isEmpty) {
       _errorMessage = 'Please select at least one preferred location';
       return false;
     }
-    
-    if (!_step3Data.containsKey('budgetRange') || 
+
+    if (!_step3Data.containsKey('budgetRange') ||
         _step3Data['budgetRange'].toString().trim().isEmpty) {
       _errorMessage = 'Please select a budget range';
       return false;
     }
-    
+
     return true;
   }
-  
+
   bool validateAgentData() {
     // Debug print to help diagnose issues
     debugPrint('Validating agent data: $_step3Data');
-    
+
     // Check required fields for agents
-    final requiredFields = ['invitationCode', 'licenseNumber', 'yearsOfExperience'];
-    
+    final requiredFields = [
+      'invitationCode',
+      'licenseNumber',
+      'yearsOfExperience'
+    ];
+
     for (final field in requiredFields) {
-      if (!_step3Data.containsKey(field) || _step3Data[field].toString().trim().isEmpty) {
+      if (!_step3Data.containsKey(field) ||
+          _step3Data[field].toString().trim().isEmpty) {
         _errorMessage = 'Please fill in all required fields';
         debugPrint('Missing required field: $field');
         return false;
       }
     }
-    
+
     // Check specializations
-    if (!_step3Data.containsKey('specializations') || 
+    if (!_step3Data.containsKey('specializations') ||
         (_step3Data['specializations'] as List<dynamic>).isEmpty) {
       _errorMessage = 'Please select at least one specialization area';
       debugPrint('No specializations selected');
       return false;
     }
-    
+
     // Check license document upload - check all possible flags for maximum compatibility
     bool hasUploadedLicense = _step3Data['hasUploadedLicenseDocument'] == true;
-    bool hasLicensePath = _step3Data.containsKey('licenseDocumentPath') && 
-                        _step3Data['licenseDocumentPath'] != null && 
-                        _step3Data['licenseDocumentPath'].toString().isNotEmpty;
-    
+    bool hasLicensePath = _step3Data.containsKey('licenseDocumentPath') &&
+        _step3Data['licenseDocumentPath'] != null &&
+        _step3Data['licenseDocumentPath'].toString().isNotEmpty;
+
     // Detailed debug output
     debugPrint('License document validation check:');
     debugPrint('- hasUploadedLicenseDocument flag: $hasUploadedLicense');
-    debugPrint('- licenseDocumentPath exists: ${_step3Data.containsKey('licenseDocumentPath')}');
-    debugPrint('- licenseDocumentPath value: ${_step3Data['licenseDocumentPath']}');
-    
+    debugPrint(
+        '- licenseDocumentPath exists: ${_step3Data.containsKey('licenseDocumentPath')}');
+    debugPrint(
+        '- licenseDocumentPath value: ${_step3Data['licenseDocumentPath']}');
+
     if (!hasUploadedLicense && !hasLicensePath) {
       _errorMessage = 'Please upload your license document';
       debugPrint('License document validation failed: document not uploaded');
       return false;
     }
-    
+
     debugPrint('Agent data validation successful');
     return true;
   }
@@ -256,17 +278,19 @@ class UnifiedRegistrationProvider with ChangeNotifier {
   // Method to set CAC certificate upload state
   void setCacCertificateUploaded(String? filePath) {
     _step3Data['cacCertificatePath'] = filePath;
-    _step3Data['hasUploadedCertificate'] = filePath != null && filePath.isNotEmpty;
+    _step3Data['hasUploadedCertificate'] =
+        filePath != null && filePath.isNotEmpty;
     notifyListeners();
   }
 
   // Method to set license document upload state for agents
   void setLicenseDocumentUploaded(String? filePath) {
     _step3Data['licenseDocumentPath'] = filePath;
-    _step3Data['hasUploadedLicenseDocument'] = filePath != null && filePath.isNotEmpty;
+    _step3Data['hasUploadedLicenseDocument'] =
+        filePath != null && filePath.isNotEmpty;
     notifyListeners();
   }
-  
+
   // Submit registration to backend
   Future<void> submitRegistration() async {
     _isLoading = true;
@@ -285,17 +309,17 @@ class UnifiedRegistrationProvider with ChangeNotifier {
         ..._step2Data,
         ..._step3Data,
       };
-      
+
       // Log data (for development purposes)
       debugPrint('Registration data: $registrationData');
-      
+
       // In actual implementation, send data to backend:
       // final response = await http.post(
       //   Uri.parse('https://api.devpropertyhub.com/register'),
       //   headers: {'Content-Type': 'application/json'},
       //   body: jsonEncode(registrationData),
       // );
-      // 
+      //
       // if (response.statusCode != 200) {
       //   throw Exception('Failed to register: ${response.body}');
       // }

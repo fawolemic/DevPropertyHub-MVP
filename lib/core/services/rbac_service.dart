@@ -40,24 +40,25 @@ class RBACService {
   Future<bool> hasPermission(String resource, String action) async {
     final userId = _authProvider.currentUser?.id;
     if (userId == null) return false;
-    
+
     final cacheKey = '$userId:$resource:$action';
-    
+
     // Check cache first
     if (_permissionsCache.containsKey(cacheKey)) {
       final timestamp = _cacheTimestamps[cacheKey];
-      if (timestamp != null && DateTime.now().difference(timestamp) < _cacheDuration) {
+      if (timestamp != null &&
+          DateTime.now().difference(timestamp) < _cacheDuration) {
         return _permissionsCache[cacheKey]?[action] ?? false;
       }
     }
-    
+
     // If not in cache or cache expired, check with auth provider
     final hasPermission = await _authProvider.hasPermission(resource, action);
-    
+
     // Update cache
     _permissionsCache[cacheKey] = {action: hasPermission};
     _cacheTimestamps[cacheKey] = DateTime.now();
-    
+
     return hasPermission;
   }
 
@@ -81,43 +82,51 @@ class RBACService {
   Future<bool> canUpdate(String resource, String resourceId) async {
     final userId = _authProvider.currentUser?.id;
     if (userId == null) return false;
-    
+
     // Explicit deny for viewers - they can never update
     if (_authProvider.isViewer) {
-      await _logDeniedAccess(userId, resource, resourceId, 'update', 'Viewers cannot update resources');
+      await _logDeniedAccess(userId, resource, resourceId, 'update',
+          'Viewers cannot update resources');
       return false;
     }
-    
+
     // Explicit deny for buyers - they can never update properties or developments
-    if (_authProvider.isBuyer && (resource == 'properties' || resource == 'developments')) {
-      await _logDeniedAccess(userId, resource, resourceId, 'update', 'Buyers cannot update properties or developments');
+    if (_authProvider.isBuyer &&
+        (resource == 'properties' || resource == 'developments')) {
+      await _logDeniedAccess(userId, resource, resourceId, 'update',
+          'Buyers cannot update properties or developments');
       return false;
     }
-    
+
     // First check if user has general update permission
-    final hasUpdatePermission = await _authProvider.hasPermission(resource, 'update');
-    
+    final hasUpdatePermission =
+        await _authProvider.hasPermission(resource, 'update');
+
     // If not, check if they're the owner (developers can update their own resources)
     if (!hasUpdatePermission && _authProvider.isDeveloper) {
       final isOwner = await _authProvider.isResourceOwner(resource, resourceId);
-      
+
       // Log the access attempt
       if (isOwner) {
-        await _logPermittedAccess(userId, resource, resourceId, 'update', 'Developer owns resource');
+        await _logPermittedAccess(
+            userId, resource, resourceId, 'update', 'Developer owns resource');
       } else {
-        await _logDeniedAccess(userId, resource, resourceId, 'update', 'Developer does not own resource');
+        await _logDeniedAccess(userId, resource, resourceId, 'update',
+            'Developer does not own resource');
       }
-      
+
       return isOwner;
     }
-    
+
     // Log the access attempt
     if (hasUpdatePermission) {
-      await _logPermittedAccess(userId, resource, resourceId, 'update', 'User has update permission');
+      await _logPermittedAccess(
+          userId, resource, resourceId, 'update', 'User has update permission');
     } else {
-      await _logDeniedAccess(userId, resource, resourceId, 'update', 'User lacks update permission');
+      await _logDeniedAccess(userId, resource, resourceId, 'update',
+          'User lacks update permission');
     }
-    
+
     return hasUpdatePermission;
   }
 
@@ -126,48 +135,57 @@ class RBACService {
   Future<bool> canDelete(String resource, String resourceId) async {
     final userId = _authProvider.currentUser?.id;
     if (userId == null) return false;
-    
+
     // Explicit deny for viewers - they can never delete
     if (_authProvider.isViewer) {
-      await _logDeniedAccess(userId, resource, resourceId, 'delete', 'Viewers cannot delete resources');
+      await _logDeniedAccess(userId, resource, resourceId, 'delete',
+          'Viewers cannot delete resources');
       return false;
     }
-    
+
     // Explicit deny for buyers - they can never delete properties or developments
-    if (_authProvider.isBuyer && (resource == 'properties' || resource == 'developments')) {
-      await _logDeniedAccess(userId, resource, resourceId, 'delete', 'Buyers cannot delete properties or developments');
+    if (_authProvider.isBuyer &&
+        (resource == 'properties' || resource == 'developments')) {
+      await _logDeniedAccess(userId, resource, resourceId, 'delete',
+          'Buyers cannot delete properties or developments');
       return false;
     }
-    
+
     // First check if user has general delete permission
-    final hasDeletePermission = await _authProvider.hasPermission(resource, 'delete');
-    
+    final hasDeletePermission =
+        await _authProvider.hasPermission(resource, 'delete');
+
     // If not, check if they're the owner (developers can delete their own resources)
     if (!hasDeletePermission && _authProvider.isDeveloper) {
       final isOwner = await _authProvider.isResourceOwner(resource, resourceId);
-      
+
       // Log the access attempt
       if (isOwner) {
-        await _logPermittedAccess(userId, resource, resourceId, 'delete', 'Developer owns resource');
+        await _logPermittedAccess(
+            userId, resource, resourceId, 'delete', 'Developer owns resource');
       } else {
-        await _logDeniedAccess(userId, resource, resourceId, 'delete', 'Developer does not own resource');
+        await _logDeniedAccess(userId, resource, resourceId, 'delete',
+            'Developer does not own resource');
       }
-      
+
       return isOwner;
     }
-    
+
     // Log the access attempt
     if (hasDeletePermission) {
-      await _logPermittedAccess(userId, resource, resourceId, 'delete', 'User has delete permission');
+      await _logPermittedAccess(
+          userId, resource, resourceId, 'delete', 'User has delete permission');
     } else {
-      await _logDeniedAccess(userId, resource, resourceId, 'delete', 'User lacks delete permission');
+      await _logDeniedAccess(userId, resource, resourceId, 'delete',
+          'User lacks delete permission');
     }
-    
+
     return hasDeletePermission;
   }
-  
+
   /// Log permitted access to audit logs
-  Future<void> _logPermittedAccess(String userId, String resource, String resourceId, String action, String reason) async {
+  Future<void> _logPermittedAccess(String userId, String resource,
+      String resourceId, String action, String reason) async {
     try {
       await _auditService.logAction(
         userId: userId,
@@ -183,9 +201,10 @@ class RBACService {
       debugPrint('Error logging permitted access: $e');
     }
   }
-  
+
   /// Log denied access to audit logs
-  Future<void> _logDeniedAccess(String userId, String resource, String resourceId, String action, String reason) async {
+  Future<void> _logDeniedAccess(String userId, String resource,
+      String resourceId, String action, String reason) async {
     try {
       await _auditService.logAction(
         userId: userId,

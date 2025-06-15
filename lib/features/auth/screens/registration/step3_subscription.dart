@@ -8,12 +8,13 @@ class Step3SubscriptionScreen extends StatefulWidget {
   const Step3SubscriptionScreen({Key? key}) : super(key: key);
 
   @override
-  State<Step3SubscriptionScreen> createState() => _Step3SubscriptionScreenState();
+  State<Step3SubscriptionScreen> createState() =>
+      _Step3SubscriptionScreenState();
 }
 
 class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   String _selectedPlan = 'basic';
   String _selectedPaymentMethod = '';
   String _selectedBillingCycle = 'monthly';
@@ -26,9 +27,11 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step3Data;
-    
+
     if (savedData.isNotEmpty) {
       setState(() {
         _selectedPlan = savedData['subscriptionPlan'] ?? 'basic';
@@ -43,7 +46,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    
+
     if (_selectedPaymentMethod.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -60,16 +63,20 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
       'billingCycle': _isAnnualBilling ? 'annual' : 'monthly',
     };
 
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     await registrationProvider.submitStep3(data);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -85,8 +92,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                   elevation: isLowBandwidth ? 0 : 1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: isLowBandwidth 
-                        ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                    side: isLowBandwidth
+                        ? BorderSide(
+                            color: theme.colorScheme.outline.withOpacity(0.5))
                         : BorderSide.none,
                   ),
                   child: Padding(
@@ -106,7 +114,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Billing cycle toggle
                         SwitchListTile(
                           title: Text(
@@ -123,28 +131,30 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                           onChanged: (value) {
                             setState(() {
                               _isAnnualBilling = value;
-                              _selectedBillingCycle = value ? 'annual' : 'monthly';
+                              _selectedBillingCycle =
+                                  value ? 'annual' : 'monthly';
                             });
                           },
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Subscription plans
                         _buildSubscriptionPlanCards(theme, isLowBandwidth),
                       ],
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Payment Methods
                 Card(
                   elevation: isLowBandwidth ? 0 : 1,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: isLowBandwidth 
-                        ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                    side: isLowBandwidth
+                        ? BorderSide(
+                            color: theme.colorScheme.outline.withOpacity(0.5))
                         : BorderSide.none,
                   ),
                   child: Padding(
@@ -164,22 +174,25 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Payment method options
                         _buildPaymentMethodOptions(theme, isLowBandwidth),
                       ],
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Navigation buttons
                 Row(
                   children: [
                     OutlinedButton(
                       onPressed: () {
-                        final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+                        final registrationProvider =
+                            provider_package.Provider.of<RegistrationProvider>(
+                                context,
+                                listen: false);
                         registrationProvider.goToStep(2);
                       },
                       child: const Text('Back'),
@@ -187,8 +200,8 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: registrationProvider.isLoading 
-                            ? null 
+                        onPressed: registrationProvider.isLoading
+                            ? null
                             : _submitStep3,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -236,9 +249,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
             'No premium placement',
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Premium Plan
         _buildPlanCard(
           theme: theme,
@@ -257,9 +270,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
             'Featured listings',
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Enterprise Plan
         _buildPlanCard(
           theme: theme,
@@ -297,7 +310,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
     final isSelected = _selectedPlan == planId;
     final displayPrice = _isAnnualBilling ? annualPrice : monthlyPrice;
     final billingPeriod = _isAnnualBilling ? '/year' : '/month';
-    
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -306,8 +319,8 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(
-              color: isSelected 
-                  ? color 
+              color: isSelected
+                  ? color
                   : theme.colorScheme.outline.withOpacity(0.5),
               width: isSelected ? 2 : 1,
             ),
@@ -347,7 +360,7 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Price display
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -366,56 +379,57 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Features list
                   ...features.map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.check_circle_outline,
-                          color: theme.colorScheme.primary,
-                          size: 20,
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: theme.colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(feature),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(feature),
-                        ),
-                      ],
-                    ),
-                  )),
-                  
+                      )),
+
                   // Limitations list
                   if (limitations != null && limitations.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     ...limitations.map((limitation) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.cancel_outlined,
-                            color: theme.colorScheme.error,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              limitation,
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.cancel_outlined,
+                                color: theme.colorScheme.error,
+                                size: 20,
                               ),
-                            ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  limitation,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.7),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )),
+                        )),
                   ],
                 ],
               ),
             ),
           ),
         ),
-        
+
         // Recommended badge
         if (isRecommended)
           Positioned(
@@ -452,9 +466,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
           icon: Icons.account_balance_outlined,
           description: 'Transfer funds from your bank account',
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Payment method option - Card Payment
         _buildPaymentMethodCard(
           theme: theme,
@@ -464,9 +478,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
           icon: Icons.credit_card_outlined,
           description: 'Pay with your debit or credit card',
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Payment method option - Mobile Money
         _buildPaymentMethodCard(
           theme: theme,
@@ -489,13 +503,13 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
     required String description,
   }) {
     final isSelected = _selectedPaymentMethod == methodId;
-    
+
     return Card(
       elevation: isLowBandwidth ? 0 : (isSelected ? 2 : 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isSelected 
+          color: isSelected
               ? theme.colorScheme.primary
               : theme.colorScheme.outline.withOpacity(0.5),
           width: isSelected ? 2 : 1,
@@ -524,7 +538,9 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
               const SizedBox(width: 8),
               Icon(
                 icon,
-                color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface,
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface,
                 size: 28,
               ),
               const SizedBox(width: 16),
@@ -535,7 +551,8 @@ class _Step3SubscriptionScreenState extends State<Step3SubscriptionScreen> {
                     Text(
                       methodName,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
                     const SizedBox(height: 4),

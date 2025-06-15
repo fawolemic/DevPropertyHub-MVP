@@ -39,10 +39,9 @@ class Project {
     this.estimatedCompletionDate,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) : 
-    this.createdAt = createdAt ?? DateTime.now(),
-    this.updatedAt = updatedAt ?? DateTime.now();
-    
+  })  : this.createdAt = createdAt ?? DateTime.now(),
+        this.updatedAt = updatedAt ?? DateTime.now();
+
   // Convenience getter for location display
   String get location {
     if (locationAddress != null && locationAddress!.isNotEmpty) {
@@ -61,12 +60,12 @@ class Project {
       locationState: json['location_state'],
       locationLga: json['location_lga'],
       locationAddress: json['location_address'],
-      coordinates: json['coordinates'] != null 
-        ? {
-            'latitude': json['coordinates']['latitude'],
-            'longitude': json['coordinates']['longitude'],
-          }
-        : null,
+      coordinates: json['coordinates'] != null
+          ? {
+              'latitude': json['coordinates']['latitude'],
+              'longitude': json['coordinates']['longitude'],
+            }
+          : null,
       projectType: ProjectType.values.firstWhere(
         (type) => type.toString().split('.').last == json['project_type'],
         orElse: () => ProjectType.residential,
@@ -78,8 +77,8 @@ class Project {
       totalUnits: json['total_units'],
       totalPhases: json['total_phases'] ?? 1,
       estimatedCompletionDate: json['estimated_completion_date'] != null
-        ? DateTime.parse(json['estimated_completion_date'])
-        : null,
+          ? DateTime.parse(json['estimated_completion_date'])
+          : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -138,7 +137,8 @@ class Project {
       status: status ?? this.status,
       totalUnits: totalUnits ?? this.totalUnits,
       totalPhases: totalPhases ?? this.totalPhases,
-      estimatedCompletionDate: estimatedCompletionDate ?? this.estimatedCompletionDate,
+      estimatedCompletionDate:
+          estimatedCompletionDate ?? this.estimatedCompletionDate,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

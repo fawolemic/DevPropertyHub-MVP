@@ -6,10 +6,10 @@ import '../../core/providers/auth_provider.dart';
 import '../../core/providers/bandwidth_provider.dart';
 
 /// MainLayout
-/// 
+///
 /// The main layout structure used across the application.
 /// Handles responsive behaviors across mobile, tablet and desktop layouts.
-/// 
+///
 /// SEARCH TAGS: #layout #responsive #navigation #scaffold #app-structure
 
 class MainLayout extends StatelessWidget {
@@ -35,10 +35,10 @@ class MainLayout extends StatelessWidget {
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Determine if we should use a drawer (mobile) or side navigation (tablet/desktop)
     final bool useDrawer = screenWidth < 1100;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -51,12 +51,14 @@ class MainLayout extends StatelessWidget {
                   ? Icons.signal_cellular_alt_1_bar
                   : Icons.signal_cellular_alt,
             ),
-            tooltip: isLowBandwidth ? 'Switch to High Bandwidth' : 'Switch to Low Bandwidth',
+            tooltip: isLowBandwidth
+                ? 'Switch to High Bandwidth'
+                : 'Switch to Low Bandwidth',
             onPressed: () {
               bandwidthProvider.toggleLowBandwidthMode();
             },
           ),
-          
+
           // User menu
           PopupMenuButton<String>(
             icon: const Icon(Icons.account_circle),
@@ -130,15 +132,16 @@ class MainLayout extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // Additional actions
           if (actions != null) ...actions!,
         ],
       ),
-      
+
       // Drawer for mobile layout
-      drawer: useDrawer ? _buildDrawer(context, authProvider, currentIndex) : null,
-      
+      drawer:
+          useDrawer ? _buildDrawer(context, authProvider, currentIndex) : null,
+
       // Side navigation for larger screens
       body: !useDrawer
           ? Row(
@@ -148,24 +151,25 @@ class MainLayout extends StatelessWidget {
               ],
             )
           : body,
-      
+
       // Bottom navigation for mobile
-      bottomNavigationBar: useDrawer ? _buildBottomNavBar(context, currentIndex) : null,
+      bottomNavigationBar:
+          useDrawer ? _buildBottomNavBar(context, currentIndex) : null,
     );
   }
-  
+
   // Drawer for mobile layout
   // #endregion
 
   // #region NAVIGATION COMPONENTS
   /// Builds the navigation drawer for mobile devices
   Widget _buildDrawer(
-    BuildContext context, 
+    BuildContext context,
     AuthProvider authProvider,
     int currentIndex,
   ) {
     final theme = Theme.of(context);
-    
+
     return Drawer(
       child: Column(
         children: [
@@ -191,7 +195,7 @@ class MainLayout extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
           ),
-          
+
           // Navigation items
           _buildDrawerItem(
             context,
@@ -214,7 +218,7 @@ class MainLayout extends StatelessWidget {
             isSelected: currentIndex == 2,
             onTap: () => context.go('/leads'),
           ),
-          
+
           // Settings available to all users
           _buildDrawerItem(
             context,
@@ -223,11 +227,11 @@ class MainLayout extends StatelessWidget {
             isSelected: currentIndex == 3,
             onTap: () => context.go('/settings'),
           ),
-          
+
           const Spacer(),
-          
+
           const Divider(),
-          
+
           // Logout button
           ListTile(
             leading: const Icon(Icons.logout),
@@ -238,13 +242,13 @@ class MainLayout extends StatelessWidget {
               });
             },
           ),
-          
+
           const SizedBox(height: 16),
         ],
       ),
     );
   }
-  
+
   // Drawer item with selection state
   /// Builds an individual drawer item
   Widget _buildDrawerItem(
@@ -255,7 +259,7 @@ class MainLayout extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    
+
     return ListTile(
       leading: Icon(
         icon,
@@ -276,16 +280,16 @@ class MainLayout extends StatelessWidget {
       onTap: onTap,
     );
   }
-  
+
   // Side navigation for tablet/desktop
   /// Builds the side navigation for tablet and desktop devices
   Widget _buildSideNavigation(
-    BuildContext context, 
+    BuildContext context,
     AuthProvider authProvider,
     int currentIndex,
   ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       width: 240,
       decoration: BoxDecoration(
@@ -321,9 +325,9 @@ class MainLayout extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const Divider(height: 1),
-          
+
           // User info
           Padding(
             padding: const EdgeInsets.all(16),
@@ -363,9 +367,9 @@ class MainLayout extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const Divider(height: 1),
-          
+
           // Navigation items
           Expanded(
             child: ListView(
@@ -392,7 +396,7 @@ class MainLayout extends StatelessWidget {
                   isSelected: currentIndex == 2,
                   onTap: () => context.go('/leads'),
                 ),
-                
+
                 // Admin-only settings
                 if (authProvider.isAdmin)
                   _buildSideNavItem(
@@ -405,9 +409,9 @@ class MainLayout extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const Divider(height: 1),
-          
+
           // Logout button
           Padding(
             padding: const EdgeInsets.all(16),
@@ -428,7 +432,7 @@ class MainLayout extends StatelessWidget {
       ),
     );
   }
-  
+
   // Side navigation item
   /// Builds an individual side navigation item
   Widget _buildSideNavItem(
@@ -439,7 +443,7 @@ class MainLayout extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Material(
@@ -473,14 +477,14 @@ class MainLayout extends StatelessWidget {
       ),
     );
   }
-  
+
   // Bottom navigation for mobile
   /// Builds the bottom navigation bar for mobile devices
   Widget _buildBottomNavBar(BuildContext context, int currentIndex) {
     // #endregion
     final theme = Theme.of(context);
     final authProvider = Provider.of<AuthProvider>(context);
-    
+
     return NavigationBar(
       selectedIndex: currentIndex > 3 ? 0 : currentIndex,
       onDestinationSelected: (index) {

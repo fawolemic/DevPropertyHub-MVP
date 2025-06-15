@@ -6,7 +6,8 @@ import 'package:mockito/mockito.dart';
 
 void main() {
   group('RegistrationSuccessScreen', () {
-    testWidgets('displays developer-specific content correctly', (WidgetTester tester) async {
+    testWidgets('displays developer-specific content correctly',
+        (WidgetTester tester) async {
       // Build our widget
       await tester.pumpWidget(
         MaterialApp(
@@ -20,22 +21,27 @@ void main() {
           ),
         ),
       );
-      
+
       // Verify the header content
       expect(find.text('Developer Registration Complete'), findsOneWidget);
-      expect(find.text('Welcome to DevPropertyHub, Test Developer! Your account has been created successfully.'), findsOneWidget);
-      
+      expect(
+          find.text(
+              'Welcome to DevPropertyHub, Test Developer! Your account has been created successfully.'),
+          findsOneWidget);
+
       // Verify next steps
       expect(find.text('Next Steps'), findsOneWidget);
       expect(find.text('Verification'), findsOneWidget);
       expect(find.text('Choose a Subscription'), findsOneWidget);
-      
+
       // Verify buttons
       expect(find.text('Verify Email'), findsOneWidget);
-      expect(find.text('Choose a Subscription'), findsOneWidget); // This appears twice - in steps and as a button
+      expect(find.text('Choose a Subscription'),
+          findsOneWidget); // This appears twice - in steps and as a button
     });
-    
-    testWidgets('displays buyer-specific content correctly', (WidgetTester tester) async {
+
+    testWidgets('displays buyer-specific content correctly',
+        (WidgetTester tester) async {
       // Build our widget
       await tester.pumpWidget(
         MaterialApp(
@@ -49,22 +55,26 @@ void main() {
           ),
         ),
       );
-      
+
       // Verify the header content
       expect(find.text('Buyer Registration Complete'), findsOneWidget);
-      expect(find.text('Welcome to DevPropertyHub, Test Buyer! Your account has been created successfully.'), findsOneWidget);
-      
+      expect(
+          find.text(
+              'Welcome to DevPropertyHub, Test Buyer! Your account has been created successfully.'),
+          findsOneWidget);
+
       // Verify next steps
       expect(find.text('Next Steps'), findsOneWidget);
       expect(find.text('Verification'), findsOneWidget);
       expect(find.text('Browse Properties'), findsOneWidget);
-      
+
       // Verify buttons
       expect(find.text('Verify Email'), findsOneWidget);
       expect(find.text('Explore Dashboard'), findsOneWidget);
     });
-    
-    testWidgets('displays agent-specific content correctly', (WidgetTester tester) async {
+
+    testWidgets('displays agent-specific content correctly',
+        (WidgetTester tester) async {
       // Build our widget
       await tester.pumpWidget(
         MaterialApp(
@@ -78,25 +88,29 @@ void main() {
           ),
         ),
       );
-      
+
       // Verify the header content
       expect(find.text('Agent Registration Complete'), findsOneWidget);
-      expect(find.text('Welcome to DevPropertyHub, Test Agent! Your account has been created successfully.'), findsOneWidget);
-      
+      expect(
+          find.text(
+              'Welcome to DevPropertyHub, Test Agent! Your account has been created successfully.'),
+          findsOneWidget);
+
       // Verify next steps
       expect(find.text('Next Steps'), findsOneWidget);
       expect(find.text('Verification'), findsOneWidget);
       expect(find.text('Application Review'), findsOneWidget);
-      
+
       // Verify buttons
       expect(find.text('Verify Email'), findsOneWidget);
       expect(find.text('Check Application Status'), findsOneWidget);
     });
-    
-    testWidgets('primary button calls correct handler', (WidgetTester tester) async {
+
+    testWidgets('primary button calls correct handler',
+        (WidgetTester tester) async {
       // Create a mock navigator observer to track navigation
       final mockObserver = MockNavigatorObserver();
-      
+
       // Build our widget
       await tester.pumpWidget(
         MaterialApp(
@@ -108,19 +122,20 @@ void main() {
           ),
         ),
       );
-      
+
       // Tap the primary action button
       await tester.tap(find.widgetWithText(ElevatedButton, 'Verify Email'));
       await tester.pumpAndSettle();
-      
+
       // Verify that navigation occurred (the specific screen is tested in the navigation service tests)
       verify(mockObserver.didPush(any, any));
     });
-    
-    testWidgets('secondary button calls correct handler', (WidgetTester tester) async {
+
+    testWidgets('secondary button calls correct handler',
+        (WidgetTester tester) async {
       // Create a mock navigator observer to track navigation
       final mockObserver = MockNavigatorObserver();
-      
+
       // Build our widget
       await tester.pumpWidget(
         MaterialApp(
@@ -132,11 +147,12 @@ void main() {
           ),
         ),
       );
-      
+
       // Tap the secondary action button
-      await tester.tap(find.widgetWithText(OutlinedButton, 'Check Application Status'));
+      await tester
+          .tap(find.widgetWithText(OutlinedButton, 'Check Application Status'));
       await tester.pumpAndSettle();
-      
+
       // Verify that navigation occurred (the specific screen is tested in the navigation service tests)
       verify(mockObserver.didPush(any, any));
     });

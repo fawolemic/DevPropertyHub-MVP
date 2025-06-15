@@ -111,9 +111,8 @@ class DevelopmentModel extends BaseModel {
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : DateTime.now(),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       developerId: map['developer_id'] ?? '',
@@ -121,16 +120,18 @@ class DevelopmentModel extends BaseModel {
       location: map['location'] ?? '',
       latitude: map['latitude']?.toDouble(),
       longitude: map['longitude']?.toDouble(),
-      startDate: map['start_date'] != null
-          ? DateTime.parse(map['start_date'])
-          : null,
+      startDate:
+          map['start_date'] != null ? DateTime.parse(map['start_date']) : null,
       completionDate: map['completion_date'] != null
           ? DateTime.parse(map['completion_date'])
           : null,
       totalUnits: map['total_units'] ?? 0,
       availableUnits: map['available_units'] ?? 0,
-      imageUrls: map['image_urls'] != null ? List<String>.from(map['image_urls']) : null,
-      amenities: map['amenities'] != null ? List<String>.from(map['amenities']) : null,
+      imageUrls: map['image_urls'] != null
+          ? List<String>.from(map['image_urls'])
+          : null,
+      amenities:
+          map['amenities'] != null ? List<String>.from(map['amenities']) : null,
       additionalDetails: map['additional_details'],
     );
   }

@@ -27,7 +27,7 @@ import '../providers/auth_provider.dart';
 /// Handles application routing with role-based access controls
 class AppRouter {
   AppRouter._(); // Private constructor to prevent instantiation
-  
+
   /// Create and configure the app router
   static GoRouter router(AuthProvider authProvider) {
     // Store a reference to the authProvider for use in redirects
@@ -38,31 +38,38 @@ class AppRouter {
       redirect: (context, state) {
         // Get current auth state
         final isLoggedIn = authProvider.isLoggedIn;
-        
+
         // Define route types
         final isLoginRoute = state.location == '/login';
-        final isRegistrationRoute = state.location.startsWith('/register') || 
-                                   state.location == '/unified-register' ||
-                                   state.location.startsWith('/email-verification') ||
-                                   state.location.startsWith('/subscription-selection') ||
-                                   state.location.startsWith('/approval-status') ||
-                                   state.location.startsWith('/payment');
-        final isPublicRoute = state.location == '/' || state.location == '/home';
-        
-        debugPrint('GoRouter redirect: isLoggedIn=$isLoggedIn, path=${state.location}');
-        
+        final isRegistrationRoute = state.location.startsWith('/register') ||
+            state.location == '/unified-register' ||
+            state.location.startsWith('/email-verification') ||
+            state.location.startsWith('/subscription-selection') ||
+            state.location.startsWith('/approval-status') ||
+            state.location.startsWith('/payment');
+        final isPublicRoute =
+            state.location == '/' || state.location == '/home';
+
+        debugPrint(
+            'GoRouter redirect: isLoggedIn=$isLoggedIn, path=${state.location}');
+
         // If logged in and on login or home page, redirect to developments dashboard
         if (isLoggedIn && (isLoginRoute || isPublicRoute)) {
-          debugPrint('User is logged in and on login/home. Redirecting to developments dashboard.');
+          debugPrint(
+              'User is logged in and on login/home. Redirecting to developments dashboard.');
           return '/developments';
         }
-        
+
         // If not logged in and trying to access a protected page, redirect to login
-        if (!isLoggedIn && !isLoginRoute && !isRegistrationRoute && !isPublicRoute) {
-          debugPrint('User is not logged in and trying to access a protected page. Redirecting to login.');
+        if (!isLoggedIn &&
+            !isLoginRoute &&
+            !isRegistrationRoute &&
+            !isPublicRoute) {
+          debugPrint(
+              'User is not logged in and trying to access a protected page. Redirecting to login.');
           return '/login';
         }
-        
+
         // No redirect needed
         return null;
       },
@@ -77,7 +84,7 @@ class AppRouter {
           path: '/home',
           builder: (context, state) => const HomeScreen(),
         ),
-        
+
         // Auth routes
         GoRoute(
           path: '/login',
@@ -103,13 +110,13 @@ class AppRouter {
           path: '/direct-test',
           builder: (context, state) => const DirectTestPage(),
         ),
-        
+
         // All dashboard routes redirect to the developments dashboard
         GoRoute(
           path: '/dashboard',
           redirect: (_, __) => '/developments',
         ),
-        
+
         // Developments routes
         GoRoute(
           path: '/developments',
@@ -119,25 +126,25 @@ class AppRouter {
           path: '/developments/add',
           builder: (context, state) => const AddDevelopmentWizard(),
         ),
-        
+
         // Leads route
         GoRoute(
           path: '/leads',
           builder: (context, state) => const ModernLeadsScreen(),
         ),
-        
+
         // Settings route
         GoRoute(
           path: '/settings',
           builder: (context, state) => const ModernSettingsScreen(),
-        ),  
-        
+        ),
+
         // API Service example route
         GoRoute(
           path: '/api-example',
           builder: (context, state) => const ApiServiceExampleScreen(),
         ),
-        
+
         // Email verification route
         GoRoute(
           path: '/email-verification',
@@ -148,19 +155,24 @@ class AppRouter {
             if (state.extra != null && state.extra is Map<String, dynamic>) {
               extra = state.extra as Map<String, dynamic>;
             }
-            
+
             // Get parameters from extra or from the location
             final Uri uri = Uri.parse(state.location);
-            final String email = extra['email'] as String? ?? uri.queryParameters['email'] ?? '';
-            final String userType = extra['userType'] as String? ?? uri.queryParameters['userType'] ?? '';
-            final String fullName = extra['fullName'] as String? ?? uri.queryParameters['fullName'] ?? '';
-            
+            final String email =
+                extra['email'] as String? ?? uri.queryParameters['email'] ?? '';
+            final String userType = extra['userType'] as String? ??
+                uri.queryParameters['userType'] ??
+                '';
+            final String fullName = extra['fullName'] as String? ??
+                uri.queryParameters['fullName'] ??
+                '';
+
             // Create a callback based on user type
             VoidCallback onVerificationComplete = () {
               // Default to home page
               GoRouter.of(context).go('/home');
             };
-            
+
             // Set the appropriate callback based on user type
             if (userType == 'developer') {
               onVerificationComplete = () {
@@ -168,34 +180,35 @@ class AppRouter {
               };
             } else if (userType == 'agent') {
               onVerificationComplete = () {
-                GoRouter.of(context).go('/approval-status', extra: {'agentName': fullName});
+                GoRouter.of(context)
+                    .go('/approval-status', extra: {'agentName': fullName});
               };
             } else if (userType == 'buyer') {
               onVerificationComplete = () {
                 GoRouter.of(context).go('/home');
               };
             }
-            
+
             return EmailVerificationScreen(
               email: email,
               onVerificationComplete: onVerificationComplete,
             );
           },
         ),
-        
+
         // Subscription selection route for developers
         GoRoute(
           path: '/subscription-selection',
           builder: (context, state) => const SubscriptionSelectionScreen(),
         ),
-        
+
         // Payment route for subscription
         GoRoute(
           path: '/payment',
           builder: (context, state) {
             // Try to get plan from both extra and URI parameters
             String plan = 'premium';
-            
+
             // First check if plan is in extra
             if (state.extra != null && state.extra is Map) {
               final Map<dynamic, dynamic> extra = state.extra as Map;
@@ -204,7 +217,7 @@ class AppRouter {
                 debugPrint('Got plan from extra: $plan');
               }
             }
-            
+
             // If not found in extra, try URI parameters
             if (plan == 'premium') {
               final Uri uri = Uri.parse(state.location);
@@ -213,25 +226,26 @@ class AppRouter {
                 debugPrint('Got plan from URI parameters: $plan');
               }
             }
-            
+
             debugPrint('Rendering PaymentScreen with plan: $plan');
             return PaymentScreen(selectedPlan: plan);
           },
         ),
-        
+
         // Approval status route for agents
         GoRoute(
           path: '/approval-status',
           builder: (context, state) {
-            final Map<String, dynamic> extra = state.extra as Map<String, dynamic>? ?? {};
+            final Map<String, dynamic> extra =
+                state.extra as Map<String, dynamic>? ?? {};
             final String agentName = extra['agentName'] as String? ?? 'Agent';
-            
+
             return ApprovalStatusScreen(
               agentName: agentName,
             );
           },
         ),
-        
+
         // Development details route
         GoRoute(
           path: '/developments/:id',
@@ -241,7 +255,7 @@ class AppRouter {
             return DevelopmentDetailsScreen(developmentId: id);
           },
         ),
-        
+
         // Lead details route
         GoRoute(
           path: '/leads/:id',
@@ -251,7 +265,7 @@ class AppRouter {
             return LeadDetailsScreen(leadId: id);
           },
         ),
-        
+
         // Root redirect
         GoRoute(
           path: '/',
@@ -297,9 +311,10 @@ class AppRouter {
 // Placeholder screens - these would be replaced by actual implementations
 class DevelopmentDetailsScreen extends StatelessWidget {
   final String developmentId;
-  
-  const DevelopmentDetailsScreen({Key? key, required this.developmentId}) : super(key: key);
-  
+
+  const DevelopmentDetailsScreen({Key? key, required this.developmentId})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -311,9 +326,9 @@ class DevelopmentDetailsScreen extends StatelessWidget {
 
 class LeadDetailsScreen extends StatelessWidget {
   final String leadId;
-  
+
   const LeadDetailsScreen({Key? key, required this.leadId}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

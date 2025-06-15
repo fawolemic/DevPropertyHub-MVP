@@ -10,7 +10,8 @@ class ModernDevelopmentsScreen extends StatefulWidget {
   const ModernDevelopmentsScreen({Key? key}) : super(key: key);
 
   @override
-  State<ModernDevelopmentsScreen> createState() => _ModernDevelopmentsScreenState();
+  State<ModernDevelopmentsScreen> createState() =>
+      _ModernDevelopmentsScreenState();
 }
 
 class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
@@ -74,7 +75,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
   void initState() {
     super.initState();
     // Check for saved draft
-    AddDevelopmentDraftService.hasDraft().then((has) => setState(() => _hasDraft = has));
+    AddDevelopmentDraftService.hasDraft()
+        .then((has) => setState(() => _hasDraft = has));
   }
 
   @override
@@ -114,15 +116,21 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                       final screenWidth = constraints.maxWidth;
                       final isVerySmallScreen = screenWidth < 320;
                       final isSmallScreen = screenWidth < 375;
-                      
+
                       // Choose appropriate title based on available width
-                      final String title = isVerySmallScreen ? 'Devs' : 
-                                          isSmallScreen ? 'Devs' : 'Developments';
-                      
+                      final String title = isVerySmallScreen
+                          ? 'Devs'
+                          : isSmallScreen
+                              ? 'Devs'
+                              : 'Developments';
+
                       // Calculate trailing widget width based on screen size
-                      final double trailingWidth = isVerySmallScreen ? 40.0 : 
-                                           isSmallScreen ? 70.0 : 100.0;
-                      
+                      final double trailingWidth = isVerySmallScreen
+                          ? 40.0
+                          : isSmallScreen
+                              ? 70.0
+                              : 100.0;
+
                       return Row(
                         children: [
                           // Menu button (mobile only) - fixed width
@@ -132,7 +140,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               child: Builder(
                                 builder: (ctx) => IconButton(
                                   icon: const Icon(Icons.menu, size: 18),
-                                  onPressed: () => Scaffold.of(ctx).openDrawer(),
+                                  onPressed: () =>
+                                      Scaffold.of(ctx).openDrawer(),
                                   color: Colors.grey.shade700,
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
@@ -141,9 +150,9 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                             )
                           else
                             const SizedBox(width: 4),
-                          
+
                           const SizedBox(width: 4), // Small spacing
-                          
+
                           // Title - use Flexible with tight fit
                           Flexible(
                             fit: FlexFit.tight,
@@ -159,28 +168,30 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               softWrap: false,
                             ),
                           ),
-                          
+
                           const SizedBox(width: 4), // Small spacing
-                          
+
                           // Trailing widgets in fixed-width container
                           SizedBox(
-                            width: trailingWidth, // Fixed width for trailing widgets
+                            width:
+                                trailingWidth, // Fixed width for trailing widgets
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 // On very small screens, just show user icon
-                                if (!isVerySmallScreen && !isSmallScreen) ...[                                  
+                                if (!isVerySmallScreen && !isSmallScreen) ...[
                                   // Search icon - only on medium+ screens
                                   IconButton(
                                     icon: const Icon(Icons.search, size: 18),
                                     onPressed: () {},
                                     padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(maxWidth: 24, maxHeight: 24),
+                                    constraints: const BoxConstraints(
+                                        maxWidth: 24, maxHeight: 24),
                                   ),
                                   const SizedBox(width: 4),
                                 ],
-                                
+
                                 // Always show user icon
                                 CircleAvatar(
                                   radius: 14,
@@ -199,7 +210,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     },
                   ),
                 ),
-                
+
                 // Main content area
                 Expanded(
                   child: Padding(
@@ -226,7 +237,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: theme.colorScheme.primary,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
                               ),
                             ),
                             if (_hasDraft) ...[
@@ -235,25 +247,29 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ElevatedButton.icon(
                                   icon: const Icon(Icons.edit),
                                   label: const Text('Resume Draft'),
-                                  onPressed: () => context.go('/developments/add'),
+                                  onPressed: () =>
+                                      context.go('/developments/add'),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: theme.colorScheme.secondary,
+                                    backgroundColor:
+                                        theme.colorScheme.secondary,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 12),
                                   ),
                                 )
                               else
                                 IconButton(
                                   icon: const Icon(Icons.edit),
-                                  onPressed: () => context.go('/developments/add'),
+                                  onPressed: () =>
+                                      context.go('/developments/add'),
                                   color: theme.colorScheme.secondary,
                                 ),
                             ],
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Filters
                         Wrap(
                           spacing: 16,
@@ -267,7 +283,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'All Statuses',
@@ -288,7 +305,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ),
                               ),
                             ),
-                            
+
                             // Location filter
                             Container(
                               width: isDesktop ? 200 : double.infinity,
@@ -297,7 +314,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'All Locations',
@@ -319,7 +337,7 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 ),
                               ),
                             ),
-                            
+
                             // Sort by
                             Container(
                               width: isDesktop ? 200 : double.infinity,
@@ -328,7 +346,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'Name',
@@ -352,14 +371,15 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Developments list
                         Expanded(
                           child: isDesktop
                               ? GridView.builder(
-                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     childAspectRatio: 2.5,
                                     crossAxisSpacing: 16,
@@ -368,7 +388,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                   itemCount: _developments.length,
                                   itemBuilder: (context, index) {
                                     final development = _developments[index];
-                                    return _buildDevelopmentCard(context, development);
+                                    return _buildDevelopmentCard(
+                                        context, development);
                                   },
                                 )
                               : ListView.builder(
@@ -376,8 +397,10 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                                   itemBuilder: (context, index) {
                                     final development = _developments[index];
                                     return Padding(
-                                      padding: const EdgeInsets.only(bottom: 16),
-                                      child: _buildDevelopmentCard(context, development),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16),
+                                      child: _buildDevelopmentCard(
+                                          context, development),
                                     );
                                   },
                                 ),
@@ -394,9 +417,11 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, String title, IconData icon, String route, {bool isActive = false}) {
+  Widget _buildNavItem(
+      BuildContext context, String title, IconData icon, String route,
+      {bool isActive = false}) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: () {
         context.go(route);
@@ -404,7 +429,9 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? theme.colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+          color: isActive
+              ? theme.colorScheme.primary.withOpacity(0.1)
+              : Colors.transparent,
           border: Border(
             left: BorderSide(
               color: isActive ? theme.colorScheme.primary : Colors.transparent,
@@ -416,14 +443,16 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
           children: [
             Icon(
               icon,
-              color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+              color:
+                  isActive ? theme.colorScheme.primary : Colors.grey.shade700,
               size: 20,
             ),
             const SizedBox(width: 16),
             Text(
               title,
               style: TextStyle(
-                color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+                color:
+                    isActive ? theme.colorScheme.primary : Colors.grey.shade700,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -433,10 +462,11 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
     );
   }
 
-  Widget _buildDevelopmentCard(BuildContext context, Map<String, dynamic> development) {
+  Widget _buildDevelopmentCard(
+      BuildContext context, Map<String, dynamic> development) {
     final theme = Theme.of(context);
     final isDesktop = MediaQuery.of(context).size.width > 1024;
-    
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -468,7 +498,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: development['status'] == 'Under Construction'
                           ? Colors.blue.shade50
@@ -535,7 +566,8 @@ class _ModernDevelopmentsScreenState extends State<ModernDevelopmentsScreen> {
               LinearProgressIndicator(
                 value: development['completion'],
                 backgroundColor: Colors.grey.shade200,
-                valueColor: AlwaysStoppedAnimation<Color>(development['progressColor']),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(development['progressColor']),
               ),
             ],
           ),

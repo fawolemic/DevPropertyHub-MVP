@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../../models/featured_property.dart';
 
 /// FeaturedPropertiesSection
-/// 
+///
 /// Displays a carousel of featured properties and developments.
 /// Contains: Property cards with images, titles, and key details.
 /// Supports low-bandwidth mode for optimized performance.
-/// 
+///
 /// SEARCH TAGS: #featured #properties #carousel #property-listings
 class FeaturedPropertiesSection extends StatelessWidget {
   final List<FeaturedProperty> properties;
@@ -22,7 +22,7 @@ class FeaturedPropertiesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -94,15 +94,21 @@ class FeaturedPropertiesSection extends StatelessWidget {
                               : Image.network(
                                   property.image,
                                   fit: BoxFit.cover,
-                                  loadingBuilder: (context, child, loadingProgress) {
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
                                     return Container(
                                       color: theme.colorScheme.surfaceVariant,
                                       child: Center(
                                         child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                                  (loadingProgress.expectedTotalBytes ?? 1)
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  (loadingProgress
+                                                          .expectedTotalBytes ??
+                                                      1)
                                               : null,
                                         ),
                                       ),
@@ -132,20 +138,25 @@ class FeaturedPropertiesSection extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Price',
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: theme.colorScheme.onBackground.withOpacity(0.7),
+                                        style:
+                                            theme.textTheme.bodySmall?.copyWith(
+                                          color: theme.colorScheme.onBackground
+                                              .withOpacity(0.7),
                                         ),
                                       ),
                                       Text(
                                         property.price,
-                                        style: theme.textTheme.titleMedium?.copyWith(
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: theme.colorScheme.primary,
                                         ),
@@ -157,13 +168,16 @@ class FeaturedPropertiesSection extends StatelessWidget {
                                     children: [
                                       Text(
                                         'Returns',
-                                        style: theme.textTheme.bodySmall?.copyWith(
-                                          color: theme.colorScheme.onBackground.withOpacity(0.7),
+                                        style:
+                                            theme.textTheme.bodySmall?.copyWith(
+                                          color: theme.colorScheme.onBackground
+                                              .withOpacity(0.7),
                                         ),
                                       ),
                                       Text(
                                         '${property.rating}/5',
-                                        style: theme.textTheme.titleMedium?.copyWith(
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

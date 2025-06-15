@@ -14,7 +14,8 @@ class BuyerRegistrationScreen extends StatefulWidget {
   const BuyerRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<BuyerRegistrationScreen> createState() => _BuyerRegistrationScreenState();
+  State<BuyerRegistrationScreen> createState() =>
+      _BuyerRegistrationScreenState();
 }
 
 class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
@@ -27,7 +28,9 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
 
     // Initialize the buyer registration provider to step 1
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
+      final registrationProvider =
+          provider_package.Provider.of<BuyerRegistrationProvider>(context,
+              listen: false);
       if (registrationProvider.currentStep != 1) {
         registrationProvider.resetRegistration();
       }
@@ -42,8 +45,10 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
 
   void _goToStep(int step) {
     if (step <= 0 || step > 2) return;
-    
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context, listen: false);
+
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context,
+            listen: false);
     if (registrationProvider.goToStep(step)) {
       _pageController.animateToPage(
         step - 1,
@@ -56,10 +61,12 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<BuyerRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<BuyerRegistrationProvider>(context);
+
     // Listen for changes to registration step
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_pageController.hasClients) {
@@ -95,9 +102,10 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
           // Stepper indicator
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: _buildStepIndicator(registrationProvider.currentStep, isLowBandwidth, theme),
+            child: _buildStepIndicator(
+                registrationProvider.currentStep, isLowBandwidth, theme),
           ),
-          
+
           // Error message if any
           if (registrationProvider.errorMessage != null)
             Padding(
@@ -118,7 +126,7 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
                 ),
               ),
             ),
-          
+
           // Registration steps
           Expanded(
             child: PageView(
@@ -135,13 +143,14 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
     );
   }
 
-  Widget _buildStepIndicator(int currentStep, bool isLowBandwidth, ThemeData theme) {
+  Widget _buildStepIndicator(
+      int currentStep, bool isLowBandwidth, ThemeData theme) {
     return Row(
       children: List.generate(2, (index) {
         final stepNumber = index + 1;
         final isActive = stepNumber == currentStep;
         final isCompleted = stepNumber < currentStep;
-        
+
         return Expanded(
           child: Row(
             children: [
@@ -151,14 +160,14 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
                 height: isLowBandwidth ? 32 : 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isCompleted 
-                      ? theme.colorScheme.primary 
-                      : isActive 
-                          ? theme.colorScheme.primary 
+                  color: isCompleted
+                      ? theme.colorScheme.primary
+                      : isActive
+                          ? theme.colorScheme.primary
                           : theme.colorScheme.surface,
                   border: Border.all(
-                    color: isCompleted || isActive 
-                        ? theme.colorScheme.primary 
+                    color: isCompleted || isActive
+                        ? theme.colorScheme.primary
                         : theme.colorScheme.onSurface.withOpacity(0.3),
                     width: 2,
                   ),
@@ -173,8 +182,8 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
                       : Text(
                           '$stepNumber',
                           style: TextStyle(
-                            color: isActive 
-                                ? theme.colorScheme.onPrimary 
+                            color: isActive
+                                ? theme.colorScheme.onPrimary
                                 : theme.colorScheme.onSurface.withOpacity(0.7),
                             fontWeight: FontWeight.bold,
                             fontSize: isLowBandwidth ? 14 : 16,
@@ -182,7 +191,7 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
                         ),
                 ),
               ),
-              
+
               // Step label
               Expanded(
                 child: Padding(
@@ -193,13 +202,15 @@ class _BuyerRegistrationScreenState extends State<BuyerRegistrationScreen> {
                       color: isActive || isCompleted
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurface.withOpacity(0.7),
-                      fontWeight: isActive || isCompleted ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isActive || isCompleted
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                       fontSize: isLowBandwidth ? 12 : 14,
                     ),
                   ),
                 ),
               ),
-              
+
               // Connector line (except after the last step)
               if (stepNumber < 2)
                 Expanded(

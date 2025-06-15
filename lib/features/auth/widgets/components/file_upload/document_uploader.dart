@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 /// DocumentUploader
-/// 
+///
 /// Component for handling document uploads with visual feedback.
 /// Shows upload progress, validation, and error handling.
-/// 
+///
 /// SEARCH TAGS: #upload #document #file #cac #registration
 class DocumentUploader extends StatefulWidget {
   final String label;
@@ -40,17 +40,19 @@ class _DocumentUploaderState extends State<DocumentUploader> {
       _isUploading = true;
       _errorMessage = null;
     });
-    
+
     try {
       // In a real implementation, we would use file_picker package
       // For now, we'll simulate the file selection and upload
-      
+
       // Simulate file selection delay
       await Future.delayed(const Duration(milliseconds: 500));
-      
+
       // Simulate file selection (in a real app, this would come from file_picker)
-      final mockFileName = widget.label.contains('License') ? 'License_Document.pdf' : 'CAC_Certificate.pdf';
-      
+      final mockFileName = widget.label.contains('License')
+          ? 'License_Document.pdf'
+          : 'CAC_Certificate.pdf';
+
       // Simulate upload progress
       for (int i = 1; i <= 10; i++) {
         await Future.delayed(const Duration(milliseconds: 200));
@@ -58,16 +60,18 @@ class _DocumentUploaderState extends State<DocumentUploader> {
           _uploadProgress = i / 10;
         });
       }
-      
+
       // Generate a unique file path with timestamp to avoid any caching issues
-      final uniqueFilePath = 'mock_path_${DateTime.now().millisecondsSinceEpoch}_$mockFileName';
-      
+      final uniqueFilePath =
+          'mock_path_${DateTime.now().millisecondsSinceEpoch}_$mockFileName';
+
       setState(() {
         _isUploading = false;
         _selectedFileName = mockFileName;
-        _selectedFilePath = uniqueFilePath; // In a real app, this would be the actual file path
+        _selectedFilePath =
+            uniqueFilePath; // In a real app, this would be the actual file path
       });
-      
+
       // Important: Call onFileSelected after state is updated to ensure the callback receives the updated path
       // This ensures the parent widget gets the correct file path
       debugPrint('Document uploaded successfully: $_selectedFilePath');
@@ -85,7 +89,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -109,7 +113,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
           ],
         ),
         const SizedBox(height: 8),
-        
+
         // Helper text
         Text(
           'Accepted file types: ${widget.acceptedFileTypes}. Max size: ${widget.maxSizeInMB}MB',
@@ -118,7 +122,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // Upload UI states
         if (_selectedFilePath == null && !_isUploading)
           _buildUploadButton(theme)
@@ -126,8 +130,8 @@ class _DocumentUploaderState extends State<DocumentUploader> {
           _buildProgressIndicator(theme)
         else
           _buildFilePreview(theme),
-          
-        // Error message  
+
+        // Error message
         if (_errorMessage != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -142,7 +146,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
       ],
     );
   }
-  
+
   Widget _buildUploadButton(ThemeData theme) {
     return OutlinedButton.icon(
       onPressed: _selectFile,
@@ -157,7 +161,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
       ),
     );
   }
-  
+
   Widget _buildProgressIndicator(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +179,7 @@ class _DocumentUploaderState extends State<DocumentUploader> {
       ],
     );
   }
-  
+
   Widget _buildFilePreview(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(16),

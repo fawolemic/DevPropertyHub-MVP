@@ -26,22 +26,24 @@ class LeadsServiceImpl {
       }
 
       final leads = await _leadService.getLeadsByDeveloperId(developerId);
-      
+
       // Convert to the format expected by the UI
-      return leads.map((lead) => {
-        'id': lead.id,
-        'name': lead.name,
-        'email': lead.email,
-        'phone': lead.phone ?? 'N/A',
-        'property': lead.propertyName ?? 'N/A',
-        'property_id': lead.propertyId,
-        'status': lead.status.toString().split('.').last,
-        'priority': lead.priority.toString().split('.').last,
-        'budget': lead.budget ?? 'N/A',
-        'notes': lead.notes,
-        'last_contact_date': lead.lastContactDate?.toString(),
-        'created_at': lead.createdAt.toString(),
-      }).toList();
+      return leads
+          .map((lead) => {
+                'id': lead.id,
+                'name': lead.name,
+                'email': lead.email,
+                'phone': lead.phone ?? 'N/A',
+                'property': lead.propertyName ?? 'N/A',
+                'property_id': lead.propertyId,
+                'status': lead.status.toString().split('.').last,
+                'priority': lead.priority.toString().split('.').last,
+                'budget': lead.budget ?? 'N/A',
+                'notes': lead.notes,
+                'last_contact_date': lead.lastContactDate?.toString(),
+                'created_at': lead.createdAt.toString(),
+              })
+          .toList();
     } catch (e) {
       debugPrint('Error getting leads: $e');
       // Return mock data for now to keep the app working
@@ -86,7 +88,7 @@ class LeadsServiceImpl {
     try {
       // Get the current lead
       final lead = await _leadService.getLeadById(leadId);
-      
+
       // Update with new data
       final updatedLead = lead.copyWith(
         name: leadData['name'] ?? lead.name,
@@ -94,12 +96,16 @@ class LeadsServiceImpl {
         phone: leadData['phone'],
         propertyId: leadData['property_id'],
         propertyName: leadData['property'],
-        status: leadData['status'] != null ? _stringToLeadStatus(leadData['status']) : lead.status,
-        priority: leadData['priority'] != null ? _stringToLeadPriority(leadData['priority']) : lead.priority,
+        status: leadData['status'] != null
+            ? _stringToLeadStatus(leadData['status'])
+            : lead.status,
+        priority: leadData['priority'] != null
+            ? _stringToLeadPriority(leadData['priority'])
+            : lead.priority,
         budget: leadData['budget'],
         notes: leadData['notes'],
-        lastContactDate: leadData['last_contact_date'] != null 
-            ? DateTime.parse(leadData['last_contact_date']) 
+        lastContactDate: leadData['last_contact_date'] != null
+            ? DateTime.parse(leadData['last_contact_date'])
             : lead.lastContactDate,
       );
 
@@ -135,36 +141,39 @@ class LeadsServiceImpl {
       }
 
       final leads = await _leadService.getLeadsByStatus(
-        developerId, 
+        developerId,
         _stringToLeadStatus(status),
       );
-      
+
       // Convert to the format expected by the UI
-      return leads.map((lead) => {
-        'id': lead.id,
-        'name': lead.name,
-        'email': lead.email,
-        'phone': lead.phone ?? 'N/A',
-        'property': lead.propertyName ?? 'N/A',
-        'property_id': lead.propertyId,
-        'status': lead.status.toString().split('.').last,
-        'priority': lead.priority.toString().split('.').last,
-        'budget': lead.budget ?? 'N/A',
-        'notes': lead.notes,
-        'last_contact_date': lead.lastContactDate?.toString(),
-        'created_at': lead.createdAt.toString(),
-      }).toList();
+      return leads
+          .map((lead) => {
+                'id': lead.id,
+                'name': lead.name,
+                'email': lead.email,
+                'phone': lead.phone ?? 'N/A',
+                'property': lead.propertyName ?? 'N/A',
+                'property_id': lead.propertyId,
+                'status': lead.status.toString().split('.').last,
+                'priority': lead.priority.toString().split('.').last,
+                'budget': lead.budget ?? 'N/A',
+                'notes': lead.notes,
+                'last_contact_date': lead.lastContactDate?.toString(),
+                'created_at': lead.createdAt.toString(),
+              })
+          .toList();
     } catch (e) {
       debugPrint('Error filtering leads by status: $e');
       // Return mock data for now to keep the app working
-      return _getMockLeads().where((lead) => 
-        status == 'All' || lead['status'] == status
-      ).toList();
+      return _getMockLeads()
+          .where((lead) => status == 'All' || lead['status'] == status)
+          .toList();
     }
   }
 
   /// Filter leads by priority
-  Future<List<Map<String, dynamic>>> filterLeadsByPriority(String priority) async {
+  Future<List<Map<String, dynamic>>> filterLeadsByPriority(
+      String priority) async {
     try {
       final developerId = _supabaseProvider.currentUser?.id;
       if (developerId == null) {
@@ -176,31 +185,33 @@ class LeadsServiceImpl {
       }
 
       final leads = await _leadService.getLeadsByPriority(
-        developerId, 
+        developerId,
         _stringToLeadPriority(priority),
       );
-      
+
       // Convert to the format expected by the UI
-      return leads.map((lead) => {
-        'id': lead.id,
-        'name': lead.name,
-        'email': lead.email,
-        'phone': lead.phone ?? 'N/A',
-        'property': lead.propertyName ?? 'N/A',
-        'property_id': lead.propertyId,
-        'status': lead.status.toString().split('.').last,
-        'priority': lead.priority.toString().split('.').last,
-        'budget': lead.budget ?? 'N/A',
-        'notes': lead.notes,
-        'last_contact_date': lead.lastContactDate?.toString(),
-        'created_at': lead.createdAt.toString(),
-      }).toList();
+      return leads
+          .map((lead) => {
+                'id': lead.id,
+                'name': lead.name,
+                'email': lead.email,
+                'phone': lead.phone ?? 'N/A',
+                'property': lead.propertyName ?? 'N/A',
+                'property_id': lead.propertyId,
+                'status': lead.status.toString().split('.').last,
+                'priority': lead.priority.toString().split('.').last,
+                'budget': lead.budget ?? 'N/A',
+                'notes': lead.notes,
+                'last_contact_date': lead.lastContactDate?.toString(),
+                'created_at': lead.createdAt.toString(),
+              })
+          .toList();
     } catch (e) {
       debugPrint('Error filtering leads by priority: $e');
       // Return mock data for now to keep the app working
-      return _getMockLeads().where((lead) => 
-        priority == 'All' || lead['priority'] == priority
-      ).toList();
+      return _getMockLeads()
+          .where((lead) => priority == 'All' || lead['priority'] == priority)
+          .toList();
     }
   }
 
@@ -213,31 +224,34 @@ class LeadsServiceImpl {
       }
 
       final leads = await _leadService.searchLeads(developerId, query);
-      
+
       // Convert to the format expected by the UI
-      return leads.map((lead) => {
-        'id': lead.id,
-        'name': lead.name,
-        'email': lead.email,
-        'phone': lead.phone ?? 'N/A',
-        'property': lead.propertyName ?? 'N/A',
-        'property_id': lead.propertyId,
-        'status': lead.status.toString().split('.').last,
-        'priority': lead.priority.toString().split('.').last,
-        'budget': lead.budget ?? 'N/A',
-        'notes': lead.notes,
-        'last_contact_date': lead.lastContactDate?.toString(),
-        'created_at': lead.createdAt.toString(),
-      }).toList();
+      return leads
+          .map((lead) => {
+                'id': lead.id,
+                'name': lead.name,
+                'email': lead.email,
+                'phone': lead.phone ?? 'N/A',
+                'property': lead.propertyName ?? 'N/A',
+                'property_id': lead.propertyId,
+                'status': lead.status.toString().split('.').last,
+                'priority': lead.priority.toString().split('.').last,
+                'budget': lead.budget ?? 'N/A',
+                'notes': lead.notes,
+                'last_contact_date': lead.lastContactDate?.toString(),
+                'created_at': lead.createdAt.toString(),
+              })
+          .toList();
     } catch (e) {
       debugPrint('Error searching leads: $e');
       // Return mock data for now to keep the app working
       final lowercaseQuery = query.toLowerCase();
-      return _getMockLeads().where((lead) => 
-        lead['name'].toLowerCase().contains(lowercaseQuery) ||
-        lead['email'].toLowerCase().contains(lowercaseQuery) ||
-        lead['property'].toLowerCase().contains(lowercaseQuery)
-      ).toList();
+      return _getMockLeads()
+          .where((lead) =>
+              lead['name'].toLowerCase().contains(lowercaseQuery) ||
+              lead['email'].toLowerCase().contains(lowercaseQuery) ||
+              lead['property'].toLowerCase().contains(lowercaseQuery))
+          .toList();
     }
   }
 

@@ -109,11 +109,8 @@ class AuthService {
       }
 
       // Get the user data from the users table
-      final userData = await _client
-          .from('users')
-          .select()
-          .eq('id', user.id)
-          .single();
+      final userData =
+          await _client.from('users').select().eq('id', user.id).single();
 
       return UserModel.fromMap(userData);
     } catch (e) {
@@ -146,11 +143,8 @@ class AuthService {
   }) async {
     try {
       // Get the current user data
-      final userData = await _client
-          .from('users')
-          .select()
-          .eq('id', userId)
-          .single();
+      final userData =
+          await _client.from('users').select().eq('id', userId).single();
 
       final user = UserModel.fromMap(userData);
 
@@ -168,10 +162,7 @@ class AuthService {
       };
 
       // Update the user in the users table
-      await _client
-          .from('users')
-          .update(updatedData)
-          .eq('id', userId);
+      await _client.from('users').update(updatedData).eq('id', userId);
 
       // Return the updated user
       return user.copyWith(
@@ -195,21 +186,18 @@ class AuthService {
   bool isAuthenticated() {
     return _auth.currentUser != null;
   }
-  
+
   /// Update user's last login time
   Future<void> updateLastLogin(String userId) async {
     try {
-      await _client
-          .from('users')
-          .update({
-            'last_login': DateTime.now().toIso8601String(),
-          })
-          .eq('id', userId);
+      await _client.from('users').update({
+        'last_login': DateTime.now().toIso8601String(),
+      }).eq('id', userId);
     } catch (e) {
       debugPrint('Error updating last login: $e');
     }
   }
-  
+
   /// Check if user has a specific role
   Future<bool> hasRole(String userId, UserRole role) async {
     try {
@@ -218,7 +206,7 @@ class AuthService {
           .select('user_type')
           .eq('id', userId)
           .single();
-      
+
       final userRole = UserModel.stringToRole(userData['user_type']);
       return userRole == role;
     } catch (e) {
@@ -226,18 +214,19 @@ class AuthService {
       return false;
     }
   }
-  
+
   /// Check if user has permission to access a resource
-  Future<bool> hasPermission(String userId, String resource, String action) async {
+  Future<bool> hasPermission(
+      String userId, String resource, String action) async {
     try {
       final userData = await _client
           .from('users')
           .select('user_type')
           .eq('id', userId)
           .single();
-      
+
       final userRole = UserModel.stringToRole(userData['user_type']);
-      
+
       // Define role-based permissions
       switch (resource) {
         case 'properties':
@@ -245,13 +234,14 @@ class AuthService {
             case 'create':
             case 'update':
             case 'delete':
-              return userRole == UserRole.developer || userRole == UserRole.admin;
+              return userRole == UserRole.developer ||
+                  userRole == UserRole.admin;
             case 'read':
               return true; // All authenticated users can read properties
             default:
               return false;
           }
-          
+
         case 'leads':
           switch (action) {
             case 'create':
@@ -259,23 +249,25 @@ class AuthService {
             case 'update':
             case 'delete':
               // Only developers who own the leads or admins can manage leads
-              return userRole == UserRole.developer || userRole == UserRole.admin;
+              return userRole == UserRole.developer ||
+                  userRole == UserRole.admin;
             default:
               return false;
           }
-          
+
         case 'developments':
           switch (action) {
             case 'create':
             case 'update':
             case 'delete':
-              return userRole == UserRole.developer || userRole == UserRole.admin;
+              return userRole == UserRole.developer ||
+                  userRole == UserRole.admin;
             case 'read':
               return true; // All authenticated users can read developments
             default:
               return false;
           }
-          
+
         case 'users':
           switch (action) {
             case 'read':
@@ -290,7 +282,7 @@ class AuthService {
             default:
               return false;
           }
-          
+
         default:
           return false;
       }

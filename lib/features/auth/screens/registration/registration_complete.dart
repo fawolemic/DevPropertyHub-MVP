@@ -11,10 +11,13 @@ class RegistrationCompleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
-    
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
+
     // Get some basic information from the registration
     final userData = registrationProvider.step1Data;
     final companyName = userData['companyName'] ?? 'your company';
@@ -53,9 +56,9 @@ class RegistrationCompleteScreen extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
               ],
-              
+
               const SizedBox(height: 32),
-              
+
               // Success message
               Text(
                 'Registration Complete!',
@@ -65,23 +68,23 @@ class RegistrationCompleteScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               Text(
                 'Thank you for registering $companyName',
                 style: theme.textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Verification status card
               Card(
                 elevation: isLowBandwidth ? 0 : 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: isLowBandwidth 
+                  side: isLowBandwidth
                       ? BorderSide(color: theme.colorScheme.outline)
                       : BorderSide.none,
                 ),
@@ -123,11 +126,11 @@ class RegistrationCompleteScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
                       const Divider(),
                       const SizedBox(height: 16),
-                      
+
                       // Next steps
                       Text(
                         'Next Steps',
@@ -135,34 +138,37 @@ class RegistrationCompleteScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       _buildNextStepItem(
                         theme,
                         icon: Icons.phone_outlined,
                         title: 'Phone Verification',
-                        description: 'We may contact you to verify your phone number.',
+                        description:
+                            'We may contact you to verify your phone number.',
                       ),
-                      
+
                       _buildNextStepItem(
                         theme,
                         icon: Icons.document_scanner_outlined,
                         title: 'Document Review',
-                        description: 'Our team will verify your submitted documents.',
+                        description:
+                            'Our team will verify your submitted documents.',
                       ),
-                      
+
                       _buildNextStepItem(
                         theme,
                         icon: Icons.email_outlined,
                         title: 'Email Confirmation',
-                        description: 'You\'ll receive an email once your account is approved.',
+                        description:
+                            'You\'ll receive an email once your account is approved.',
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Action buttons
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -177,15 +183,14 @@ class RegistrationCompleteScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                   ),
-                  
                   const SizedBox(height: 16),
-                  
                   OutlinedButton.icon(
                     onPressed: () {
                       // For a real app, this would send to a contact page
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Contact support functionality would be here'),
+                          content: Text(
+                              'Contact support functionality would be here'),
                         ),
                       );
                     },

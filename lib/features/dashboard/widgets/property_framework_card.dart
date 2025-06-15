@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
 /// A modern property framework card widget for use in property and developments screens.
-/// 
+///
 /// Displays property development information with completion status
 class PropertyFrameworkCard extends StatelessWidget {
   final String name;
@@ -29,7 +29,7 @@ class PropertyFrameworkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -73,13 +73,14 @@ class PropertyFrameworkCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 // Status badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: status == 'Ready to Move' 
-                        ? Colors.green.shade50 
+                    color: status == 'Ready to Move'
+                        ? Colors.green.shade50
                         : Colors.blue.shade50,
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -88,17 +89,17 @@ class PropertyFrameworkCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: status == 'Ready to Move' 
-                          ? Colors.green.shade800 
+                      color: status == 'Ready to Move'
+                          ? Colors.green.shade800
                           : Colors.blue.shade800,
                     ),
                   ),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Stats grid
             Row(
               children: [
@@ -109,9 +110,9 @@ class PropertyFrameworkCard extends StatelessWidget {
                 _buildStatItem('Revenue', revenue),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Progress bar
             Row(
               children: [
@@ -140,7 +141,7 @@ class PropertyFrameworkCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildStatItem(String label, String value) {
     return Expanded(
       child: Column(
@@ -164,7 +165,7 @@ class PropertyFrameworkCard extends StatelessWidget {
       ),
     );
   }
-  
+
   double _parseCompletion(String completion) {
     // Parse percentage string like "75%" to 0.75
     try {

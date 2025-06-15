@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// LocationMultiSelect
-/// 
+///
 /// Component for selecting multiple locations with search capability.
 /// Includes visualization of selected items and filtering.
-/// 
+///
 /// SEARCH TAGS: #selection #location #multi-select #filter #registration
 class LocationMultiSelect extends StatefulWidget {
   final List<String> availableLocations;
@@ -29,21 +29,21 @@ class LocationMultiSelect extends StatefulWidget {
 class _LocationMultiSelectState extends State<LocationMultiSelect> {
   final TextEditingController _searchController = TextEditingController();
   List<String> _filteredLocations = [];
-  
+
   @override
   void initState() {
     super.initState();
     _filteredLocations = List.from(widget.availableLocations);
     _searchController.addListener(_filterLocations);
   }
-  
+
   @override
   void dispose() {
     _searchController.removeListener(_filterLocations);
     _searchController.dispose();
     super.dispose();
   }
-  
+
   void _filterLocations() {
     final query = _searchController.text.toLowerCase();
     setState(() {
@@ -56,7 +56,7 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
       }
     });
   }
-  
+
   void _toggleLocation(String location) {
     final newSelected = List<String>.from(widget.selectedLocations);
     if (newSelected.contains(location)) {
@@ -70,7 +70,7 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -94,7 +94,7 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
           ],
         ),
         const SizedBox(height: 8),
-        
+
         // Search field
         TextField(
           controller: _searchController,
@@ -104,12 +104,13 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           ),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Selected locations chips
         if (widget.selectedLocations.isNotEmpty) ...[
           Text(
@@ -139,7 +140,7 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
           ),
           const SizedBox(height: 16),
         ],
-        
+
         // Available locations
         Text(
           'Available Locations:',
@@ -150,7 +151,8 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: theme.colorScheme.outline.withOpacity(0.5)),
+            border:
+                Border.all(color: theme.colorScheme.outline.withOpacity(0.5)),
             borderRadius: BorderRadius.circular(8),
           ),
           height: 200,
@@ -167,8 +169,9 @@ class _LocationMultiSelectState extends State<LocationMultiSelect> {
                   itemCount: _filteredLocations.length,
                   itemBuilder: (context, index) {
                     final location = _filteredLocations[index];
-                    final isSelected = widget.selectedLocations.contains(location);
-                    
+                    final isSelected =
+                        widget.selectedLocations.contains(location);
+
                     return CheckboxListTile(
                       title: Text(location),
                       value: isSelected,

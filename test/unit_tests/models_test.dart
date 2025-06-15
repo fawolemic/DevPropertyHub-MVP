@@ -9,7 +9,7 @@ void main() {
     test('fromMap correctly parses user data', () {
       final now = DateTime.now();
       final nowString = now.toIso8601String();
-      
+
       final userData = {
         'id': 'user-123',
         'email': 'test@example.com',
@@ -27,9 +27,9 @@ void main() {
         'preferences': {'theme': 'dark'},
         'profile_data': {'address': '123 Test St'},
       };
-      
+
       final user = UserModel.fromMap(userData);
-      
+
       expect(user.id, 'user-123');
       expect(user.email, 'test@example.com');
       expect(user.firstName, 'John');
@@ -46,10 +46,10 @@ void main() {
       expect(user.preferences?['theme'], 'dark');
       expect(user.profileData?['address'], '123 Test St');
     });
-    
+
     test('toMap correctly serializes user data', () {
       final now = DateTime.now();
-      
+
       final user = UserModel(
         id: 'user-123',
         email: 'test@example.com',
@@ -67,9 +67,9 @@ void main() {
         preferences: {'theme': 'dark'},
         profileData: {'address': '123 Test St'},
       );
-      
+
       final map = user.toMap();
-      
+
       expect(map['id'], 'user-123');
       expect(map['email'], 'test@example.com');
       expect(map['first_name'], 'John');
@@ -86,20 +86,20 @@ void main() {
       expect(map['preferences']['theme'], 'dark');
       expect(map['profile_data']['address'], '123 Test St');
     });
-    
+
     test('roleToString and stringToRole work correctly', () {
       expect(UserModel.roleToString(UserRole.developer), 'developer');
       expect(UserModel.roleToString(UserRole.buyer), 'buyer');
       expect(UserModel.roleToString(UserRole.admin), 'admin');
       expect(UserModel.roleToString(UserRole.viewer), 'viewer');
-      
+
       expect(UserModel.stringToRole('developer'), UserRole.developer);
       expect(UserModel.stringToRole('buyer'), UserRole.buyer);
       expect(UserModel.stringToRole('admin'), UserRole.admin);
       expect(UserModel.stringToRole('viewer'), UserRole.viewer);
       expect(UserModel.stringToRole('invalid'), UserRole.viewer); // Default
     });
-    
+
     test('copyWith correctly updates user fields', () {
       final user = UserModel(
         id: 'user-123',
@@ -109,13 +109,13 @@ void main() {
         role: UserRole.developer,
         createdAt: DateTime.now(),
       );
-      
+
       final updatedUser = user.copyWith(
         firstName: 'Jane',
         lastName: 'Smith',
         role: UserRole.admin,
       );
-      
+
       expect(updatedUser.id, 'user-123'); // Unchanged
       expect(updatedUser.email, 'test@example.com'); // Unchanged
       expect(updatedUser.firstName, 'Jane'); // Changed
@@ -123,12 +123,12 @@ void main() {
       expect(updatedUser.role, UserRole.admin); // Changed
     });
   });
-  
+
   group('LeadModel Tests', () {
     test('fromMap correctly parses lead data', () {
       final now = DateTime.now();
       final nowString = now.toIso8601String();
-      
+
       final leadData = {
         'id': 'lead-123',
         'property_id': 'property-123',
@@ -143,9 +143,9 @@ void main() {
         'created_at': nowString,
         'updated_at': nowString,
       };
-      
+
       final lead = LeadModel.fromMap(leadData);
-      
+
       expect(lead.id, 'lead-123');
       expect(lead.propertyId, 'property-123');
       expect(lead.buyerId, 'buyer-123');
@@ -161,10 +161,10 @@ void main() {
       expect(lead.createdAt.toIso8601String(), nowString);
       expect(lead.updatedAt?.toIso8601String(), nowString);
     });
-    
+
     test('toMap correctly serializes lead data', () {
       final now = DateTime.now();
-      
+
       final lead = LeadModel(
         id: 'lead-123',
         propertyId: 'property-123',
@@ -179,9 +179,9 @@ void main() {
         createdAt: now,
         updatedAt: now,
       );
-      
+
       final map = lead.toMap();
-      
+
       expect(map['id'], 'lead-123');
       expect(map['property_id'], 'property-123');
       expect(map['buyer_id'], 'buyer-123');
@@ -197,24 +197,25 @@ void main() {
       expect(map['created_at'], now.toIso8601String());
       expect(map['updated_at'], isNotNull);
     });
-    
+
     test('statusToString and stringToStatus work correctly', () {
       expect(LeadModel.statusToString(LeadStatus.new_lead), 'new');
       expect(LeadModel.statusToString(LeadStatus.contacted), 'contacted');
       expect(LeadModel.statusToString(LeadStatus.interested), 'interested');
-      
+
       expect(LeadModel.stringToStatus('new'), LeadStatus.new_lead);
       expect(LeadModel.stringToStatus('contacted'), LeadStatus.contacted);
       expect(LeadModel.stringToStatus('interested'), LeadStatus.interested);
-      expect(LeadModel.stringToStatus('invalid'), LeadStatus.new_lead); // Default
+      expect(
+          LeadModel.stringToStatus('invalid'), LeadStatus.new_lead); // Default
     });
   });
-  
+
   group('PropertyModel Tests', () {
     test('fromMap correctly parses property data', () {
       final now = DateTime.now();
       final nowString = now.toIso8601String();
-      
+
       final propertyData = {
         'id': 'property-123',
         'title': 'Test Property',
@@ -238,9 +239,9 @@ void main() {
         'created_at': nowString,
         'updated_at': nowString,
       };
-      
+
       final property = PropertyModel.fromMap(propertyData);
-      
+
       expect(property.id, 'property-123');
       expect(property.title, 'Test Property');
       expect(property.description, 'Test description');
@@ -261,26 +262,33 @@ void main() {
       expect(property.imageUrls, ['https://example.com/image1.jpg']);
       expect(property.additionalDetails?['year_built'], 2023);
     });
-    
+
     test('statusToString and stringToStatus work correctly', () {
-      expect(PropertyModel.statusToString(PropertyStatus.pre_launch), 'pre_launch');
-      expect(PropertyModel.statusToString(PropertyStatus.under_construction), 'under_construction');
-      expect(PropertyModel.statusToString(PropertyStatus.ready_to_move), 'ready_to_move');
+      expect(PropertyModel.statusToString(PropertyStatus.pre_launch),
+          'pre_launch');
+      expect(PropertyModel.statusToString(PropertyStatus.under_construction),
+          'under_construction');
+      expect(PropertyModel.statusToString(PropertyStatus.ready_to_move),
+          'ready_to_move');
       expect(PropertyModel.statusToString(PropertyStatus.sold_out), 'sold_out');
-      
-      expect(PropertyModel.stringToStatus('pre_launch'), PropertyStatus.pre_launch);
-      expect(PropertyModel.stringToStatus('under_construction'), PropertyStatus.under_construction);
-      expect(PropertyModel.stringToStatus('ready_to_move'), PropertyStatus.ready_to_move);
+
+      expect(PropertyModel.stringToStatus('pre_launch'),
+          PropertyStatus.pre_launch);
+      expect(PropertyModel.stringToStatus('under_construction'),
+          PropertyStatus.under_construction);
+      expect(PropertyModel.stringToStatus('ready_to_move'),
+          PropertyStatus.ready_to_move);
       expect(PropertyModel.stringToStatus('sold_out'), PropertyStatus.sold_out);
-      expect(PropertyModel.stringToStatus('invalid'), PropertyStatus.under_construction); // Default
+      expect(PropertyModel.stringToStatus('invalid'),
+          PropertyStatus.under_construction); // Default
     });
   });
-  
+
   group('LeadActivityModel Tests', () {
     test('fromMap correctly parses lead activity data', () {
       final now = DateTime.now();
       final nowString = now.toIso8601String();
-      
+
       final activityData = {
         'id': 'activity-123',
         'lead_id': 'lead-123',
@@ -292,9 +300,9 @@ void main() {
         'created_at': nowString,
         'updated_at': nowString,
       };
-      
+
       final activity = LeadActivityModel.fromMap(activityData);
-      
+
       expect(activity.id, 'activity-123');
       expect(activity.leadId, 'lead-123');
       expect(activity.activityType, ActivityType.call);
@@ -305,10 +313,10 @@ void main() {
       expect(activity.createdAt.toIso8601String(), nowString);
       expect(activity.updatedAt?.toIso8601String(), nowString);
     });
-    
+
     test('toMap correctly serializes lead activity data', () {
       final now = DateTime.now();
-      
+
       final activity = LeadActivityModel(
         id: 'activity-123',
         leadId: 'lead-123',
@@ -320,9 +328,9 @@ void main() {
         createdAt: now,
         updatedAt: now,
       );
-      
+
       final map = activity.toMap();
-      
+
       expect(map['id'], 'activity-123');
       expect(map['lead_id'], 'lead-123');
       expect(map['activity_type'], 'call');
@@ -333,16 +341,21 @@ void main() {
       expect(map['created_at'], now.toIso8601String());
       expect(map['updated_at'], isNotNull);
     });
-    
+
     test('activityTypeToString and stringToActivityType work correctly', () {
       expect(LeadActivityModel.activityTypeToString(ActivityType.call), 'call');
-      expect(LeadActivityModel.activityTypeToString(ActivityType.email), 'email');
-      expect(LeadActivityModel.activityTypeToString(ActivityType.meeting), 'meeting');
-      
+      expect(
+          LeadActivityModel.activityTypeToString(ActivityType.email), 'email');
+      expect(LeadActivityModel.activityTypeToString(ActivityType.meeting),
+          'meeting');
+
       expect(LeadActivityModel.stringToActivityType('call'), ActivityType.call);
-      expect(LeadActivityModel.stringToActivityType('email'), ActivityType.email);
-      expect(LeadActivityModel.stringToActivityType('meeting'), ActivityType.meeting);
-      expect(LeadActivityModel.stringToActivityType('invalid'), ActivityType.call); // Default
+      expect(
+          LeadActivityModel.stringToActivityType('email'), ActivityType.email);
+      expect(LeadActivityModel.stringToActivityType('meeting'),
+          ActivityType.meeting);
+      expect(LeadActivityModel.stringToActivityType('invalid'),
+          ActivityType.call); // Default
     });
   });
 }

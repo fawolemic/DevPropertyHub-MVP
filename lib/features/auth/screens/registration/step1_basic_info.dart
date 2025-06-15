@@ -14,14 +14,14 @@ class Step1BasicInfoScreen extends StatefulWidget {
 
 class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _companyNameController = TextEditingController();
   final _contactPersonController = TextEditingController();
   final _phoneController = TextEditingController();
-  
+
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -43,9 +43,11 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step1Data;
-    
+
     if (savedData.isNotEmpty) {
       _emailController.text = savedData['email'] ?? '';
       _passwordController.text = savedData['password'] ?? '';
@@ -80,16 +82,20 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
       'phone': _phoneController.text.trim(),
     };
 
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context,
+            listen: false);
     await registrationProvider.submitStep1(data);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<RegistrationProvider>(context);
+    final registrationProvider =
+        provider_package.Provider.of<RegistrationProvider>(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -100,8 +106,9 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -123,7 +130,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // Email field
                     TextFormField(
                       controller: _emailController,
@@ -137,14 +144,15 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Email is required';
                         }
-                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+').hasMatch(value)) {
+                        if (!RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
+                            .hasMatch(value)) {
                           return 'Please enter a valid email address';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Password field
                     TextFormField(
                       controller: _passwordController,
@@ -153,14 +161,17 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                         hintText: 'Create a secure password',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                          icon: Icon(_obscurePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined),
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
                             });
                           },
                         ),
-                        helperText: 'Must be at least 8 characters with 1 uppercase letter and 1 number',
+                        helperText:
+                            'Must be at least 8 characters with 1 uppercase letter and 1 number',
                       ),
                       obscureText: _obscurePassword,
                       validator: (value) {
@@ -180,7 +191,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Confirm Password field
                     TextFormField(
                       controller: _confirmPasswordController,
@@ -189,10 +200,13 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                         hintText: 'Repeat your password',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
-                          icon: Icon(_obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                          icon: Icon(_obscureConfirmPassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -209,10 +223,10 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     const Divider(),
                     const SizedBox(height: 24),
-                    
+
                     // Company name field
                     TextFormField(
                       controller: _companyNameController,
@@ -229,7 +243,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Contact person field
                     TextFormField(
                       controller: _contactPersonController,
@@ -246,7 +260,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Phone number field
                     TextFormField(
                       controller: _phoneController,
@@ -268,13 +282,13 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       },
                     ),
                     const SizedBox(height: 32),
-                    
+
                     // Submit button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: registrationProvider.isLoading 
-                            ? null 
+                        onPressed: registrationProvider.isLoading
+                            ? null
                             : _submitStep1,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -289,7 +303,7 @@ class _Step1BasicInfoScreenState extends State<Step1BasicInfoScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Login link
                     Center(
                       child: TextButton(

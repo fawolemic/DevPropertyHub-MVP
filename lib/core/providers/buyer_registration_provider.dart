@@ -8,7 +8,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
   // Current step in the registration process
   int _currentStep = 1;
   int get currentStep => _currentStep;
-  
+
   // Maximum number of steps in the buyer registration process (simpler than developer)
   final int _totalSteps = 2;
   int get totalSteps => _totalSteps;
@@ -20,11 +20,11 @@ class BuyerRegistrationProvider with ChangeNotifier {
   // Getters for step data
   Map<String, dynamic> get step1Data => Map.unmodifiable(_step1Data);
   Map<String, dynamic> get step2Data => Map.unmodifiable(_step2Data);
-  
+
   // Status tracking
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  
+
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
@@ -73,7 +73,8 @@ class BuyerRegistrationProvider with ChangeNotifier {
     // Phone number validation (simple Nigerian format check)
     final phoneRegex = RegExp(r'^(\+234|0)[0-9]{10}$');
     if (!phoneRegex.hasMatch(data['phone'])) {
-      _errorMessage = 'Please enter a valid Nigerian phone number (e.g., +2348012345678 or 08012345678)';
+      _errorMessage =
+          'Please enter a valid Nigerian phone number (e.g., +2348012345678 or 08012345678)';
       return false;
     }
 
@@ -86,13 +87,16 @@ class BuyerRegistrationProvider with ChangeNotifier {
     _errorMessage = null;
 
     // Validate property preferences
-    if (data['propertyTypes'] == null || (data['propertyTypes'] is List && data['propertyTypes'].isEmpty)) {
+    if (data['propertyTypes'] == null ||
+        (data['propertyTypes'] is List && data['propertyTypes'].isEmpty)) {
       _errorMessage = 'Please select at least one property type';
       return false;
     }
 
     // Validate location preferences
-    if (data['preferredLocations'] == null || (data['preferredLocations'] is List && data['preferredLocations'].isEmpty)) {
+    if (data['preferredLocations'] == null ||
+        (data['preferredLocations'] is List &&
+            data['preferredLocations'].isEmpty)) {
       _errorMessage = 'Please select at least one preferred location';
       return false;
     }
@@ -122,7 +126,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
   // Advance to next step if validation passes
   bool nextStep(Map<String, dynamic> currentStepData) {
     bool isValid = false;
-    
+
     // Validate based on current step
     if (_currentStep == 1) {
       isValid = validateStep1Data(currentStepData);
@@ -135,7 +139,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
         saveStep2Data(currentStepData);
       }
     }
-    
+
     // If validation passed, move to next step
     if (isValid && _currentStep < _totalSteps) {
       _currentStep++;
@@ -145,7 +149,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
       // Last step completed successfully
       return true;
     }
-    
+
     return false;
   }
 
@@ -160,20 +164,20 @@ class BuyerRegistrationProvider with ChangeNotifier {
   // Go to a specific step if allowed
   bool goToStep(int step) {
     if (step < 1 || step > _totalSteps) return false;
-    
+
     // Can freely go back to previous steps
     if (step < _currentStep) {
       _currentStep = step;
       notifyListeners();
       return true;
     }
-    
+
     // Can only advance to next step if current step is valid
     if (step == _currentStep + 1) {
       // This should be handled by nextStep() method instead
       return false;
     }
-    
+
     return false;
   }
 
@@ -186,20 +190,18 @@ class BuyerRegistrationProvider with ChangeNotifier {
     try {
       // For MVP, we're just simulating the API call
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // TODO: Replace with actual API call
-      final response = {
-        'success': true,
-        'message': 'Registration successful'
-      };
-      
+      final response = {'success': true, 'message': 'Registration successful'};
+
       if (response['success'] == true) {
         _registrationComplete = true;
         _isLoading = false;
         notifyListeners();
         return true;
       } else {
-        _errorMessage = response['message']?.toString() ?? 'Registration failed';
+        _errorMessage =
+            response['message']?.toString() ?? 'Registration failed';
         _isLoading = false;
         notifyListeners();
         return false;
@@ -222,7 +224,7 @@ class BuyerRegistrationProvider with ChangeNotifier {
     _registrationComplete = false;
     notifyListeners();
   }
-  
+
   // Get combined registration data
   Map<String, dynamic> get allRegistrationData {
     final combinedData = <String, dynamic>{};

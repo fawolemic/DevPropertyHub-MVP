@@ -10,16 +10,18 @@ class RegistrationCompleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     // User type specific content
     String title;
     String subtitle;
     List<Map<String, dynamic>> nextSteps = [];
     Widget? specialContent;
-    
+
     switch (registrationProvider.userType) {
       case UserType.developer:
         title = 'Developer Registration Complete';
@@ -28,21 +30,24 @@ class RegistrationCompleteScreen extends StatelessWidget {
           {
             'icon': Icons.verified_user,
             'title': 'Verification',
-            'description': 'Your account is pending verification. We\'ll review your details within 24-48 hours.',
+            'description':
+                'Your account is pending verification. We\'ll review your details within 24-48 hours.',
           },
           {
             'icon': Icons.subscriptions,
             'title': 'Choose a Subscription',
-            'description': 'Select a subscription plan to start listing your properties and developments.',
+            'description':
+                'Select a subscription plan to start listing your properties and developments.',
           },
           {
             'icon': Icons.add_business,
             'title': 'Add Your First Development',
-            'description': 'Once verified, you can add your first property development.',
+            'description':
+                'Once verified, you can add your first property development.',
           },
         ];
         break;
-        
+
       case UserType.buyer:
         title = 'Buyer Registration Complete';
         subtitle = 'Welcome to DevPropertyHub! Your account has been created';
@@ -50,17 +55,20 @@ class RegistrationCompleteScreen extends StatelessWidget {
           {
             'icon': Icons.email,
             'title': 'Verify Your Email',
-            'description': 'We\'ve sent a verification link to your email. Please check your inbox and verify your account.',
+            'description':
+                'We\'ve sent a verification link to your email. Please check your inbox and verify your account.',
           },
           {
             'icon': Icons.home_work,
             'title': 'Explore Properties',
-            'description': 'Start exploring available properties that match your preferences.',
+            'description':
+                'Start exploring available properties that match your preferences.',
           },
           {
             'icon': Icons.notifications,
             'title': 'Set Up Alerts',
-            'description': 'Configure alerts to get notified when new properties matching your criteria are listed.',
+            'description':
+                'Configure alerts to get notified when new properties matching your criteria are listed.',
           },
         ];
         // Add special content for email verification
@@ -72,7 +80,8 @@ class RegistrationCompleteScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.colorScheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.colorScheme.primary.withOpacity(0.3)),
+                border: Border.all(
+                    color: theme.colorScheme.primary.withOpacity(0.3)),
               ),
               child: Row(
                 children: [
@@ -99,13 +108,15 @@ class RegistrationCompleteScreen extends StatelessWidget {
                           onPressed: () {
                             // Function to resend verification email
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Verification email resent!')),
+                              const SnackBar(
+                                  content: Text('Verification email resent!')),
                             );
                           },
                           icon: const Icon(Icons.refresh),
                           label: const Text('Resend Verification Email'),
                           style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                           ),
                         ),
                       ],
@@ -117,7 +128,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
           ],
         );
         break;
-        
+
       case UserType.agent:
         title = 'Agent Registration Complete';
         subtitle = 'Thank you for registering as a property agent';
@@ -125,21 +136,24 @@ class RegistrationCompleteScreen extends StatelessWidget {
           {
             'icon': Icons.verified,
             'title': 'Pending Approval',
-            'description': 'Your account is under review. We\'ll verify your credentials and invitation code.',
+            'description':
+                'Your account is under review. We\'ll verify your credentials and invitation code.',
           },
           {
             'icon': Icons.person_search,
             'title': 'Developer Connection',
-            'description': 'Once approved, you\'ll be connected with the developer who invited you.',
+            'description':
+                'Once approved, you\'ll be connected with the developer who invited you.',
           },
           {
             'icon': Icons.apartment,
             'title': 'Property Access',
-            'description': 'You\'ll gain access to properties you can market and sell on behalf of developers.',
+            'description':
+                'You\'ll gain access to properties you can market and sell on behalf of developers.',
           },
         ];
         break;
-        
+
       default:
         title = 'Registration Complete';
         subtitle = 'Thank you for registering with DevPropertyHub';
@@ -151,7 +165,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
           },
         ];
     }
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -161,8 +175,9 @@ class RegistrationCompleteScreen extends StatelessWidget {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -184,7 +199,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Title
                   Text(
                     title,
@@ -192,7 +207,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Subtitle
                   Text(
                     subtitle,
@@ -202,7 +217,7 @@ class RegistrationCompleteScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Next steps
                   Text(
                     'Next Steps',
@@ -211,42 +226,43 @@ class RegistrationCompleteScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Next steps list
                   ...nextSteps.map((step) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: ListTile(
-                      leading: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: theme.colorScheme.secondary.withOpacity(0.1),
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                                  theme.colorScheme.secondary.withOpacity(0.1),
+                            ),
+                            child: Icon(
+                              step['icon'] as IconData,
+                              color: theme.colorScheme.secondary,
+                            ),
+                          ),
+                          title: Text(
+                            step['title'] as String,
+                            style: theme.textTheme.titleMedium,
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              step['description'] as String,
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.zero,
                         ),
-                        child: Icon(
-                          step['icon'] as IconData,
-                          color: theme.colorScheme.secondary,
-                        ),
-                      ),
-                      title: Text(
-                        step['title'] as String,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          step['description'] as String,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  )),
-                  
+                      )),
+
                   // Special content (like email verification for buyers)
                   if (specialContent != null) specialContent,
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Action buttons
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

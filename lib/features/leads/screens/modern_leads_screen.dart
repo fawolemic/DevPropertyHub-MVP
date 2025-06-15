@@ -103,7 +103,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
         children: [
           // Sidebar for desktop
           if (isDesktop) const AppSidebar(),
-          
+
           // Main content
           Expanded(
             child: Column(
@@ -127,15 +127,21 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                       final screenWidth = constraints.maxWidth;
                       final isVerySmallScreen = screenWidth < 320;
                       final isSmallScreen = screenWidth < 375;
-                      
+
                       // Choose appropriate title based on available width
-                      final String title = isVerySmallScreen ? 'Leads' : 
-                                          isSmallScreen ? 'Leads' : 'Leads Management';
-                      
+                      final String title = isVerySmallScreen
+                          ? 'Leads'
+                          : isSmallScreen
+                              ? 'Leads'
+                              : 'Leads Management';
+
                       // Calculate trailing widget width based on screen size
-                      final double trailingWidth = isVerySmallScreen ? 40.0 : 
-                                           isSmallScreen ? 70.0 : 100.0;
-                      
+                      final double trailingWidth = isVerySmallScreen
+                          ? 40.0
+                          : isSmallScreen
+                              ? 70.0
+                              : 100.0;
+
                       return Row(
                         children: [
                           // Menu button (mobile only) - fixed width
@@ -145,7 +151,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                               child: Builder(
                                 builder: (ctx) => IconButton(
                                   icon: const Icon(Icons.menu, size: 18),
-                                  onPressed: () => Scaffold.of(ctx).openDrawer(),
+                                  onPressed: () =>
+                                      Scaffold.of(ctx).openDrawer(),
                                   color: Colors.grey.shade700,
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
@@ -154,9 +161,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                             )
                           else
                             const SizedBox(width: 4),
-                          
+
                           const SizedBox(width: 4), // Small spacing
-                          
+
                           // Title - use Flexible with tight fit
                           Flexible(
                             fit: FlexFit.tight,
@@ -172,28 +179,30 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                               softWrap: false,
                             ),
                           ),
-                          
+
                           const SizedBox(width: 4), // Small spacing
-                          
+
                           // Trailing widgets in fixed-width container
                           SizedBox(
-                            width: trailingWidth, // Fixed width for trailing widgets
+                            width:
+                                trailingWidth, // Fixed width for trailing widgets
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 // On very small screens, just show user icon
-                                if (!isVerySmallScreen && !isSmallScreen) ...[                                  
+                                if (!isVerySmallScreen && !isSmallScreen) ...[
                                   // Search icon - only on medium+ screens
                                   IconButton(
                                     icon: const Icon(Icons.search, size: 18),
                                     onPressed: () {},
                                     padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(maxWidth: 24, maxHeight: 24),
+                                    constraints: const BoxConstraints(
+                                        maxWidth: 24, maxHeight: 24),
                                   ),
                                   const SizedBox(width: 4),
                                 ],
-                                
+
                                 // Always show user icon
                                 CircleAvatar(
                                   radius: 14,
@@ -212,7 +221,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                     },
                   ),
                 ),
-                
+
                 // Main content area
                 Expanded(
                   child: Padding(
@@ -241,7 +250,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: theme.colorScheme.primary,
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 12),
                                 ),
                               )
                             else
@@ -254,9 +264,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                               ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // Filters
                         Wrap(
                           spacing: 16,
@@ -270,7 +280,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'All Statuses',
@@ -295,7 +306,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 ),
                               ),
                             ),
-                            
+
                             // Source filter
                             Container(
                               width: isDesktop ? 200 : double.infinity,
@@ -304,7 +315,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'All Sources',
@@ -327,7 +339,7 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 ),
                               ),
                             ),
-                            
+
                             // Assigned filter
                             Container(
                               width: isDesktop ? 200 : double.infinity,
@@ -336,7 +348,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: Colors.grey.shade300),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: 'All Agents',
@@ -359,9 +372,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 24),
-                        
+
                         // Leads list
                         Expanded(
                           child: ListView.builder(
@@ -377,7 +390,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(16),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -391,10 +405,15 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4),
                                               decoration: BoxDecoration(
-                                                color: _getStatusColor(lead['status']),
-                                                borderRadius: BorderRadius.circular(4),
+                                                color: _getStatusColor(
+                                                    lead['status']),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
                                               ),
                                               child: Text(
                                                 lead['status'],
@@ -445,7 +464,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                         ),
                                         const SizedBox(height: 16),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
@@ -487,7 +507,8 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
                                                   width: 8,
                                                   height: 8,
                                                   decoration: BoxDecoration(
-                                                    color: _getPriorityColor(lead['priority']),
+                                                    color: _getPriorityColor(
+                                                        lead['priority']),
                                                     shape: BoxShape.circle,
                                                   ),
                                                 ),
@@ -541,9 +562,11 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, String title, IconData icon, String route, {bool isActive = false}) {
+  Widget _buildNavItem(
+      BuildContext context, String title, IconData icon, String route,
+      {bool isActive = false}) {
     final theme = Theme.of(context);
-    
+
     return InkWell(
       onTap: () {
         context.go(route);
@@ -551,7 +574,9 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? theme.colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+          color: isActive
+              ? theme.colorScheme.primary.withOpacity(0.1)
+              : Colors.transparent,
           border: Border(
             left: BorderSide(
               color: isActive ? theme.colorScheme.primary : Colors.transparent,
@@ -563,14 +588,16 @@ class _ModernLeadsScreenState extends State<ModernLeadsScreen> {
           children: [
             Icon(
               icon,
-              color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+              color:
+                  isActive ? theme.colorScheme.primary : Colors.grey.shade700,
               size: 20,
             ),
             const SizedBox(width: 16),
             Text(
               title,
               style: TextStyle(
-                color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+                color:
+                    isActive ? theme.colorScheme.primary : Colors.grey.shade700,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
               ),
             ),

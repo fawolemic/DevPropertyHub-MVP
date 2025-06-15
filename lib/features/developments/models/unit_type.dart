@@ -37,16 +37,15 @@ class UnitType {
       name: json['name'],
       bedrooms: json['bedrooms'],
       bathrooms: json['bathrooms'],
-      squareFootage: json['square_footage'] != null 
-        ? double.parse(json['square_footage'].toString())
-        : null,
+      squareFootage: json['square_footage'] != null
+          ? double.parse(json['square_footage'].toString())
+          : null,
       unitCount: json['unit_count'],
       priceMin: double.parse(json['price_min'].toString()),
       priceMax: double.parse(json['price_max'].toString()),
       currency: json['currency'] ?? 'NGN',
-      features: json['features'] != null 
-        ? List<String>.from(json['features'])
-        : [],
+      features:
+          json['features'] != null ? List<String>.from(json['features']) : [],
       createdAt: DateTime.parse(json['created_at']),
     );
   }

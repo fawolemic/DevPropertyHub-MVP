@@ -4,9 +4,10 @@ import 'package:devpropertyhub/features/auth/widgets/components/terms_and_condit
 
 void main() {
   group('TermsAndConditionsCheckbox', () {
-    testWidgets('should render checkbox and terms text', (WidgetTester tester) async {
+    testWidgets('should render checkbox and terms text',
+        (WidgetTester tester) async {
       bool checkboxValue = false;
-      
+
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: TermsAndConditionsCheckbox(
@@ -17,20 +18,21 @@ void main() {
           ),
         ),
       ));
-      
+
       // Verify checkbox is rendered
       expect(find.byType(Checkbox), findsOneWidget);
-      
+
       // Verify text is rendered
       expect(find.text('I agree to the '), findsOneWidget);
       expect(find.text('Terms of Service'), findsOneWidget);
       expect(find.text(' and '), findsOneWidget);
       expect(find.text('Privacy Policy'), findsOneWidget);
     });
-    
-    testWidgets('should display error text when provided', (WidgetTester tester) async {
+
+    testWidgets('should display error text when provided',
+        (WidgetTester tester) async {
       const errorText = 'You must accept the terms and conditions';
-      
+
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: const TermsAndConditionsCheckbox(
@@ -40,14 +42,15 @@ void main() {
           ),
         ),
       ));
-      
+
       // Verify error text is displayed
       expect(find.text(errorText), findsOneWidget);
     });
-    
-    testWidgets('should call onChanged when checkbox is tapped', (WidgetTester tester) async {
+
+    testWidgets('should call onChanged when checkbox is tapped',
+        (WidgetTester tester) async {
       bool checkboxValue = false;
-      
+
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: StatefulBuilder(
@@ -64,14 +67,14 @@ void main() {
           ),
         ),
       ));
-      
+
       // Verify initial state
       expect(checkboxValue, false);
-      
+
       // Tap the checkbox
       await tester.tap(find.byType(Checkbox));
       await tester.pump();
-      
+
       // Verify value changed
       expect(checkboxValue, true);
     });

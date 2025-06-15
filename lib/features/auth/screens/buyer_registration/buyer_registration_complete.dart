@@ -10,9 +10,10 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -24,8 +25,9 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                 elevation: isLowBandwidth ? 0 : 1,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: isLowBandwidth 
-                      ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+                  side: isLowBandwidth
+                      ? BorderSide(
+                          color: theme.colorScheme.outline.withOpacity(0.5))
                       : BorderSide.none,
                 ),
                 child: Padding(
@@ -49,7 +51,7 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Success title
                       Text(
                         'Registration Successful!',
@@ -60,7 +62,7 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Success message
                       Text(
                         'Your buyer account has been created successfully. You can now start exploring properties that match your preferences.',
@@ -70,7 +72,7 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
-                      
+
                       // What's next section
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -95,37 +97,37 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            
                             _buildNextStep(
                               context,
                               icon: Icons.search,
                               title: 'Browse Properties',
-                              description: 'Explore properties that match your preferences',
+                              description:
+                                  'Explore properties that match your preferences',
                             ),
                             const SizedBox(height: 12),
-                            
                             _buildNextStep(
                               context,
                               icon: Icons.star_border,
                               title: 'Save Favorites',
-                              description: 'Keep track of properties you\'re interested in',
+                              description:
+                                  'Keep track of properties you\'re interested in',
                             ),
                             const SizedBox(height: 12),
-                            
                             _buildNextStep(
                               context,
                               icon: Icons.contact_page_outlined,
                               title: 'Connect with Developers',
-                              description: 'Contact property developers directly through the platform',
+                              description:
+                                  'Contact property developers directly through the platform',
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 32),
-                      
+
                       const Divider(),
                       const SizedBox(height: 24),
-                      
+
                       // Continue to dashboard button
                       SizedBox(
                         width: double.infinity,
@@ -141,7 +143,7 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Go home button
                       Center(
                         child: TextButton(
@@ -161,14 +163,15 @@ class BuyerRegistrationCompleteScreen extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildNextStep(BuildContext context, {
+
+  Widget _buildNextStep(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String description,
   }) {
     final theme = Theme.of(context);
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -26,9 +26,9 @@ class ProjectUpdate {
       title: json['title'],
       content: json['content'],
       updateDate: DateTime.parse(json['update_date']),
-      mediaUrls: json['media_urls'] != null 
-        ? List<String>.from(json['media_urls'])
-        : [],
+      mediaUrls: json['media_urls'] != null
+          ? List<String>.from(json['media_urls'])
+          : [],
       isPublished: json['is_published'] ?? true,
       createdAt: DateTime.parse(json['created_at']),
     );

@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 /// SubscriptionSelectionScreen
-/// 
+///
 /// Screen for developers to select subscription plans after registration.
 /// Shows plan features, pricing, and benefits.
-/// 
+///
 /// SEARCH TAGS: #subscription #pricing #payment #developer #registration
 class SubscriptionSelectionScreen extends StatefulWidget {
   const SubscriptionSelectionScreen({Key? key}) : super(key: key);
 
   @override
-  State<SubscriptionSelectionScreen> createState() => _SubscriptionSelectionScreenState();
+  State<SubscriptionSelectionScreen> createState() =>
+      _SubscriptionSelectionScreenState();
 }
 
-class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScreen> {
+class _SubscriptionSelectionScreenState
+    extends State<SubscriptionSelectionScreen> {
   String _selectedPlan = 'premium'; // Default selection
-  
+
   final List<Map<String, dynamic>> _plans = [
     {
       'id': 'basic',
@@ -65,7 +67,7 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Subscription Plan'),
@@ -91,20 +93,20 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Plan selection cards
               ...List.generate(_plans.length, (index) {
                 final plan = _plans[index];
                 final isSelected = _selectedPlan == plan['id'];
-                
+
                 return Card(
                   elevation: isSelected ? 4 : 1,
                   margin: const EdgeInsets.only(bottom: 24),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(
-                      color: isSelected 
-                          ? theme.colorScheme.primary 
+                      color: isSelected
+                          ? theme.colorScheme.primary
                           : Colors.transparent,
                       width: 2,
                     ),
@@ -133,7 +135,7 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
                               if (plan['recommended'])
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, 
+                                    horizontal: 12,
                                     vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
@@ -215,9 +217,9 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
                   ),
                 );
               }),
-              
+
               const SizedBox(height: 32),
-              
+
               // Continue button
               SizedBox(
                 width: double.infinity,
@@ -235,9 +237,9 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
                   child: const Text('Continue to Payment'),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Skip for now option
               Center(
                 child: TextButton(
@@ -259,18 +261,18 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
       ),
     );
   }
-  
+
   void _proceedToPayment() {
     // Navigate to the payment screen with the selected plan as a query parameter
     // Use extra parameter to ensure the plan is passed correctly
     GoRouter.of(context).go('/payment?plan=$_selectedPlan', extra: {
       'plan': _selectedPlan,
     });
-    
+
     // Add debug print to help diagnose issues
     debugPrint('Navigating to payment screen with plan: $_selectedPlan');
   }
-  
+
   void _skipSubscription() {
     // Show a message that subscription selection was skipped
     ScaffoldMessenger.of(context).showSnackBar(
@@ -279,7 +281,7 @@ class _SubscriptionSelectionScreenState extends State<SubscriptionSelectionScree
         behavior: SnackBarBehavior.floating,
       ),
     );
-    
+
     // Navigate to the dashboard using GoRouter
     GoRouter.of(context).go('/developments');
   }

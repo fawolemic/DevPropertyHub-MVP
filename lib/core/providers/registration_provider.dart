@@ -8,7 +8,7 @@ class RegistrationProvider with ChangeNotifier {
   // Current step in the registration process
   int _currentStep = 1;
   int get currentStep => _currentStep;
-  
+
   // Maximum number of steps in the registration process
   final int _totalSteps = 3;
   int get totalSteps => _totalSteps;
@@ -22,11 +22,11 @@ class RegistrationProvider with ChangeNotifier {
   Map<String, dynamic> get step1Data => Map.unmodifiable(_step1Data);
   Map<String, dynamic> get step2Data => Map.unmodifiable(_step2Data);
   Map<String, dynamic> get step3Data => Map.unmodifiable(_step3Data);
-  
+
   // Status tracking
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  
+
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
@@ -90,7 +90,8 @@ class RegistrationProvider with ChangeNotifier {
     // Phone number validation (simple Nigerian format check)
     final phoneRegex = RegExp(r'^(\+234|0)[0-9]{10}$');
     if (!phoneRegex.hasMatch(data['phone'])) {
-      _errorMessage = 'Please enter a valid Nigerian phone number (e.g., +2348012345678 or 08012345678)';
+      _errorMessage =
+          'Please enter a valid Nigerian phone number (e.g., +2348012345678 or 08012345678)';
       return false;
     }
 

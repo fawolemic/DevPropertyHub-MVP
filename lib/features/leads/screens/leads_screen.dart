@@ -27,9 +27,10 @@ class _LeadsScreenState extends State<LeadsScreen> {
     try {
       // In a real app, this would be an API call
       // For the MVP, we'll load from a local JSON file
-      final jsonString = await rootBundle.loadString('assets/data/sample_data.json');
+      final jsonString =
+          await rootBundle.loadString('assets/data/sample_data.json');
       final jsonData = json.decode(jsonString);
-      
+
       setState(() {
         _leads = jsonData['leads'];
         _isLoading = false;
@@ -75,7 +76,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                                 // Add new lead functionality would go here
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Add lead feature coming soon!'),
+                                    content:
+                                        Text('Add lead feature coming soon!'),
                                   ),
                                 );
                               },
@@ -91,7 +93,8 @@ class _LeadsScreenState extends State<LeadsScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: _leads.length,
-                          separatorBuilder: (context, index) => const Divider(height: 1),
+                          separatorBuilder: (context, index) =>
+                              const Divider(height: 1),
                           itemBuilder: (context, index) {
                             final lead = _leads[index];
                             return LeadListItem(
@@ -103,22 +106,30 @@ class _LeadsScreenState extends State<LeadsScreen> {
                               status: lead['status'],
                               createdAt: DateTime.parse(lead['createdAt']),
                               canEdit: canEdit,
-                              onEdit: canEdit ? () {
-                                // Edit lead functionality would go here
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Edit ${lead['name']} feature coming soon!'),
-                                  ),
-                                );
-                              } : null,
-                              onDelete: authProvider.userRole == 'admin' ? () {
-                                // Delete lead functionality would go here
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Delete ${lead['name']} feature coming soon!'),
-                                  ),
-                                );
-                              } : null,
+                              onEdit: canEdit
+                                  ? () {
+                                      // Edit lead functionality would go here
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Edit ${lead['name']} feature coming soon!'),
+                                        ),
+                                      );
+                                    }
+                                  : null,
+                              onDelete: authProvider.userRole == 'admin'
+                                  ? () {
+                                      // Delete lead functionality would go here
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Delete ${lead['name']} feature coming soon!'),
+                                        ),
+                                      );
+                                    }
+                                  : null,
                             );
                           },
                         ),

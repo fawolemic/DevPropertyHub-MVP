@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// A modern sidebar widget for the application
-/// 
+///
 /// Displays navigation options and user information
 class ModernSidebar extends StatelessWidget {
   final String activeSection;
@@ -20,7 +20,7 @@ class ModernSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       width: 256,
       color: Colors.white,
@@ -54,7 +54,7 @@ class ModernSidebar extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Navigation items
           Expanded(
             child: Padding(
@@ -106,7 +106,7 @@ class ModernSidebar extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Upgrade promo
           Padding(
             padding: const EdgeInsets.all(16),
@@ -148,7 +148,8 @@ class ModernSidebar extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: theme.colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -168,7 +169,7 @@ class ModernSidebar extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildNavItem(
     BuildContext context,
     String id,
@@ -177,7 +178,7 @@ class ModernSidebar extends StatelessWidget {
   ) {
     final theme = Theme.of(context);
     final isActive = activeSection == id;
-    
+
     return InkWell(
       onTap: () {
         onSectionChanged(id);
@@ -189,7 +190,9 @@ class ModernSidebar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? theme.colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+          color: isActive
+              ? theme.colorScheme.primary.withOpacity(0.1)
+              : Colors.transparent,
           border: isActive
               ? Border.all(color: theme.colorScheme.primary.withOpacity(0.3))
               : null,
@@ -200,14 +203,16 @@ class ModernSidebar extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+              color:
+                  isActive ? theme.colorScheme.primary : Colors.grey.shade700,
             ),
             const SizedBox(width: 12),
             Text(
               label,
               style: TextStyle(
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                color: isActive ? theme.colorScheme.primary : Colors.grey.shade700,
+                color:
+                    isActive ? theme.colorScheme.primary : Colors.grey.shade700,
               ),
             ),
           ],

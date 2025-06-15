@@ -1,4 +1,5 @@
 enum PlanType { outright, installmental, construction_linked }
+
 enum InstallmentFrequency { monthly, quarterly, milestone }
 
 class PaymentPlan {
@@ -37,15 +38,17 @@ class PaymentPlan {
         orElse: () => PlanType.outright,
       ),
       initialDepositPercentage: json['initial_deposit_percentage'] != null
-        ? double.parse(json['initial_deposit_percentage'].toString())
-        : null,
+          ? double.parse(json['initial_deposit_percentage'].toString())
+          : null,
       installmentCount: json['installment_count'],
       installmentFrequency: json['installment_frequency'] != null
-        ? InstallmentFrequency.values.firstWhere(
-            (freq) => freq.toString().split('.').last == json['installment_frequency'],
-            orElse: () => InstallmentFrequency.monthly,
-          )
-        : null,
+          ? InstallmentFrequency.values.firstWhere(
+              (freq) =>
+                  freq.toString().split('.').last ==
+                  json['installment_frequency'],
+              orElse: () => InstallmentFrequency.monthly,
+            )
+          : null,
       termsDescription: json['terms_description'],
       createdAt: DateTime.parse(json['created_at']),
     );
@@ -84,7 +87,8 @@ class PaymentPlan {
       unitTypeId: unitTypeId ?? this.unitTypeId,
       planName: planName ?? this.planName,
       planType: planType ?? this.planType,
-      initialDepositPercentage: initialDepositPercentage ?? this.initialDepositPercentage,
+      initialDepositPercentage:
+          initialDepositPercentage ?? this.initialDepositPercentage,
       installmentCount: installmentCount ?? this.installmentCount,
       installmentFrequency: installmentFrequency ?? this.installmentFrequency,
       termsDescription: termsDescription ?? this.termsDescription,

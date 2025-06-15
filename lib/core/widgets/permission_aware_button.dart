@@ -56,7 +56,7 @@ class _PermissionAwareButtonState extends State<PermissionAwareButton> {
     });
 
     bool hasPermission = false;
-    
+
     // Check the appropriate permission based on the action
     if (widget.action == 'create') {
       hasPermission = await widget.rbacService.canCreate(widget.resource);
@@ -64,15 +64,18 @@ class _PermissionAwareButtonState extends State<PermissionAwareButton> {
       hasPermission = await widget.rbacService.canRead(widget.resource);
     } else if (widget.action == 'update') {
       if (widget.resourceId != null) {
-        hasPermission = await widget.rbacService.canUpdate(widget.resource, widget.resourceId!);
+        hasPermission = await widget.rbacService
+            .canUpdate(widget.resource, widget.resourceId!);
       }
     } else if (widget.action == 'delete') {
       if (widget.resourceId != null) {
-        hasPermission = await widget.rbacService.canDelete(widget.resource, widget.resourceId!);
+        hasPermission = await widget.rbacService
+            .canDelete(widget.resource, widget.resourceId!);
       }
     } else {
       // For custom actions
-      hasPermission = await widget.rbacService.hasPermission(widget.resource, widget.action);
+      hasPermission = await widget.rbacService
+          .hasPermission(widget.resource, widget.action);
     }
 
     if (mounted) {
@@ -86,7 +89,8 @@ class _PermissionAwareButtonState extends State<PermissionAwareButton> {
   void _showPermissionDeniedFeedback() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('You do not have permission to ${widget.action} this ${widget.resource}'),
+        content: Text(
+            'You do not have permission to ${widget.action} this ${widget.resource}'),
         backgroundColor: Colors.red,
         duration: const Duration(seconds: 3),
       ),
@@ -118,7 +122,7 @@ class _PermissionAwareButtonState extends State<PermissionAwareButton> {
     if (!_hasPermission) {
       // Option 1: Hide the button completely
       // return const SizedBox.shrink();
-      
+
       // Option 2: Show disabled button with feedback on press
       return ElevatedButton.icon(
         icon: widget.icon != null ? Icon(widget.icon) : const SizedBox.shrink(),

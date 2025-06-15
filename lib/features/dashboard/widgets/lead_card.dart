@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
 /// A modern lead card widget for use in developments and leads screens.
-/// 
+///
 /// Displays information about a lead with priority indicators
 class LeadCard extends StatelessWidget {
   final int id;
@@ -29,7 +29,7 @@ class LeadCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -66,9 +66,9 @@ class LeadCard extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Lead information
             Expanded(
               child: Column(
@@ -96,7 +96,7 @@ class LeadCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Budget and time
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -115,9 +115,9 @@ class LeadCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(width: 16),
-            
+
             // Status badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -134,7 +134,7 @@ class LeadCard extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // More options button
             IconButton(
               icon: Icon(
@@ -151,7 +151,7 @@ class LeadCard extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getInitials(String name) {
     final nameParts = name.split(' ');
     if (nameParts.length > 1) {
@@ -161,7 +161,7 @@ class LeadCard extends StatelessWidget {
     }
     return '';
   }
-  
+
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'high':

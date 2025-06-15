@@ -13,19 +13,19 @@ import 'package:go_router/go_router.dart';
 class TestAuthProvider extends AuthProvider {
   bool _isLoggedIn = false;
   UserRole _userRole = UserRole.viewer;
-  
+
   @override
   bool get isLoggedIn => _isLoggedIn;
-  
+
   @override
   UserRole get userRole => _userRole;
-  
+
   // Expose setters for testing
   void setLoggedIn(bool value) {
     _isLoggedIn = value;
     notifyListeners();
   }
-  
+
   void setUserRole(UserRole role) {
     _userRole = role;
     notifyListeners();
@@ -40,7 +40,7 @@ class MockBandwidthProvider extends Mock implements BandwidthProvider {
 void main() {
   // Initialize Flutter binding
   TestWidgetsFlutterBinding.ensureInitialized();
-  
+
   late TestAuthProvider authProvider;
   late MockBandwidthProvider bandwidthProvider;
 
@@ -50,57 +50,59 @@ void main() {
   });
 
   group('Authentication Flow Tests', () {
-    testWidgets('Unauthenticated user is redirected to login screen', 
+    testWidgets('Unauthenticated user is redirected to login screen',
         (WidgetTester tester) async {
       // Set up to return unauthenticated
       authProvider.setLoggedIn(false);
-      
+
       // Create app with router
       final router = AppRouter.router(authProvider);
-      
+
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-            ChangeNotifierProvider<BandwidthProvider>.value(value: bandwidthProvider),
+            ChangeNotifierProvider<BandwidthProvider>.value(
+                value: bandwidthProvider),
           ],
           child: MaterialApp.router(
             routerConfig: router,
           ),
         ),
       );
-      
+
       // Wait for redirects to complete
       await tester.pumpAndSettle();
-      
+
       // Verify we're on the login screen
       expect(find.byType(LoginScreen), findsOneWidget);
     });
 
-    testWidgets('Authenticated user with viewer role can access dashboard', 
+    testWidgets('Authenticated user with viewer role can access dashboard',
         (WidgetTester tester) async {
       // Set up to return authenticated with viewer role
       authProvider.setLoggedIn(true);
       authProvider.setUserRole(UserRole.viewer);
-      
+
       // Create app with router
       final router = AppRouter.router(authProvider);
-      
+
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-            ChangeNotifierProvider<BandwidthProvider>.value(value: bandwidthProvider),
+            ChangeNotifierProvider<BandwidthProvider>.value(
+                value: bandwidthProvider),
           ],
           child: MaterialApp.router(
             routerConfig: router,
           ),
         ),
       );
-      
+
       // Wait for redirects to complete
       await tester.pumpAndSettle();
-      
+
       // Verify we're on the dashboard
       expect(find.byType(DashboardScreen), findsOneWidget);
     });

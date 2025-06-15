@@ -3,10 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// TermsAndConditionsCheckbox
-/// 
+///
 /// Reusable checkbox component for terms and conditions acceptance.
 /// Includes link to full terms document and validation.
-/// 
+///
 /// SEARCH TAGS: #auth #terms #checkbox #validation #registration
 class TermsAndConditionsCheckbox extends StatelessWidget {
   final bool value;
@@ -27,7 +27,7 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,7 +90,7 @@ class TermsAndConditionsCheckbox extends StatelessWidget {
       ],
     );
   }
-  
+
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {

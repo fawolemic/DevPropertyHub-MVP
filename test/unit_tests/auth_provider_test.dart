@@ -4,11 +4,11 @@ import 'package:devpropertyhub/core/providers/auth_provider.dart';
 
 void main() {
   late AuthProvider authProvider;
-  
+
   setUp(() {
     // Initialize SharedPreferences
     SharedPreferences.setMockInitialValues({});
-    
+
     // Create instance of AuthProvider
     authProvider = AuthProvider();
   });
@@ -26,7 +26,7 @@ void main() {
       expect(authProvider.isStandard, false);
       expect(authProvider.isViewer, true); // Default is viewer
     });
-    
+
     test('Permission check methods work correctly', () {
       // Test canEdit (should be false for viewer)
       expect(authProvider.canEdit, false);

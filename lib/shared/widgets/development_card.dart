@@ -32,12 +32,14 @@ class DevelopmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: isLowBandwidth ? 0 : 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: isLowBandwidth ? BorderSide(color: Colors.grey.shade300) : BorderSide.none,
+        side: isLowBandwidth
+            ? BorderSide(color: Colors.grey.shade300)
+            : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -72,15 +74,18 @@ class DevelopmentCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                
+
                 // Status badge
                 Positioned(
                   top: 8,
                   right: 8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: status != null ? _getStatusColor(status!, theme) : Colors.grey,
+                      color: status != null
+                          ? _getStatusColor(status!, theme)
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
@@ -95,7 +100,7 @@ class DevelopmentCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             // Development details
             Padding(
               padding: const EdgeInsets.all(12),
@@ -130,7 +135,7 @@ class DevelopmentCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Units info
                   Row(
                     children: [
@@ -146,7 +151,9 @@ class DevelopmentCard extends StatelessWidget {
                       ),
                       const Spacer(),
                       Text(
-                        progress != null ? '${(progress! * 100).toInt()}%' : 'N/A',
+                        progress != null
+                            ? '${(progress! * 100).toInt()}%'
+                            : 'N/A',
                         style: theme.textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.primary,
@@ -155,16 +162,19 @@ class DevelopmentCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  
+
                   // Progress bar
                   ClipRRect(
                     borderRadius: BorderRadius.circular(2),
-                    child: progress != null ? LinearProgressIndicator(
-                      value: progress!,
-                      backgroundColor: Colors.grey[200],
-                      valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
-                      minHeight: 4,
-                    ) : const SizedBox(height: 4),
+                    child: progress != null
+                        ? LinearProgressIndicator(
+                            value: progress!,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                theme.colorScheme.primary),
+                            minHeight: 4,
+                          )
+                        : const SizedBox(height: 4),
                   ),
                 ],
               ),
@@ -174,7 +184,7 @@ class DevelopmentCard extends StatelessWidget {
       ),
     );
   }
-  
+
   // Get color based on development status
   Color _getStatusColor(String status, ThemeData theme) {
     switch (status.toLowerCase()) {
@@ -190,7 +200,7 @@ class DevelopmentCard extends StatelessWidget {
         return Colors.grey;
     }
   }
-  
+
   // Generate a consistent color based on development name
   Color _getColorForName(String name) {
     final colors = [
@@ -200,7 +210,7 @@ class DevelopmentCard extends StatelessWidget {
       const Color(0xFF7B1FA2), // Purple
       const Color(0xFFD32F2F), // Red
     ];
-    
+
     // Use the name to generate a consistent index
     final index = name.length % colors.length;
     return colors[index];

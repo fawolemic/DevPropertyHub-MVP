@@ -138,7 +138,8 @@ class LeadModel extends BaseModel {
       'requirements': requirements ?? {}, // Ensure we don't send null
       'source': source,
       'notes': notes,
-      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
+      'updated_at':
+          DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -150,18 +151,18 @@ class LeadModel extends BaseModel {
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : DateTime.now(),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       propertyId: map['property_id'],
       buyerId: map['buyer_id'],
       developerId: map['developer_id'] ?? '',
       status: stringToStatus(map['status'] ?? 'new'), // Provide default value
-      priority: stringToPriority(map['priority'] ?? 'medium'), // Provide default value
-      budgetRange: map['budget_range'] != null 
+      priority: stringToPriority(
+          map['priority'] ?? 'medium'), // Provide default value
+      budgetRange: map['budget_range'] != null
           ? Map<String, dynamic>.from(map['budget_range'])
           : {}, // Safe conversion with empty default
-      requirements: map['requirements'] != null 
+      requirements: map['requirements'] != null
           ? Map<String, dynamic>.from(map['requirements'])
           : {}, // Safe conversion with empty default
       source: map['source'],

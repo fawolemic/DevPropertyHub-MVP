@@ -17,33 +17,39 @@ import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Supabase
   await SupabaseConfig.initialize();
-  
+
   // Initialize other services and providers here
-  
+
   // Initialize Supabase provider
   final supabaseProvider = SupabaseProvider();
   await supabaseProvider.initialize();
-  
+
   // Initialize Supabase auth provider
   final supabaseAuthProvider = SupabaseAuthProvider();
   await supabaseAuthProvider.initAuth();
-  
+
   runApp(
     provider_package.MultiProvider(
       providers: [
         provider_package.ChangeNotifierProvider.value(value: supabaseProvider),
-        provider_package.ChangeNotifierProvider.value(value: supabaseAuthProvider),
+        provider_package.ChangeNotifierProvider.value(
+            value: supabaseAuthProvider),
         provider_package.ChangeNotifierProvider(create: (_) => AuthProvider()),
-        provider_package.ChangeNotifierProvider(create: (_) => BandwidthProvider()),
-        provider_package.ChangeNotifierProvider(create: (_) => RegistrationProvider()),
-        provider_package.ChangeNotifierProvider(create: (_) => BuyerRegistrationProvider()),
-        provider_package.ChangeNotifierProvider(create: (_) => UnifiedRegistrationProvider()),
+        provider_package.ChangeNotifierProvider(
+            create: (_) => BandwidthProvider()),
+        provider_package.ChangeNotifierProvider(
+            create: (_) => RegistrationProvider()),
+        provider_package.ChangeNotifierProvider(
+            create: (_) => BuyerRegistrationProvider()),
+        provider_package.ChangeNotifierProvider(
+            create: (_) => UnifiedRegistrationProvider()),
         provider_package.ChangeNotifierProvider(
           create: (context) => RBACProvider(
-            provider_package.Provider.of<SupabaseAuthProvider>(context, listen: false),
+            provider_package.Provider.of<SupabaseAuthProvider>(context,
+                listen: false),
           ),
         ),
         // Add ProjectProvider for the development projects feature
@@ -69,8 +75,9 @@ class DevPropertyHub extends StatelessWidget {
     // Access the auth provider to handle user roles
     final authProvider = provider_package.Provider.of<AuthProvider>(context);
     // Access the bandwidth provider to optimize UI based on network conditions
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
-    
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
+
     return MaterialApp.router(
       title: 'DevPropertyHub',
       debugShowCheckedModeBanner: false,
@@ -81,7 +88,7 @@ class DevPropertyHub extends StatelessWidget {
       builder: (context, child) {
         // Apply bandwidth optimizations if needed
         final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-        
+
         return MediaQuery(
           // Adjust font sizes for low bandwidth mode
           data: MediaQuery.of(context).copyWith(

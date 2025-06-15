@@ -10,7 +10,7 @@ class MobileNavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Drawer(
       child: Column(
         children: [
@@ -132,11 +132,7 @@ class MobileNavigationDrawer extends StatelessWidget {
   }
 
   Widget _buildDrawerItem(
-    BuildContext context, 
-    String title, 
-    IconData icon, 
-    VoidCallback onTap
-  ) {
+      BuildContext context, String title, IconData icon, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),

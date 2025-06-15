@@ -11,7 +11,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return AppBar(
       backgroundColor: theme.colorScheme.surface,
       elevation: 1,
@@ -27,13 +27,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       // Add hamburger menu for mobile
       leading: MediaQuery.of(context).size.width <= 800
-        ? Builder(
-            builder: (ctx) => IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () => Scaffold.of(ctx).openDrawer(),
-            ),
-          )
-        : null,
+          ? Builder(
+              builder: (ctx) => IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () => Scaffold.of(ctx).openDrawer(),
+              ),
+            )
+          : null,
       actions: [
         // Navigation links for larger screens
         if (MediaQuery.of(context).size.width > 800) ...[
@@ -43,7 +43,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           _buildNavLink(context, 'About', theme),
           const SizedBox(width: 16),
         ],
-        
+
         // Auth buttons
         TextButton(
           onPressed: () {

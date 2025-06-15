@@ -16,15 +16,20 @@ class DesignSystemShowcase extends StatelessWidget {
         children: [
           // Typography Section
           _buildSectionTitle(context, 'Typography'),
-          Text('Display Large', style: Theme.of(context).textTheme.displayLarge),
+          Text('Display Large',
+              style: Theme.of(context).textTheme.displayLarge),
           const SizedBox(height: AppTheme.spaceSM),
-          Text('Display Medium', style: Theme.of(context).textTheme.displayMedium),
+          Text('Display Medium',
+              style: Theme.of(context).textTheme.displayMedium),
           const SizedBox(height: AppTheme.spaceSM),
-          Text('Display Small', style: Theme.of(context).textTheme.displaySmall),
+          Text('Display Small',
+              style: Theme.of(context).textTheme.displaySmall),
           const SizedBox(height: AppTheme.spaceSM),
-          Text('Headline Medium', style: Theme.of(context).textTheme.headlineMedium),
+          Text('Headline Medium',
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: AppTheme.spaceSM),
-          Text('Headline Small', style: Theme.of(context).textTheme.headlineSmall),
+          Text('Headline Small',
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: AppTheme.spaceSM),
           Text('Title Large', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: AppTheme.spaceSM),
@@ -33,9 +38,9 @@ class DesignSystemShowcase extends StatelessWidget {
           Text('Body Medium', style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: AppTheme.spaceSM),
           Text('Body Small', style: Theme.of(context).textTheme.bodySmall),
-          
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Colors Section
           _buildSectionTitle(context, 'Brand Colors'),
           _buildColorRow('Primary Navy', AppTheme.primaryNavy),
@@ -44,16 +49,16 @@ class DesignSystemShowcase extends StatelessWidget {
           _buildColorRow('Secondary Gold', AppTheme.secondaryGold),
           _buildColorRow('Secondary Gold Light', AppTheme.secondaryGoldLight),
           _buildColorRow('Accent Teal', AppTheme.accentTeal),
-          
+
           const SizedBox(height: AppTheme.spaceLG),
           _buildSectionTitle(context, 'Status Colors'),
           _buildColorRow('Success', AppTheme.success),
           _buildColorRow('Warning', AppTheme.warning),
           _buildColorRow('Error', AppTheme.error),
           _buildColorRow('Info', AppTheme.info),
-          
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Buttons Section
           _buildSectionTitle(context, 'Buttons'),
           Wrap(
@@ -61,36 +66,24 @@ class DesignSystemShowcase extends StatelessWidget {
             runSpacing: AppTheme.spaceMD,
             children: [
               ElevatedButton(
-                onPressed: () {}, 
-                child: const Text('Primary Button')
-              ),
+                  onPressed: () {}, child: const Text('Primary Button')),
               ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.add),
                 label: const Text('With Icon'),
               ),
+              ElevatedButton(onPressed: null, child: const Text('Disabled')),
+              OutlinedButton(onPressed: () {}, child: const Text('Outlined')),
+              TextButton(onPressed: () {}, child: const Text('Text Button')),
               ElevatedButton(
-                onPressed: null, 
-                child: const Text('Disabled')
-              ),
-              OutlinedButton(
-                onPressed: () {}, 
-                child: const Text('Outlined')
-              ),
-              TextButton(
-                onPressed: () {}, 
-                child: const Text('Text Button')
-              ),
-              ElevatedButton(
-                style: AppTheme.secondaryButtonStyle,
-                onPressed: () {}, 
-                child: const Text('Secondary')
-              ),
+                  style: AppTheme.secondaryButtonStyle,
+                  onPressed: () {},
+                  child: const Text('Secondary')),
             ],
           ),
-          
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Cards Section
           _buildSectionTitle(context, 'Cards'),
           Wrap(
@@ -102,9 +95,9 @@ class DesignSystemShowcase extends StatelessWidget {
               _buildCard('Elevation 3', AppTheme.cardElevation3),
             ],
           ),
-          
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Form Elements
           _buildSectionTitle(context, 'Form Elements'),
           Padding(
@@ -128,41 +121,25 @@ class DesignSystemShowcase extends StatelessWidget {
               obscureText: true,
             ),
           ),
-          
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Status Indicators
           _buildSectionTitle(context, 'Status Indicators'),
-          _buildStatusIndicator(
-            'Success Status', 
-            Icons.check_circle, 
-            AppTheme.statusSuccess(), 
-            AppTheme.successTextStyle
-          ),
+          _buildStatusIndicator('Success Status', Icons.check_circle,
+              AppTheme.statusSuccess(), AppTheme.successTextStyle),
           const SizedBox(height: AppTheme.spaceMD),
-          _buildStatusIndicator(
-            'Warning Status', 
-            Icons.warning, 
-            AppTheme.statusWarning(), 
-            AppTheme.warningTextStyle
-          ),
+          _buildStatusIndicator('Warning Status', Icons.warning,
+              AppTheme.statusWarning(), AppTheme.warningTextStyle),
           const SizedBox(height: AppTheme.spaceMD),
-          _buildStatusIndicator(
-            'Error Status', 
-            Icons.error, 
-            AppTheme.statusError(), 
-            AppTheme.errorTextStyle
-          ),
+          _buildStatusIndicator('Error Status', Icons.error,
+              AppTheme.statusError(), AppTheme.errorTextStyle),
           const SizedBox(height: AppTheme.spaceMD),
-          _buildStatusIndicator(
-            'Info Status', 
-            Icons.info, 
-            AppTheme.statusInfo(), 
-            AppTheme.infoTextStyle
-          ),
-          
+          _buildStatusIndicator('Info Status', Icons.info,
+              AppTheme.statusInfo(), AppTheme.infoTextStyle),
+
           const SizedBox(height: AppTheme.spaceXL),
-          
+
           // Progress Indicators
           _buildSectionTitle(context, 'Progress Indicators'),
           Column(
@@ -171,20 +148,19 @@ class DesignSystemShowcase extends StatelessWidget {
               const Text('Construction Progress (78%)'),
               const SizedBox(height: AppTheme.spaceXS),
               AppTheme.progressIndicator(0.78),
-              
               const SizedBox(height: AppTheme.spaceMD),
               const Text('Sales Progress (65%)'),
               const SizedBox(height: AppTheme.spaceXS),
               AppTheme.progressIndicator(0.65, color: AppTheme.secondaryGold),
             ],
           ),
-          
+
           const SizedBox(height: AppTheme.spaceXXL),
         ],
       ),
     );
   }
-  
+
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppTheme.spaceMD),
@@ -209,7 +185,7 @@ class DesignSystemShowcase extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildColorRow(String name, Color color) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppTheme.spaceSM),
@@ -242,7 +218,7 @@ class DesignSystemShowcase extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildCard(String title, BoxDecoration decoration) {
     return Container(
       width: 250,
@@ -263,13 +239,9 @@ class DesignSystemShowcase extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildStatusIndicator(
-    String text, 
-    IconData icon, 
-    BoxDecoration decoration, 
-    TextStyle textStyle
-  ) {
+
+  Widget _buildStatusIndicator(String text, IconData icon,
+      BoxDecoration decoration, TextStyle textStyle) {
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceMD),
       decoration: decoration,

@@ -11,28 +11,28 @@ class AppTheme {
   static const Color primaryNavy = Color(0xFF1B2B4D);
   static const Color primaryNavyLight = Color(0xFF2A3B5D);
   static const Color primaryNavyDark = Color(0xFF0F1B35);
-  
+
   static const Color secondaryGold = Color(0xFFD4A574);
   static const Color secondaryGoldLight = Color(0xFFE2B884);
   static const Color secondaryGoldDark = Color(0xFFC29764);
-  
+
   static const Color accentTeal = Color(0xFF2D7D7D);
   static const Color accentTealLight = Color(0xFF3D8D8D);
   static const Color accentTealDark = Color(0xFF1D6D6D);
-  
+
   // Supporting Colors
   static const Color backgroundLight = Color(0xFFF8F9FA);
   static const Color backgroundWhite = Colors.white;
   static const Color textPrimary = Color(0xFF212529);
   static const Color textSecondary = Color(0xFF6C757D);
   static const Color textLight = Color(0xFFADB5BD);
-  
+
   // Status Colors
   static const Color success = Color(0xFF28A745);
   static const Color warning = Color(0xFFFD7E14);
   static const Color error = Color(0xFFDC3545);
   static const Color info = Color(0xFF17A2B8);
-  
+
   // Spacing Scale
   static const double spaceXS = 4.0;
   static const double spaceSM = 8.0;
@@ -40,7 +40,7 @@ class AppTheme {
   static const double spaceLG = 24.0;
   static const double spaceXL = 32.0;
   static const double spaceXXL = 48.0;
-  
+
   // Border Radius
   static const double radiusSmall = 4.0;
   static const double radiusMedium = 8.0;
@@ -49,28 +49,28 @@ class AppTheme {
 
   // Elevation
   static List<BoxShadow> get elevation1 => [
-    const BoxShadow(
-      color: Color(0x1A000000),
-      offset: Offset(0, 1),
-      blurRadius: 3,
-    ),
-  ];
-  
+        const BoxShadow(
+          color: Color(0x1A000000),
+          offset: Offset(0, 1),
+          blurRadius: 3,
+        ),
+      ];
+
   static List<BoxShadow> get elevation2 => [
-    const BoxShadow(
-      color: Color(0x1A000000),
-      offset: Offset(0, 2),
-      blurRadius: 6,
-    ),
-  ];
-  
+        const BoxShadow(
+          color: Color(0x1A000000),
+          offset: Offset(0, 2),
+          blurRadius: 6,
+        ),
+      ];
+
   static List<BoxShadow> get elevation3 => [
-    const BoxShadow(
-      color: Color(0x1A000000),
-      offset: Offset(0, 4),
-      blurRadius: 12,
-    ),
-  ];
+        const BoxShadow(
+          color: Color(0x1A000000),
+          offset: Offset(0, 4),
+          blurRadius: 12,
+        ),
+      ];
 
   // Light theme
   static ThemeData get lightTheme {
@@ -93,7 +93,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: backgroundLight,
       indicatorColor: accentTeal,
-      
+
       // Typography
       textTheme: TextTheme(
         // Headings
@@ -112,7 +112,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           color: textPrimary,
         ),
-        
+
         // Titles
         titleLarge: GoogleFonts.inter(
           fontSize: 20,
@@ -129,7 +129,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
-        
+
         // Body
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
@@ -146,7 +146,7 @@ class AppTheme {
           fontWeight: FontWeight.normal,
           color: textSecondary,
         ),
-        
+
         // Label
         labelLarge: GoogleFonts.inter(
           fontSize: 14,
@@ -164,7 +164,7 @@ class AppTheme {
           color: textSecondary,
         ),
       ),
-      
+
       // Buttons
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -193,7 +193,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
@@ -229,7 +229,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
@@ -252,7 +252,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Input fields
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -290,7 +290,7 @@ class AppTheme {
           color: error,
         ),
       ),
-      
+
       // Divider
       dividerTheme: const DividerThemeData(
         color: Color(0xFFE9ECEF),
@@ -321,7 +321,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: const Color(0xFF121212),
       indicatorColor: accentTealLight,
-      
+
       // Typography
       textTheme: TextTheme(
         // Headings
@@ -340,7 +340,7 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
-        
+
         // Titles
         titleLarge: GoogleFonts.inter(
           fontSize: 20,
@@ -357,7 +357,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        
+
         // Body
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
@@ -374,7 +374,7 @@ class AppTheme {
           fontWeight: FontWeight.normal,
           color: const Color(0xFFAAAAAA),
         ),
-        
+
         // Label
         labelLarge: GoogleFonts.inter(
           fontSize: 14,
@@ -392,7 +392,7 @@ class AppTheme {
           color: const Color(0xFFAAAAAA),
         ),
       ),
-      
+
       // Buttons
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -421,7 +421,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
@@ -457,7 +457,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
@@ -480,7 +480,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Input fields
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -518,7 +518,7 @@ class AppTheme {
           color: error,
         ),
       ),
-      
+
       // Divider
       dividerTheme: const DividerThemeData(
         color: Color(0xFF444444),
@@ -529,7 +529,7 @@ class AppTheme {
   }
 
   // Helper methods for use in the app
-  
+
   // Card styling to use directly in Card widgets instead of through theme
   static BoxDecoration get cardDecoration {
     return BoxDecoration(
@@ -538,7 +538,7 @@ class AppTheme {
       boxShadow: elevation1,
     );
   }
-  
+
   static BoxDecoration get cardDecorationDark {
     return BoxDecoration(
       color: const Color(0xFF1E1E1E),

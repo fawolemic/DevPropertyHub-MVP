@@ -7,17 +7,16 @@ import '../providers/auth_provider.dart';
 class ApiService {
   final AuthProvider _authProvider;
   final String _baseUrl;
-  
+
   /// Default timeout for API requests (15 seconds)
   final Duration timeout = const Duration(seconds: 15);
-  
+
   ApiService({
     required AuthProvider authProvider,
     String baseUrl = 'https://api.devpropertyhub.com/v1', // Example base URL
-  }) : 
-    _authProvider = authProvider,
-    _baseUrl = baseUrl;
-  
+  })  : _authProvider = authProvider,
+        _baseUrl = baseUrl;
+
   /// Make an authenticated GET request
   /// Automatically handles token refresh if needed
   Future<Map<String, dynamic>> get(
@@ -33,7 +32,7 @@ class ApiService {
       ),
     );
   }
-  
+
   /// Make an authenticated POST request
   /// Automatically handles token refresh if needed
   Future<Map<String, dynamic>> post(
@@ -51,7 +50,7 @@ class ApiService {
       ),
     );
   }
-  
+
   /// Make an authenticated PUT request
   /// Automatically handles token refresh if needed
   Future<Map<String, dynamic>> put(
@@ -69,7 +68,7 @@ class ApiService {
       ),
     );
   }
-  
+
   /// Make an authenticated DELETE request
   /// Automatically handles token refresh if needed
   Future<Map<String, dynamic>> delete(
@@ -87,7 +86,7 @@ class ApiService {
       ),
     );
   }
-  
+
   /// Makes an authenticated request with token refresh handling
   Future<Map<String, dynamic>> _authenticatedRequest(
     Future<http.Response> Function() requestFunction,
@@ -99,10 +98,10 @@ class ApiService {
         // Not authenticated, return error
         return _formatErrorResponse(401, 'Authentication required');
       }
-      
+
       // Make the request with valid token
       final response = await requestFunction().timeout(timeout);
-      
+
       // Handle response
       if (response.statusCode == 401) {
         // Try to refresh the token and retry once
@@ -116,19 +115,19 @@ class ApiService {
           return _formatErrorResponse(401, 'Authentication failed');
         }
       }
-      
+
       // Parse regular response
       return _parseResponse(response);
     } catch (e) {
       return _formatErrorResponse(500, 'Request failed: ${e.toString()}');
     }
   }
-  
+
   /// Parse HTTP response into a Map
   Map<String, dynamic> _parseResponse(http.Response response) {
     try {
       final data = jsonDecode(response.body);
-      
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         // Success response
         return {
@@ -148,12 +147,10 @@ class ApiService {
     } catch (e) {
       // Parsing error
       return _formatErrorResponse(
-        response.statusCode, 
-        'Failed to parse response: ${e.toString()}'
-      );
+          response.statusCode, 'Failed to parse response: ${e.toString()}');
     }
   }
-  
+
   /// Create a formatted error response
   Map<String, dynamic> _formatErrorResponse(int statusCode, String message) {
     return {
@@ -162,42 +159,43 @@ class ApiService {
       'error': message,
     };
   }
-  
+
   /// Build request URI with query parameters
   Uri _buildUri(String endpoint, Map<String, dynamic>? queryParams) {
     final uri = Uri.parse('$_baseUrl/$endpoint');
-    
+
     if (queryParams == null || queryParams.isEmpty) {
       return uri;
     }
-    
+
     // Convert all query parameter values to strings
     final stringQueryParams = queryParams.map(
       (key, value) => MapEntry(key, value.toString()),
     );
-    
+
     return uri.replace(queryParameters: stringQueryParams);
   }
-  
+
   /// Get request headers with authentication token
-  Future<Map<String, String>> _getHeaders(Map<String, String>? additionalHeaders) async {
+  Future<Map<String, String>> _getHeaders(
+      Map<String, String>? additionalHeaders) async {
     // Base headers
     final headers = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    
+
     // Add authentication token if available
     final token = await _authProvider.getValidToken();
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
     }
-    
+
     // Add custom headers
     if (additionalHeaders != null) {
       headers.addAll(additionalHeaders);
     }
-    
+
     return headers;
   }
 }

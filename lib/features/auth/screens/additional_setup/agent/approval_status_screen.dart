@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// ApprovalStatusScreen
-/// 
+///
 /// Screen for agents to track their approval status after registration.
 /// Shows the current stage of the approval process and estimated time to completion.
-/// 
+///
 /// SEARCH TAGS: #agent #approval #registration #status
 class ApprovalStatusScreen extends StatefulWidget {
   final String agentName;
@@ -22,13 +22,15 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
   // In a real implementation, this would come from an API
   // For demo purposes, we'll use a hardcoded value
   final String _currentStatus = 'review';
-  final DateTime _submissionDate = DateTime.now().subtract(const Duration(days: 1));
-  final DateTime _estimatedCompletionDate = DateTime.now().add(const Duration(days: 2));
-  
+  final DateTime _submissionDate =
+      DateTime.now().subtract(const Duration(days: 1));
+  final DateTime _estimatedCompletionDate =
+      DateTime.now().add(const Duration(days: 2));
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Application Status'),
@@ -56,7 +58,8 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                         children: [
                           CircleAvatar(
                             radius: 48,
-                            backgroundColor: _getStatusColor(_currentStatus).withOpacity(0.2),
+                            backgroundColor: _getStatusColor(_currentStatus)
+                                .withOpacity(0.2),
                             child: Icon(
                               _getStatusIcon(_currentStatus),
                               size: 48,
@@ -75,7 +78,8 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                           Text(
                             _getStatusDescription(_currentStatus),
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.7),
+                              color:
+                                  theme.colorScheme.onSurface.withOpacity(0.7),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -84,7 +88,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Timeline
                   Text(
                     'Approval Timeline',
@@ -93,45 +97,45 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   _buildTimelineItem(
-                    context, 
-                    'Application Submitted', 
+                    context,
+                    'Application Submitted',
                     _formatDate(_submissionDate),
                     'Your agent application has been received.',
                     isCompleted: true,
                   ),
-                  
+
                   _buildTimelineItem(
-                    context, 
-                    'Document Review', 
+                    context,
+                    'Document Review',
                     'In Progress',
                     'We\'re reviewing your credentials and documentation.',
                     isCompleted: false,
                     isActive: _currentStatus == 'review',
                   ),
-                  
+
                   _buildTimelineItem(
-                    context, 
-                    'Background Verification', 
+                    context,
+                    'Background Verification',
                     'Pending',
                     'Checking license validity and professional history.',
                     isCompleted: false,
                     isActive: _currentStatus == 'verification',
                   ),
-                  
+
                   _buildTimelineItem(
-                    context, 
-                    'Approval Decision', 
+                    context,
+                    'Approval Decision',
                     _formatDate(_estimatedCompletionDate),
                     'Final decision on your agent application.',
                     isCompleted: false,
                     isActive: _currentStatus == 'decision',
                     isLast: true,
                   ),
-                  
+
                   const SizedBox(height: 24),
-                  
+
                   // Estimated time
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -168,7 +172,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Action buttons
                   Text(
                     'Need Help?',
@@ -216,23 +220,21 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
       ),
     );
   }
-  
+
   Widget _buildTimelineItem(
-    BuildContext context, 
-    String title, 
-    String date, 
-    String description, 
-    {
-      bool isCompleted = false, 
-      bool isActive = false,
-      bool isLast = false,
-    }
-  ) {
+    BuildContext context,
+    String title,
+    String date,
+    String description, {
+    bool isCompleted = false,
+    bool isActive = false,
+    bool isLast = false,
+  }) {
     final theme = Theme.of(context);
-    final Color dotColor = isCompleted 
-        ? Colors.green 
+    final Color dotColor = isCompleted
+        ? Colors.green
         : (isActive ? theme.colorScheme.primary : theme.colorScheme.outline);
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -249,7 +251,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                   width: 2,
                 ),
               ),
-              child: isCompleted 
+              child: isCompleted
                   ? const Icon(Icons.check, size: 16, color: Colors.white)
                   : null,
             ),
@@ -257,8 +259,8 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
               Container(
                 width: 2,
                 height: 60,
-                color: isCompleted 
-                    ? Colors.green 
+                color: isCompleted
+                    ? Colors.green
                     : theme.colorScheme.outline.withOpacity(0.3),
               ),
           ],
@@ -279,20 +281,25 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: (isCompleted 
-                          ? Colors.green 
-                          : (isActive ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant))
+                      color: (isCompleted
+                              ? Colors.green
+                              : (isActive
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.surfaceVariant))
                           .withOpacity(isActive || isCompleted ? 0.2 : 0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
                       date,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: isCompleted 
-                            ? Colors.green 
-                            : (isActive ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant),
+                        color: isCompleted
+                            ? Colors.green
+                            : (isActive
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurfaceVariant),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -313,15 +320,25 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
       ],
     );
   }
-  
+
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
-  
+
   IconData _getStatusIcon(String status) {
     switch (status) {
       case 'submitted':
@@ -340,7 +357,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
         return Icons.hourglass_bottom;
     }
   }
-  
+
   Color _getStatusColor(String status) {
     switch (status) {
       case 'submitted':
@@ -359,7 +376,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
         return Colors.grey;
     }
   }
-  
+
   String _getStatusTitle(String status) {
     switch (status) {
       case 'submitted':
@@ -378,7 +395,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
         return 'Processing';
     }
   }
-  
+
   String _getStatusDescription(String status) {
     switch (status) {
       case 'submitted':
@@ -397,7 +414,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
         return 'Your application is being processed.';
     }
   }
-  
+
   void _showContactSupportDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -407,7 +424,8 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Our support team is available to help you with any questions about your agent application.'),
+            const Text(
+                'Our support team is available to help you with any questions about your agent application.'),
             const SizedBox(height: 16),
             Row(
               children: [
@@ -442,7 +460,7 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
       ),
     );
   }
-  
+
   void _showAdditionalDocsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -452,7 +470,8 @@ class _ApprovalStatusScreenState extends State<ApprovalStatusScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('If you\'ve been asked to provide additional documentation for your application, you can upload it here.'),
+            const Text(
+                'If you\'ve been asked to provide additional documentation for your application, you can upload it here.'),
             const SizedBox(height: 16),
             OutlinedButton.icon(
               onPressed: () {

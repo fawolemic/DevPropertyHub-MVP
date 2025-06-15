@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/version_indicator.dart';
 
 /// FooterSection
-/// 
+///
 /// Footer displayed at the bottom of the home page.
 /// Contains: Company information, navigation links, and version indicator.
-/// 
+///
 /// SEARCH TAGS: #footer #copyright #links #version
 class FooterSection extends StatelessWidget {
   const FooterSection({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class FooterSection extends StatelessWidget {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final bool isDesktop = screenWidth > 900;
-    
+
     return Container(
       color: theme.colorScheme.surface,
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
@@ -88,9 +88,12 @@ class FooterSection extends StatelessWidget {
         Row(
           children: [
             _buildSocialIcon(Icons.facebook, theme),
-            _buildSocialIcon(Icons.message, theme),  // Using message icon instead of twitter
-            _buildSocialIcon(Icons.business_center, theme),  // Using business_center icon instead of linkedin
-            _buildSocialIcon(Icons.photo_camera, theme),  // Using photo_camera icon instead of instagram
+            _buildSocialIcon(
+                Icons.message, theme), // Using message icon instead of twitter
+            _buildSocialIcon(Icons.business_center,
+                theme), // Using business_center icon instead of linkedin
+            _buildSocialIcon(Icons.photo_camera,
+                theme), // Using photo_camera icon instead of instagram
           ],
         ),
       ],
@@ -132,10 +135,15 @@ class FooterSection extends StatelessWidget {
         links = ['Blog', 'Guides', 'Help Center', 'Contact'];
         break;
       case 'Legal':
-        links = ['Terms of Service', 'Privacy Policy', 'Cookie Policy', 'Disclaimers'];
+        links = [
+          'Terms of Service',
+          'Privacy Policy',
+          'Cookie Policy',
+          'Disclaimers'
+        ];
         break;
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

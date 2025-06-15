@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // NOTE: This is a shared widget, not a dashboard screen. The legacy dashboard has been removed.
 /// A modern stats card widget for use in developments and analytics screens.
-/// 
+///
 /// Displays a key metric with title, value, subtitle, and trend indicator
 class StatsCard extends StatelessWidget {
   final String title;
@@ -27,7 +27,7 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(
@@ -56,10 +56,11 @@ class StatsCard extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                
+
                 // Trend indicator
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: trendUp ? Colors.green.shade50 : Colors.red.shade50,
                     borderRadius: BorderRadius.circular(16),
@@ -70,7 +71,9 @@ class StatsCard extends StatelessWidget {
                       Icon(
                         trendUp ? Icons.trending_up : Icons.trending_down,
                         size: 12,
-                        color: trendUp ? Colors.green.shade800 : Colors.red.shade800,
+                        color: trendUp
+                            ? Colors.green.shade800
+                            : Colors.red.shade800,
                       ),
                       const SizedBox(width: 4),
                       Text(
@@ -78,7 +81,9 @@ class StatsCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: trendUp ? Colors.green.shade800 : Colors.red.shade800,
+                          color: trendUp
+                              ? Colors.green.shade800
+                              : Colors.red.shade800,
                         ),
                       ),
                     ],
@@ -87,7 +92,7 @@ class StatsCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            
+
             // Value
             Text(
               value,
@@ -95,7 +100,7 @@ class StatsCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             // Subtitle
             Text(
               subtitle,

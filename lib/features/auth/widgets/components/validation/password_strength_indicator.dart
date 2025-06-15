@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:devpropertyhub/features/auth/widgets/components/validation/password_validator.dart';
 
 /// PasswordStrengthIndicator
-/// 
+///
 /// Visual component that displays password strength.
 /// Shows a progress bar and text description of strength level.
-/// 
+///
 /// SEARCH TAGS: #auth #validation #password #security #indicator
 class PasswordStrengthIndicator extends StatelessWidget {
   final String password;
@@ -21,12 +21,12 @@ class PasswordStrengthIndicator extends StatelessWidget {
     final strength = PasswordValidator.calculateStrength(password);
     final color = PasswordValidator.getStrengthColor(strength);
     final text = PasswordValidator.getStrengthText(strength);
-    
+
     // Don't show for empty passwords
     if (password.isEmpty) {
       return const SizedBox.shrink();
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -70,7 +70,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _buildPasswordTips(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(12),
@@ -88,15 +88,19 @@ class PasswordStrengthIndicator extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          _buildTipItem(theme, 'Use at least 8 characters', !password.isEmpty && password.length >= 8),
-          _buildTipItem(theme, 'Include uppercase letters (A-Z)', _containsUppercase(password)),
-          _buildTipItem(theme, 'Include numbers (0-9)', _containsDigit(password)),
-          _buildTipItem(theme, 'Include special characters (!@#\$)', _containsSpecialChar(password)),
+          _buildTipItem(theme, 'Use at least 8 characters',
+              !password.isEmpty && password.length >= 8),
+          _buildTipItem(theme, 'Include uppercase letters (A-Z)',
+              _containsUppercase(password)),
+          _buildTipItem(
+              theme, 'Include numbers (0-9)', _containsDigit(password)),
+          _buildTipItem(theme, 'Include special characters (!@#\$)',
+              _containsSpecialChar(password)),
         ],
       ),
     );
   }
-  
+
   Widget _buildTipItem(ThemeData theme, String text, bool isSatisfied) {
     return Padding(
       padding: const EdgeInsets.only(top: 4),
@@ -105,7 +109,9 @@ class PasswordStrengthIndicator extends StatelessWidget {
           Icon(
             isSatisfied ? Icons.check_circle : Icons.circle_outlined,
             size: 16,
-            color: isSatisfied ? Colors.green : theme.colorScheme.onSurface.withOpacity(0.6),
+            color: isSatisfied
+                ? Colors.green
+                : theme.colorScheme.onSurface.withOpacity(0.6),
           ),
           const SizedBox(width: 8),
           Text(
@@ -118,14 +124,12 @@ class PasswordStrengthIndicator extends StatelessWidget {
       ),
     );
   }
-  
+
   // Helper methods to check password requirements
-  bool _containsUppercase(String value) => 
-      value.contains(RegExp(r'[A-Z]'));
-  
-  bool _containsDigit(String value) => 
-      value.contains(RegExp(r'[0-9]'));
-  
-  bool _containsSpecialChar(String value) => 
+  bool _containsUppercase(String value) => value.contains(RegExp(r'[A-Z]'));
+
+  bool _containsDigit(String value) => value.contains(RegExp(r'[0-9]'));
+
+  bool _containsSpecialChar(String value) =>
       value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 }

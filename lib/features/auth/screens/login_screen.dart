@@ -39,7 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final authProvider = provider_package.Provider.of<AuthProvider>(context, listen: false);
+      final authProvider =
+          provider_package.Provider.of<AuthProvider>(context, listen: false);
       final success = await authProvider.signIn(
         _emailController.text.trim(),
         _passwordController.text,
@@ -49,7 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (success) {
         // Don't manually navigate here
         // GoRouter redirect will handle navigation based on isLoggedIn state
-        debugPrint('Login successful - GoRouter should handle redirect to dashboard');
+        debugPrint(
+            'Login successful - GoRouter should handle redirect to dashboard');
       } else {
         setState(() {
           _errorMessage = 'Invalid email or password';
@@ -103,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Use Future.microtask to avoid build-time navigation
       // This ensures we don't get a "setState called during build" error
       Future.microtask(() => GoRouter.of(context).go('/developments'));
-      
+
       // Return a loading indicator while redirecting
       return const Scaffold(
         body: Center(
@@ -111,9 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     }
-    
+
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
     final theme = Theme.of(context);
 
@@ -280,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 24),
 
                           // Error message
-                          if (_errorMessage != null) ...[                          
+                          if (_errorMessage != null) ...[
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -310,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )
                                 : const Text('Sign In'),
                           ),
-                          
+
                           // Registration link
                           const SizedBox(height: 16),
                           Center(
@@ -318,7 +321,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 context.go('/unified-register');
                               },
-                              child: const Text('New to DevPropertyHub? Register here'),
+                              child: const Text(
+                                  'New to DevPropertyHub? Register here'),
                             ),
                           ),
                         ],

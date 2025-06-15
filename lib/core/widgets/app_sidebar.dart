@@ -13,11 +13,13 @@ class AppSidebar extends StatelessWidget {
 
     Widget navItem(String title, IconData icon, String path) {
       return ListTile(
-        leading: Icon(icon, color: isActive(path) ? theme.colorScheme.primary : null),
+        leading: Icon(icon,
+            color: isActive(path) ? theme.colorScheme.primary : null),
         title: Text(title,
             style: TextStyle(
                 color: isActive(path) ? theme.colorScheme.primary : null,
-                fontWeight: isActive(path) ? FontWeight.bold : FontWeight.normal)),
+                fontWeight:
+                    isActive(path) ? FontWeight.bold : FontWeight.normal)),
         selected: isActive(path),
         onTap: () => GoRouter.of(context).go(path),
       );

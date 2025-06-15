@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 /// AuthPageLayout
-/// 
+///
 /// A reusable layout component for authentication pages.
 /// Features a responsive layout with a left side image/illustration
 /// and content area on the right.
-/// 
+///
 /// SEARCH TAGS: #auth #layout #responsive #login-page #registration-page
 class AuthPageLayout extends StatelessWidget {
   final String title;
@@ -30,7 +30,7 @@ class AuthPageLayout extends StatelessWidget {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final bool isDesktop = size.width > 900;
-    
+
     return Scaffold(
       body: SafeArea(
         child: isDesktop
@@ -65,7 +65,7 @@ class AuthPageLayout extends StatelessWidget {
             ),
           ),
         ],
-        
+
         // Right side - Content
         Expanded(
           flex: isLowBandwidth ? 10 : 5,
@@ -96,10 +96,10 @@ class AuthPageLayout extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 40),
-                  
+
                   // Main content
                   content,
-                  
+
                   // Bottom content if provided
                   if (bottomContent != null) ...[
                     const SizedBox(height: 40),
@@ -134,7 +134,7 @@ class AuthPageLayout extends StatelessWidget {
               ),
               const SizedBox(height: 32),
             ],
-            
+
             // Header
             Text(
               title,
@@ -152,10 +152,10 @@ class AuthPageLayout extends StatelessWidget {
               ),
             ],
             const SizedBox(height: 32),
-            
+
             // Main content
             content,
-            
+
             // Bottom content if provided
             if (bottomContent != null) ...[
               const SizedBox(height: 32),

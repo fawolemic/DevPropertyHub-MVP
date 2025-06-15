@@ -14,15 +14,15 @@ class AgentForm extends StatefulWidget {
 
 class _AgentFormState extends State<AgentForm> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _invitationCodeController = TextEditingController();
   final _licenseNumberController = TextEditingController();
   final _yearsOfExperienceController = TextEditingController();
   final _bioController = TextEditingController();
-  
+
   // Document upload
   String? _licenseDocumentPath;
-  
+
   // Specialization areas
   final List<String> _availableSpecializations = [
     'Residential',
@@ -52,9 +52,11 @@ class _AgentFormState extends State<AgentForm> {
   }
 
   void _loadSavedData() {
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+            listen: false);
     final savedData = registrationProvider.step3Data;
-    
+
     if (savedData.isNotEmpty) {
       _invitationCodeController.text = savedData['invitationCode'] ?? '';
       _licenseNumberController.text = savedData['licenseNumber'] ?? '';
@@ -62,41 +64,48 @@ class _AgentFormState extends State<AgentForm> {
       _bioController.text = savedData['bio'] ?? '';
       _licenseDocumentPath = savedData['licenseDocumentPath'];
       setState(() {
-        _selectedSpecializations = List<String>.from(savedData['specializations'] ?? []);
+        _selectedSpecializations =
+            List<String>.from(savedData['specializations'] ?? []);
       });
     }
-    
+
     // If we already have invitation code from step 1
-    if (_invitationCodeController.text.isEmpty && registrationProvider.step1Data.containsKey('invitationCode')) {
-      _invitationCodeController.text = registrationProvider.step1Data['invitationCode'];
+    if (_invitationCodeController.text.isEmpty &&
+        registrationProvider.step1Data.containsKey('invitationCode')) {
+      _invitationCodeController.text =
+          registrationProvider.step1Data['invitationCode'];
     }
   }
-  
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       if (_selectedSpecializations.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select at least one specialization area')),
+          const SnackBar(
+              content: Text('Please select at least one specialization area')),
         );
         return;
       }
-      
+
       // Debug print to check license document path
-      debugPrint('License document path before validation: $_licenseDocumentPath');
-      
+      debugPrint(
+          'License document path before validation: $_licenseDocumentPath');
+
       if (_licenseDocumentPath == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please upload your license document')),
         );
         return;
       }
-      
-      final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-      
+
+      final registrationProvider =
+          provider_package.Provider.of<UnifiedRegistrationProvider>(context,
+              listen: false);
+
       // Make sure the license document is marked as uploaded in the provider
       // This is critical - ensure it's called before submitting the form
       registrationProvider.setLicenseDocumentUploaded(_licenseDocumentPath);
-      
+
       final data = {
         'invitationCode': _invitationCodeController.text.trim(),
         'licenseNumber': _licenseNumberController.text.trim(),
@@ -107,7 +116,7 @@ class _AgentFormState extends State<AgentForm> {
         'licenseDocumentPath': _licenseDocumentPath,
         'hasUploadedLicenseDocument': true,
       };
-      
+
       if (registrationProvider.nextStep(data)) {
         // If this is the final step, submit registration
         registrationProvider.submitRegistration();
@@ -118,10 +127,12 @@ class _AgentFormState extends State<AgentForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -143,7 +154,7 @@ class _AgentFormState extends State<AgentForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // License Number
           TextFormField(
             controller: _licenseNumberController,
@@ -160,7 +171,7 @@ class _AgentFormState extends State<AgentForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Years of Experience
           TextFormField(
             controller: _yearsOfExperienceController,
@@ -182,7 +193,7 @@ class _AgentFormState extends State<AgentForm> {
             },
           ),
           const SizedBox(height: 16),
-          
+
           // Specialization Areas
           Text(
             'Specialization Areas',
@@ -198,13 +209,14 @@ class _AgentFormState extends State<AgentForm> {
             ),
           ),
           const SizedBox(height: 8),
-          
+
           // Specialization chips
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: _availableSpecializations.map((specialization) {
-              final isSelected = _selectedSpecializations.contains(specialization);
+              final isSelected =
+                  _selectedSpecializations.contains(specialization);
               return FilterChip(
                 label: Text(specialization),
                 selected: isSelected,
@@ -223,7 +235,7 @@ class _AgentFormState extends State<AgentForm> {
             }).toList(),
           ),
           const SizedBox(height: 24),
-          
+
           // Bio/Description
           TextFormField(
             controller: _bioController,
@@ -237,23 +249,26 @@ class _AgentFormState extends State<AgentForm> {
             minLines: 3,
           ),
           const SizedBox(height: 24),
-          
+
           // License Document Upload
           DocumentUploader(
             label: 'License Document',
             acceptedFileTypes: 'PDF, JPG, PNG',
             maxSizeInMB: 5,
             onFileSelected: (path) {
-  setState(() {
-    _licenseDocumentPath = path;
-  });
-  // Use the provider's method to update the state properly
-  final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context, listen: false);
-  registrationProvider.setLicenseDocumentUploaded(path);
-},
+              setState(() {
+                _licenseDocumentPath = path;
+              });
+              // Use the provider's method to update the state properly
+              final registrationProvider =
+                  provider_package.Provider.of<UnifiedRegistrationProvider>(
+                      context,
+                      listen: false);
+              registrationProvider.setLicenseDocumentUploaded(path);
+            },
           ),
           const SizedBox(height: 32),
-          
+
           // Navigation buttons
           Row(
             children: [
@@ -265,16 +280,18 @@ class _AgentFormState extends State<AgentForm> {
                         registrationProvider.previousStep();
                       },
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 ),
                 child: const Text('Back'),
               ),
               const SizedBox(width: 16),
-              
+
               // Continue button
               Expanded(
                 child: ElevatedButton(
-                  onPressed: registrationProvider.isLoading ? null : _submitForm,
+                  onPressed:
+                      registrationProvider.isLoading ? null : _submitForm,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),

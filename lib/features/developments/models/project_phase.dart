@@ -35,15 +35,14 @@ class ProjectPhase {
       phaseName: json['phase_name'],
       description: json['description'],
       unitsCount: json['units_count'],
-      completionPercentage: json['completion_percentage'] != null 
-        ? double.parse(json['completion_percentage'].toString())
-        : 0.0,
-      startDate: json['start_date'] != null 
-        ? DateTime.parse(json['start_date'])
-        : null,
-      endDate: json['end_date'] != null 
-        ? DateTime.parse(json['end_date'])
-        : null,
+      completionPercentage: json['completion_percentage'] != null
+          ? double.parse(json['completion_percentage'].toString())
+          : 0.0,
+      startDate: json['start_date'] != null
+          ? DateTime.parse(json['start_date'])
+          : null,
+      endDate:
+          json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
       status: PhaseStatus.values.firstWhere(
         (status) => status.toString().split('.').last == json['status'],
         orElse: () => PhaseStatus.planning,

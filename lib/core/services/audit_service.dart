@@ -8,7 +8,7 @@ class AuditService {
   final SupabaseClient _client = SupabaseConfig.client;
 
   /// Log an audit event
-  /// 
+  ///
   /// [userId] - The ID of the user performing the action
   /// [resource] - The resource being acted upon (e.g., 'properties', 'leads')
   /// [resourceId] - The ID of the specific resource

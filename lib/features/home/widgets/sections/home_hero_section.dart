@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// HomeHeroSection
-/// 
+///
 /// The main hero banner displayed at the top of the home page.
 /// Contains: Main headline, subtitle, and primary content.
-/// 
+///
 /// SEARCH TAGS: #home #hero #banner #headline #property
 class HomeHeroSection extends StatelessWidget {
   final bool isLowBandwidth;
@@ -17,7 +17,7 @@ class HomeHeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -62,7 +62,7 @@ class HomeHeroSection extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                
+
                 // Intentionally removed registration buttons
                 // Only using a spacer as per requirements
                 const SizedBox(height: 16),

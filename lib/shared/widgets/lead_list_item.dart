@@ -31,9 +31,10 @@ class LeadListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dateFormat = DateFormat('MMM d, yyyy');
-    
+
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       leading: CircleAvatar(
         backgroundColor: _getStatusColor(status),
         child: Text(
@@ -53,40 +54,43 @@ class LeadListItem extends StatelessWidget {
           const SizedBox(height: 2),
           Text('Contact: $email | $phone', style: theme.textTheme.bodySmall),
           const SizedBox(height: 2),
-          Text('Added: ${dateFormat.format(createdAt)}', style: theme.textTheme.bodySmall),
+          Text('Added: ${dateFormat.format(createdAt)}',
+              style: theme.textTheme.bodySmall),
         ],
       ),
-      trailing: canEdit ? Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Chip(
-            label: Text(status),
-            backgroundColor: _getStatusColor(status).withOpacity(0.2),
-            labelStyle: TextStyle(color: _getStatusColor(status)),
-          ),
-          if (onEdit != null) 
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: onEdit,
-              tooltip: 'Edit Lead',
+      trailing: canEdit
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Chip(
+                  label: Text(status),
+                  backgroundColor: _getStatusColor(status).withOpacity(0.2),
+                  labelStyle: TextStyle(color: _getStatusColor(status)),
+                ),
+                if (onEdit != null)
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: onEdit,
+                    tooltip: 'Edit Lead',
+                  ),
+                if (onDelete != null)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: onDelete,
+                    tooltip: 'Delete Lead',
+                    color: Colors.red,
+                  ),
+              ],
+            )
+          : Chip(
+              label: Text(status),
+              backgroundColor: _getStatusColor(status).withOpacity(0.2),
+              labelStyle: TextStyle(color: _getStatusColor(status)),
             ),
-          if (onDelete != null)
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: onDelete,
-              tooltip: 'Delete Lead',
-              color: Colors.red,
-            ),
-        ],
-      ) : Chip(
-        label: Text(status),
-        backgroundColor: _getStatusColor(status).withOpacity(0.2),
-        labelStyle: TextStyle(color: _getStatusColor(status)),
-      ),
       isThreeLine: true,
     );
   }
-  
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'new':

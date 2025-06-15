@@ -12,17 +12,20 @@ class UnifiedRegistrationScreen extends StatefulWidget {
   const UnifiedRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<UnifiedRegistrationScreen> createState() => _UnifiedRegistrationScreenState();
+  State<UnifiedRegistrationScreen> createState() =>
+      _UnifiedRegistrationScreenState();
 }
 
 class _UnifiedRegistrationScreenState extends State<UnifiedRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     // Handle back button press
     return WillPopScope(
       onWillPop: () async {
@@ -30,7 +33,7 @@ class _UnifiedRegistrationScreenState extends State<UnifiedRegistrationScreen> {
         if (registrationProvider.currentStep == 0) {
           return true;
         }
-        
+
         // Otherwise, go to previous step and prevent default back behavior
         if (!registrationProvider.isLoading) {
           registrationProvider.previousStep();
@@ -54,47 +57,48 @@ class _UnifiedRegistrationScreenState extends State<UnifiedRegistrationScreen> {
         body: SafeArea(
           child: Column(
             children: [
-            // Progress indicator
-            if (registrationProvider.currentStep < 3) ...[
-              LinearProgressIndicator(
-                value: (registrationProvider.currentStep + 1) / 4,
-                backgroundColor: theme.colorScheme.surfaceVariant,
-                color: theme.colorScheme.primary,
-              ),
-              // Step indicator
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Step ${registrationProvider.currentStep + 1} of 4',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                    Text(
-                      _getStepTitle(registrationProvider.currentStep),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+              // Progress indicator
+              if (registrationProvider.currentStep < 3) ...[
+                LinearProgressIndicator(
+                  value: (registrationProvider.currentStep + 1) / 4,
+                  backgroundColor: theme.colorScheme.surfaceVariant,
+                  color: theme.colorScheme.primary,
                 ),
+                // Step indicator
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Step ${registrationProvider.currentStep + 1} of 4',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
+                      Text(
+                        _getStepTitle(registrationProvider.currentStep),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+
+              // Step content
+              Expanded(
+                child: _buildCurrentStep(registrationProvider.currentStep),
               ),
             ],
-            
-            // Step content
-            Expanded(
-              child: _buildCurrentStep(registrationProvider.currentStep),
-            ),
-          ],
           ),
         ),
       ),
     );
   }
-  
+
   Widget _buildCurrentStep(int step) {
     switch (step) {
       case 0:
@@ -111,7 +115,7 @@ class _UnifiedRegistrationScreenState extends State<UnifiedRegistrationScreen> {
         );
     }
   }
-  
+
   String _getStepTitle(int step) {
     switch (step) {
       case 0:

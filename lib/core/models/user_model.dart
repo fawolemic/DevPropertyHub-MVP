@@ -72,7 +72,7 @@ class UserModel extends BaseModel {
         return UserRole.viewer;
     }
   }
-  
+
   /// Get database field name for role
   static String get roleFieldName => 'user_type';
 
@@ -92,7 +92,8 @@ class UserModel extends BaseModel {
       'last_login': lastLogin?.toIso8601String(),
       'preferences': preferences ?? {},
       'profile_data': profileData ?? {},
-      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
+      'updated_at':
+          DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -104,9 +105,8 @@ class UserModel extends BaseModel {
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : DateTime.now(),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       email: map['email'] ?? '',
       firstName: map['first_name'],
       lastName: map['last_name'],
@@ -116,13 +116,12 @@ class UserModel extends BaseModel {
       bio: map['bio'],
       role: stringToRole(map['user_type'] ?? 'buyer'), // Provide default value
       isVerified: map['is_verified'] ?? false,
-      lastLogin: map['last_login'] != null
-          ? DateTime.parse(map['last_login'])
-          : null,
-      preferences: map['preferences'] != null 
+      lastLogin:
+          map['last_login'] != null ? DateTime.parse(map['last_login']) : null,
+      preferences: map['preferences'] != null
           ? Map<String, dynamic>.from(map['preferences'])
           : {}, // Safe conversion with empty default
-      profileData: map['profile_data'] != null 
+      profileData: map['profile_data'] != null
           ? Map<String, dynamic>.from(map['profile_data'])
           : {}, // Safe conversion with empty default
     );

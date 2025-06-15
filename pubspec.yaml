@@ -32,7 +32,7 @@ dependencies:
   # Storage
   flutter_secure_storage: ^8.0.0
   shared_preferences: ^2.1.1
-  file_picker: ^5.2.6
+  file_picker: ^6.1.1
   
   # Utilities
   intl: ^0.18.1
@@ -56,6 +56,12 @@ dev_dependencies:
 # Override dependencies to resolve conflicts
 dependency_overrides:
   intl: ^0.18.1
+  file_picker:
+    git:
+      url: https://github.com/miguelpruivo/flutter_file_picker.git
+      ref: master
+    platforms:
+      windows: null
 
 flutter:
   uses-material-design: true

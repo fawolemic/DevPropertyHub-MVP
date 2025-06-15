@@ -4,10 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../models/user_role.dart';
 
 /// UserRolesSection
-/// 
+///
 /// Displays the different user roles available on the platform.
 /// Contains: Card-based role selection with icons and descriptions.
-/// 
+///
 /// SEARCH TAGS: #roles #user-types #developer #buyer #investor
 class UserRolesSection extends StatelessWidget {
   final List<UserRole> userRoles;
@@ -21,11 +21,12 @@ class UserRolesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Responsive layout adjustments
-    final int crossAxisCount = screenWidth > 1100 ? 3 : (screenWidth > 700 ? 2 : 1);
+    final int crossAxisCount =
+        screenWidth > 1100 ? 3 : (screenWidth > 700 ? 2 : 1);
     final double childAspectRatio = screenWidth > 1100 ? 1.5 : 1.3;
-    
+
     return Container(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -66,9 +67,10 @@ class UserRolesSection extends StatelessWidget {
                   onTap: () async {
                     // Handle role selection - direct to unified registration with role parameter
                     final roleParam = role.type.toLowerCase();
-                    
+
                     // Try using url_launcher with web-specific options
-                    final Uri url = Uri.parse('https://devpropertyhub-mvp.netlify.app/unified-register.html?role=$roleParam');
+                    final Uri url = Uri.parse(
+                        'https://devpropertyhub-mvp.netlify.app/unified-register.html?role=$roleParam');
                     if (!await launchUrl(
                       url,
                       mode: LaunchMode.externalApplication,
@@ -77,9 +79,12 @@ class UserRolesSection extends StatelessWidget {
                       // If url_launcher fails, fallback to Go Router
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Navigating to registration page...')),
+                          const SnackBar(
+                              content:
+                                  Text('Navigating to registration page...')),
                         );
-                        GoRouter.of(context).go('/unified-register?role=$roleParam');
+                        GoRouter.of(context)
+                            .go('/unified-register?role=$roleParam');
                       }
                     }
                   },
@@ -106,7 +111,8 @@ class UserRolesSection extends StatelessWidget {
                         Text(
                           role.description,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onBackground.withOpacity(0.7),
+                            color:
+                                theme.colorScheme.onBackground.withOpacity(0.7),
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 3,

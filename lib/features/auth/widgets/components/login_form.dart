@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import '../../../../core/providers/auth_provider.dart';
 
 /// LoginForm
-/// 
+///
 /// A form component for user authentication.
 /// Contains email and password fields, validation, error handling,
 /// and login button with loading state.
-/// 
+///
 /// SEARCH TAGS: #auth #login #form #authentication #signin
 class LoginForm extends StatefulWidget {
   final Function(String userType)? onUserTypeChanged;
@@ -111,7 +111,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Form(
       key: _formKey,
       child: Column(
@@ -119,9 +119,9 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           // User type selection
           _buildUserTypeSelector(theme),
-          
+
           const SizedBox(height: 24),
-          
+
           // Email field
           TextFormField(
             controller: _emailController,
@@ -138,15 +138,16 @@ class _LoginFormState extends State<LoginForm> {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
               }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                  .hasMatch(value)) {
                 return 'Please enter a valid email';
               }
               return null;
             },
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Password field
           TextFormField(
             controller: _passwordController,
@@ -179,9 +180,9 @@ class _LoginFormState extends State<LoginForm> {
               return null;
             },
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Forgot password
           Align(
             alignment: Alignment.centerRight,
@@ -192,9 +193,9 @@ class _LoginFormState extends State<LoginForm> {
               child: const Text('Forgot Password?'),
             ),
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Error message
           if (_errorMessage != null)
             Padding(
@@ -205,7 +206,7 @@ class _LoginFormState extends State<LoginForm> {
                 textAlign: TextAlign.center,
               ),
             ),
-          
+
           // Login button
           ElevatedButton(
             onPressed: _isLoading ? null : _handleLogin,
@@ -223,9 +224,9 @@ class _LoginFormState extends State<LoginForm> {
                   )
                 : const Text('Sign In'),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Register link
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -239,7 +240,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ],
           ),
-          
+
           // Demo options
           if (widget.showDemoOptions) _buildDemoOptions(theme),
         ],
@@ -295,7 +296,7 @@ class _LoginFormState extends State<LoginForm> {
     ThemeData theme,
   ) {
     final isSelected = _userType == value;
-    
+
     return InkWell(
       onTap: () {
         setState(() {

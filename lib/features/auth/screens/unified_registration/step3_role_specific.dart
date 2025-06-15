@@ -13,15 +13,17 @@ class Step3RoleSpecificScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bandwidthProvider = provider_package.Provider.of<BandwidthProvider>(context);
+    final bandwidthProvider =
+        provider_package.Provider.of<BandwidthProvider>(context);
     final isLowBandwidth = bandwidthProvider.isLowBandwidth;
-    final registrationProvider = provider_package.Provider.of<UnifiedRegistrationProvider>(context);
-    
+    final registrationProvider =
+        provider_package.Provider.of<UnifiedRegistrationProvider>(context);
+
     // Display appropriate form based on user type
     Widget formContent;
     String title;
     String subtitle;
-    
+
     switch (registrationProvider.userType) {
       case UserType.developer:
         formContent = const DeveloperForm();
@@ -63,7 +65,7 @@ class Step3RoleSpecificScreen extends StatelessWidget {
         title = 'Error';
         subtitle = 'No user type selected';
     }
-    
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Center(
@@ -73,8 +75,9 @@ class Step3RoleSpecificScreen extends StatelessWidget {
             elevation: isLowBandwidth ? 0 : 1,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: isLowBandwidth 
-                  ? BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)) 
+              side: isLowBandwidth
+                  ? BorderSide(
+                      color: theme.colorScheme.outline.withOpacity(0.5))
                   : BorderSide.none,
             ),
             child: Padding(
@@ -94,10 +97,10 @@ class Step3RoleSpecificScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  
+
                   // Dynamic form content based on user type
                   formContent,
-                  
+
                   if (registrationProvider.errorMessage != null) ...[
                     const SizedBox(height: 16),
                     Text(

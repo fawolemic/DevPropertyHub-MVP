@@ -265,7 +265,8 @@ class ProjectService {
         final List<dynamic> plansJson = jsonDecode(response.body);
         return plansJson.map((json) => PaymentPlan.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to get project payment plans: ${response.body}');
+        throw Exception(
+            'Failed to get project payment plans: ${response.body}');
       }
     } catch (e) {
       throw Exception('Failed to get project payment plans: $e');

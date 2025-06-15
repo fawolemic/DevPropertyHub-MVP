@@ -5,7 +5,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
 
-  const AppHeader({Key? key, required this.title, this.actions}) : super(key: key);
+  const AppHeader({Key? key, required this.title, this.actions})
+      : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -20,9 +21,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: Colors.grey.shade900,
-        ),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade900,
+            ),
       ),
       leading: isDesktop
           ? null

@@ -182,7 +182,8 @@ class PropertyModel extends BaseModel {
       'features': features ?? [],
       'image_urls': imageUrls ?? [],
       'additional_details': additionalDetails ?? {},
-      'updated_at': DateTime.now().toIso8601String(), // Always set updated_at on changes
+      'updated_at':
+          DateTime.now().toIso8601String(), // Always set updated_at on changes
     });
     return map;
   }
@@ -194,15 +195,15 @@ class PropertyModel extends BaseModel {
       createdAt: map['created_at'] != null
           ? DateTime.parse(map['created_at'])
           : DateTime.now(),
-      updatedAt: map['updated_at'] != null
-          ? DateTime.parse(map['updated_at'])
-          : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       developerId: map['developer_id'] ?? '',
       developmentId: map['development_id'],
       type: stringToType(map['type'] ?? 'apartment'), // Provide default value
-      status: stringToStatus(map['status'] ?? 'under_construction'), // Provide default value
+      status: stringToStatus(
+          map['status'] ?? 'under_construction'), // Provide default value
       price: (map['price'] ?? 0).toDouble(),
       priceUnit: map['price_unit'] ?? 'USD',
       bedrooms: map['bedrooms'] ?? 0,
@@ -212,9 +213,13 @@ class PropertyModel extends BaseModel {
       location: map['location'] ?? '',
       latitude: map['latitude']?.toDouble(),
       longitude: map['longitude']?.toDouble(),
-      features: map['features'] != null ? List<String>.from(map['features']) : [], // Empty list instead of null
-      imageUrls: map['image_urls'] != null ? List<String>.from(map['image_urls']) : [], // Empty list instead of null
-      additionalDetails: map['additional_details'] != null 
+      features: map['features'] != null
+          ? List<String>.from(map['features'])
+          : [], // Empty list instead of null
+      imageUrls: map['image_urls'] != null
+          ? List<String>.from(map['image_urls'])
+          : [], // Empty list instead of null
+      additionalDetails: map['additional_details'] != null
           ? Map<String, dynamic>.from(map['additional_details'])
           : {}, // Safe conversion with empty default
     );
