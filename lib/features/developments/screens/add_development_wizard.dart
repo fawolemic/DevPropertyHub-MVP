@@ -103,7 +103,7 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
     super.dispose();
   }
 
-  void _onContinue() {
+  Future<void> _onContinue() async {
     if (_processingNext) return;
     setState(() => _processingNext = true);
     try {
@@ -124,6 +124,8 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
       GoRouter.of(context).go('/developments');
     } else {
       setState(() => _currentStep++);
+      // Small delay so spinner stays visible for at least one frame
+      await Future.delayed(const Duration(milliseconds: 300));
     }
   } finally {
     if (mounted) setState(() => _processingNext = false);
@@ -209,9 +211,12 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
       'paymentPlans': _paymentPlans,
     };
     await AddDevelopmentDraftService.saveDraft(draft);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Draft saved')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Draft saved'), duration: Duration(seconds: 2)),
+      );
   } finally {
     if (mounted) setState(() => _savingDraft = false);
+  }
   }
 
   @override
@@ -254,8 +259,10 @@ class _AddDevelopmentWizardState extends State<AddDevelopmentWizard> {
                 ),
               const Spacer(),
               ElevatedButton(
-                onPressed: details.onStepContinue,
-                child: Text(_currentStep == 6 ? 'Submit' : 'Next'),
+                onPressed: _processingNext ? null : details.onStepContinue,
+                child: _processingNext
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    : Text(_currentStep == 6 ? 'Submit' : 'Next'),
               ),
               const SizedBox(width: 8),
               if (_currentStep > 0)
